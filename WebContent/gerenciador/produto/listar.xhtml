@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
+		<ui:define name="content">
+		<ui:include src="/gerenciador/menugerenciador.xhtml" />
+			<h:dataTable styleClass="table table-striped" var="produto"
+				value="#{produtoBean.produtos}">
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+                    #{produto.nome}
+                </h:column>
+                <h:column>
+               		 <f:facet name="header">Data</f:facet>
+                    <h:outputText value="#{produto.data}">
+                        <f:convertDateTime pattern="dd/mm/yyyy" />
+                    </h:outputText>
+                </h:column>
+                <h:column>
+					<f:facet name="header">Tipo</f:facet>
+                    #{produto.tipo}
+                </h:column>
+                <h:column>
+                	<f:facet name="header">Valor</f:facet>
+                    <h:outputText value="#{produto.valor}">
+                        <f:convertNumber pattern="#0.00" />
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                	<f:facet name="header">Opcoes</f:facet>
+                	<h:form styleClass="form">
+							<h:column>
+								<h:commandLink actionListener="#{produtoBean.delete}" >
+											<f:attribute name="selected" value="#{produto}" /> 
+											<p:graphicImage name="/icons/delete.png" />
+								</h:commandLink>
+								<h:commandLink action="/gerenciador/produto/editar.xhtml">
+									 <f:setPropertyActionListener target="#{produtoBean.produto}"
+	                               	 value="#{produto}" />
+	                               	 <p:graphicImage name="/icons/edit.png" />
+								</h:commandLink>
+							</h:column>
+                    </h:form>
+                </h:column>
+			</h:dataTable>
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

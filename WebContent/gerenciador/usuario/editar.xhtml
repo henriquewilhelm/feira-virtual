@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
+		<ui:define name="content">
+		<ui:include src="/gerenciador/menugerenciador.xhtml" />
+			<h1>
+				<h:outputText value="Editar Perfil do Usuario" />
+			</h1>
+			<h:form styleClass="form-horizontal">
+			    <div class="form-group">
+					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-2" />
+					<div class="col-sm-7">
+							<h:inputText id="nome" value="#{usuarioBean.usuario.nome}" styleClass="form-control" />
+					</div>	
+					<div class="col-sm-3">
+							<h:message for="nome" />
+					</div>
+				</div>
+				<div class="form-group">
+					<h:outputLabel for="email" value="E-mail " styleClass="col-sm-2" />
+					<div class="col-sm-7">
+						<h:inputText id="email" value="#{usuarioBean.usuario.email}" styleClass="form-control">
+	<!-- 	                    <f:validator validatorId="emailEspecialValidator"/> -->
+		                </h:inputText>
+	                </div>	
+					<div class="col-sm-3">
+							<h:message for="email" />
+					</div>
+                </div>
+                <div class="form-group">
+                
+					<h:outputLabel for="tipo" value="Tipo: " styleClass="col-sm-2" />
+					<div class="col-sm-7">
+							<h:inputText id="tipo" value="#{usuarioBean.usuario.tipo}" styleClass="form-control"/>
+					</div>		
+					<div class="col-sm-3">
+							<h:message for="tipo" />
+					</div>
+				</div>
+                <div class="form-group">
+	                <h:outputLabel for="telefone" value="Telefone: " styleClass="col-sm-2" />
+	                <div class="col-sm-7">
+			                <h:inputText id="telefone" value="#{usuarioBean.usuario.telefone}" styleClass="form-control">
+		                    	<f:validator validatorId="telefoneValidator"/>
+                            	<f:converter converterId="telefoneConverter"/>
+		                   	</h:inputText>
+		             </div>      
+		             <div class="col-sm-3">
+		             		<h:message for="telefone" />
+		             </div>
+                </div>
+                <br />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Salvar" action="#{usuarioBean.updateUsuario}"/>
+				
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Limpar" action="#{usuarioBean.clearUsuarios}"/>
+			</h:form>
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

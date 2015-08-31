@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
+		<ui:define name="content">
+		<ui:include src="/gerenciador/menugerenciador.xhtml" />
+		<h:form>
+    		<p:dataTable id="tbl" var="pedido" value="#{dataExporterView.pedidos}"
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                 paginator="true" rows="10" style="margin-bottom:20px">
+ 
+		        <f:facet name="{Exporters}">
+		            <h:commandLink>
+		                <p:graphicImage name="/image/excel.png" width="24"/>
+		                <p:dataExporter type="xls" target="tbl" ajax="false" fileName="pedidos"  />
+		            </h:commandLink>
+		 
+		            <h:commandLink>
+		                <p:graphicImage name="/image/pdf.png" width="24"/>
+		                <p:dataExporter type="pdf" target="tbl" ajax="false" fileName="pedidos"/>
+		            </h:commandLink>
+		        </f:facet>
+ 
+       			<p:column>
+					<f:facet name="header">Nome</f:facet>
+                    <h:outputText value="#{pedido.nome}" />
+                </p:column>
+                <p:column>
+               		 <f:facet name="header">Data Entrega</f:facet>
+                    <h:outputText value="#{pedido.data}">
+                        <f:convertDateTime pattern="dd/mm/yyyy" />
+                    </h:outputText>
+                </p:column>
+                <p:column>
+					<f:facet name="header">Endereco</f:facet>
+                    <h:outputText value="#{pedido.endereco}"/>
+                </p:column>
+                <p:column>
+					<f:facet name="header">Bairro</f:facet>
+                     <h:outputText value="#{pedido.bairro}"/>
+                </p:column>
+                <p:column>
+					<f:facet name="header">Cidade</f:facet>
+                     <h:outputText value="#{pedido.cidade}"/>
+                </p:column>
+                <p:column>
+					<f:facet name="header">Observacao</f:facet>
+                     <h:outputText value="#{pedido.obs}"/>
+                </p:column>
+                <p:column>
+                	<f:facet name="header">Produtos</f:facet>
+               		<h:selectOneMenu >
+               			<f:selectItem itemValue="" itemLabel="Produtos Cadastrados" />  
+    					<f:selectItems value="#{pedido.listItens}"  var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.quantidade} #{item.produto.tipo} = #{item.total} " />
+					</h:selectOneMenu>
+    			</p:column>
+                <p:column>
+                	<f:facet name="header">Opcoes</f:facet>
+            			<h:column>
+							<h:commandLink action="/gerenciador/pedido/editar.xhtml">
+											 <f:setPropertyActionListener target="#{pedidoBean.pedido}"
+			                               	 value="#{pedido}" />
+			                		<p:graphicImage name="/icons/edit.png" />
+			                </h:commandLink>
+							<h:commandLink actionListener="#{pedidoBean.deletePedido}" >
+								<f:attribute name="selected" value="#{pedido}" />
+								 <p:graphicImage name="/icons/delete.png" />
+							</h:commandLink>
+						</h:column>
+                </p:column>
+			    </p:dataTable>
+			 
+			    <h3>Export Page Data Only</h3>
+			    <h:commandLink>
+			        <p:graphicImage name="/image/excel.png" />
+			        <p:dataExporter type="xls" target="tbl" ajax="false" fileName="pedidos"/>
+			    </h:commandLink>
+			 
+			    <h:commandLink>
+			        <p:graphicImage name="/image/pdf.png" />
+			       <p:dataExporter type="pdf" target="tbl" ajax="false" fileName="pedidos" />
+			    </h:commandLink>
+			</h:form>
+			<br /><br />
+			<h:messages />
+			<br /><br />
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

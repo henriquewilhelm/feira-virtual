@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
+		<ui:define name="content">
+		<ui:include src="/gerenciador/menugerenciador.xhtml" />
+			<h1>
+				<h:outputText value="Cadastro de Produtos" />
+			</h1>
+			<h:form styleClass="form-horizontal">
+			    <div class="form-group">
+					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-2" />
+					<div class="col-sm-7">
+							<h:inputText id="nome" value="#{produtoBean.produto.nome}" styleClass="form-control" />
+					</div>	
+					<div class="col-sm-3">
+							<h:message for="nome" />
+					</div>
+				</div>
+				<div class="form-group">
+					<h:outputLabel for="data" value="Data Cadastro: " styleClass="col-sm-2" />
+					<div class="col-sm-7">
+						<h:inputText id="data" value="#{produtoBean.produto.data}" styleClass="form-control">
+		                    <f:convertDateTime pattern="dd/mm/yyyy" />
+		                </h:inputText>
+	                </div>
+                </div>
+                <div class="form-group">
+                
+					<h:outputLabel for="tipo" value="Tipo: " styleClass="col-sm-2" />
+					<div class="col-sm-7">
+							<h:inputText id="tipo" value="#{produtoBean.produto.tipo}" styleClass="form-control"/>
+					</div>		
+					<div class="col-sm-3">
+							<h:message for="tipo" />
+					</div>
+				</div>
+                <div class="form-group">
+	                <h:outputLabel for="valor" value="Valor: " styleClass="col-sm-2" />
+	                <div class="col-sm-7">
+			                <h:inputText id="valor" value="#{produtoBean.produto.valor}" styleClass="form-control">
+		                    	<f:convertNumber pattern="#0.00" />
+		                   	</h:inputText>
+		             </div>      
+		             <div class="col-sm-3">
+		             		<h:message for="valor" />
+		             </div>
+                </div>
+                <br />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Salvar" action="#{produtoBean.updateProduto}"/>
+				
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Limpar" action="#{produtoBean.clearProdutos}"/>
+			</h:form>
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<meta charset="UTF-8" />
+	<title>Feria Orgânica</title>
+</h:head>
+<h:body>
+	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
+		<ui:define name="content">
+		<ui:include src="/gerenciador/menugerenciador.xhtml" />
+			<h1>		
+						<strong>Administrador</strong> <small> do LNB</small>
+			</h1>
+			<ul>
+					<li>Feria Organica precisa salvar sua lista de itens.</li>
+					<li>Estes itens possuem: nome, tipo e
+						a valor.</li>
+					<li>Além dos itens é necessário cadastrar os pedidos, estes
+						possuem como dados: nome, endereço e a sua lista
+						de itens, mais a quantidade de cada item </li>
+					<li>Desenvolver uma app JSF que gerencie o cadastro, a listagem e
+						a remoção destes dados</li>
+					<li>Tente deixar a aplicação bonita se for capaz</li>
+			</ul>
+			<h2>
+						<a href="/feira/index.xhtml">Index</a>
+			</h2>
+			
+			<div class="form-group">
+				</div>
+				<h:messages />
+                <br />
+		</ui:define>
+		<ui:define name="footer">
+		      		<ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

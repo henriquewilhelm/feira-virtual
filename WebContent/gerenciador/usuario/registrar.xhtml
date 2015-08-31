@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
+		<ui:define name="content">
+		<ui:include src="/gerenciador/menugerenciador.xhtml" />
+			<h1>
+				<h:outputText value="Cadastro de Usuario" />
+			</h1>
+			<h:form styleClass="form-horizontal">
+			    <div class="form-group">
+					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-2" />
+					<div class="col-sm-7">
+							<h:inputText id="nome" value="#{usuarioBean.novoUsuario.nome}" styleClass="form-control" />
+					</div>	
+					<div class="col-sm-3">
+							<h:message for="nome" />
+					</div>
+				</div>
+				<div class="form-group">
+					<h:outputLabel for="email" value="E-mail " styleClass="col-sm-2" />
+					<div class="col-sm-7">
+						<h:inputText id="email" value="#{usuarioBean.novoUsuario.email}" styleClass="form-control">
+		                    <f:validator validatorId="emailValidator"/>
+		                </h:inputText>
+	                </div>
+	                <div class="col-sm-3">
+						<h:message for="email" />
+					</div>
+                </div>
+                <div class="form-group">
+                
+					<h:outputLabel for="tipo" value="Senha: " styleClass="col-sm-2" />
+					<div class="col-sm-7">
+							<h:inputText id="tipo" accesskey="*" value="#{usuarioBean.novoUsuario.password}" styleClass="form-control"/>
+					</div>		
+					<div class="col-sm-3">
+							<h:message for="tipo" />
+					</div>
+				</div>
+                <div class="form-group">
+	                <h:outputLabel for="telefone" value="Telefone: " styleClass="col-sm-2" />
+	                <div class="col-sm-7">
+			                <h:inputText id="telefone" value="#{usuarioBean.novoUsuario.telefone}" styleClass="form-control">
+		                    	<f:validator validatorId="telefoneValidator"/>
+                            	<f:converter converterId="telefoneConverter"/>
+		                   	</h:inputText>
+		             </div>      
+		             <div class="col-sm-3">
+		             		<h:message for="telefone" />
+		             </div>
+                </div>
+                <br />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Send" action="#{usuarioBean.addUsuario}" />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Clear" action="#{usuarioBean.clearUsuarios}" />
+			</h:form>
+			</ui:define>
+	</ui:composition>
+</h:body>
+</html>

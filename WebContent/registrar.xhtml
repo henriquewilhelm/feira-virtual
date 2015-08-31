@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition template="/layout/layout.xhtml">
+		<ui:define name="content">
+	
+			<h1>
+				<h:outputText value="Cadastro de Usuario" />
+			</h1>
+			<h:form styleClass="form-horizontal">
+			    <div class="form-group">
+					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-2" />
+					<div class="col-sm-7">
+							<h:inputText id="nome" value="#{loginBean.usuario.nome}" styleClass="form-control" />
+					</div>	
+					<div class="col-sm-3">
+							<h:message for="nome" />
+					</div>
+				</div>
+				<div class="form-group">
+					<h:outputLabel for="email" value="E-mail " styleClass="col-sm-2" />
+					<div class="col-sm-7">
+						<h:inputText id="email" value="#{loginBean.usuario.email}" styleClass="form-control">
+		                    <f:validator validatorId="emailValidator"/>
+		                </h:inputText>
+	                </div>
+	                <div class="col-sm-3">
+						<h:message for="email" />
+					</div>
+                </div>
+                <div class="form-group">
+                
+					<h:outputLabel for="password" value="Senha: " styleClass="col-sm-2" />
+					<div class="col-sm-7">
+							<h:inputText id="password" accesskey="*" value="#{loginBean.usuario.password}" styleClass="form-control"/>
+					</div>		
+					<div class="col-sm-3">
+							<h:message for="password" />
+					</div>
+				</div>
+                <div class="form-group">
+	                <h:outputLabel for="telefone" value="Telefone: " styleClass="col-sm-2" />
+	                <div class="col-sm-7">
+			                <h:inputText id="telefone" value="#{loginBean.usuario.telefone}" styleClass="form-control">
+		                    	<f:validator validatorId="telefoneValidator"/>
+                            	<f:converter converterId="telefoneConverter"/>
+		                   	</h:inputText>
+		             </div>      
+		             <div class="col-sm-3">
+		             		<h:message for="telefone" />
+		             </div>
+                </div>
+                <div class="form-group">
+	                <h:outputLabel for="endereco" value="Endereco: " styleClass="col-sm-2" />
+	                <div class="col-sm-7">
+			                <h:inputText id="endereco" value="#{loginBean.usuario.endereco}" styleClass="form-control" />
+		             </div>      
+		             <div class="col-sm-3">
+		             		<h:message for="endereco" />
+		             </div>
+                </div>
+                <br />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Send" action="#{loginBean.addUsuario}" />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Clear" action="#{loginBean.clearLogin}" />
+			</h:form>
+			<br />
+			<br />
+		</ui:define>
+		<ui:define name="footer">
+		      		<ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

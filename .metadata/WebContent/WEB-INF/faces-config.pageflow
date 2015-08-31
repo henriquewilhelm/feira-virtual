@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14157995532590" configfile="/feira/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="login.xhtml" x="122" y="178" id="pf144069516478923" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf144069516478925 pf144078440932736" path="/login.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="gerenciador/admin.xhtml" x="122" y="562" id="pf144069516478926" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf144078674291340" path="/registrar.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="loja/usuario.xhtml" x="338" y="562" id="pf144069516478927" referenceLink="//@navigationRule.1/@navigationCase.0/@toViewId|" inlinks="pf144069516478925 pf144078674291340" path="/loja/usuario.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="sobre.xhtml" x="122" y="946" id="pf144069623344234" referenceLink="//@navigationRule.0/@navigationCase.2/@toViewId|" path="/sobre.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="gerenciador/admin.xhtml" x="338" y="178" id="pf144078440932738" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf144078440932736" path="/gerenciador/admin.xhtml"/>
+  <links id="pf144069516478925" target="pf144069516478927" source="pf144069516478923" outcome="usuario" fromaction="#{loginBean.login}"/>
+  <links id="pf144078440932736" target="pf144078440932738" source="pf144069516478923" outcome="admin" fromaction="#{loginBean.login}"/>
+  <links id="pf144078674291340" target="pf144069516478927" source="pf144069516478926" outcome="usuario" fromaction="#{loginBean.addUsuario}"/>
+</pageflow:Pageflow>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
+		<ui:define name="content">
+		<ui:include src="/gerenciador/menugerenciador.xhtml" />
+			<h1>
+				<h:outputText value="Editar Pedido" />
+			</h1>
+			<h:form styleClass="form-horizontal">
+			    <div class="form-group">
+					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-2" />
+					<div class="col-sm-7">
+							<h:inputText id="nome" value="#{pedidoBean.pedido.nome}" styleClass="form-control" />
+					</div>	
+					<div class="col-sm-3">
+							<h:message for="nome" />
+					</div>
+				</div>
+				<div class="form-group">
+					<h:outputLabel for="data" value="Data Entrega " styleClass="col-sm-2" />
+					<div class="col-sm-7">
+						<h:inputText id="data" value="#{pedidoBean.pedido.data}" styleClass="form-control">
+								 <f:convertDateTime pattern="dd/MM/yyyy" timeZone="EST" type="date" />
+		                </h:inputText>
+	                </div>	
+					<div class="col-sm-3">
+							<h:message for="data" />
+					</div>
+                </div>
+                <div class="form-group">
+                
+					<h:outputLabel for="endereco" value="Endereco: " styleClass="col-sm-2" />
+					<div class="col-sm-7">
+							<h:inputText id="endereco" value="#{pedidoBean.pedido.endereco}" styleClass="form-control"/>
+					</div>		
+					<div class="col-sm-3">
+							<h:message for="endereco" />
+					</div>
+				</div>
+                <div class="form-group">
+	                <h:outputLabel for="bairro" value="Bairro: " styleClass="col-sm-2" />
+	                <div class="col-sm-7">
+			                <h:inputText id="bairro" value="#{pedidoBean.pedido.bairro}" styleClass="form-control">
+		                   	</h:inputText>
+		             </div>      
+		             <div class="col-sm-3">
+		             		<h:message for="bairro" />
+		             </div>
+                </div>
+                 <div class="form-group">
+	                <h:outputLabel for="cidade" value="Cidade: " styleClass="col-sm-2" />
+	                <div class="col-sm-7">
+			                <h:inputText id="cidade" value="#{pedidoBean.pedido.cidade}" styleClass="form-control">
+		                   	</h:inputText>
+		             </div>      
+		             <div class="col-sm-3">
+		             		<h:message for="cidade" />
+		             </div>
+                </div>
+                 <div class="form-group">
+	                <h:outputLabel for="telefone" value="Telefone: " styleClass="col-sm-2" />
+	                <div class="col-sm-7">
+			                <h:inputText id="telefone" value="#{pedidoBean.pedido.telefone}" styleClass="form-control">
+		                    	<f:validator validatorId="telefoneValidator"/>
+                            	<f:converter converterId="telefoneConverter"/>
+		                   	</h:inputText>
+		             </div>      
+		             <div class="col-sm-3">
+		             		<h:message for="telefone"/>
+		             </div>
+                </div>
+                 <div class="form-group">
+	                <h:outputLabel for="obs" value="Observacao: " styleClass="col-sm-2" />
+	                <div class="col-sm-7">
+			                <h:inputText id="obs" value="#{pedidoBean.pedido.obs}" styleClass="form-control">
+		                   	</h:inputText>
+		             </div>      
+		             <div class="col-sm-3">
+		             		<h:message for="obs" />
+		             </div>
+                </div>
+                <div class="form-group">
+               		<h:outputLabel for="nome" value="Produtos: " styleClass="col-sm-2"/>
+					<div class="col-sm-3">
+                		<h:selectOneListbox value="#{pedidoBean.produtoSelecionado}"
+                				converter="produtoConverter" styleClass="form-control">
+               				<f:selectItem itemValue="" itemLabel="Selecione um Produto" />  
+    						<f:selectItems value="#{pedidoBean.produtosCadastrados}" var="prod" itemValue="#{prod}" itemLabel="#{prod.nome} - #{prod.valor} R$ #{prod.tipo}"/>		
+						</h:selectOneListbox >
+					</div>	
+					<div class="col-sm-2">
+						<h:outputLabel value="Quantidade" styleClass="col-sm-2"/>
+						<h:inputText id="quantidade" value="#{pedidoBean.quantidade}" styleClass="form-control" />
+						<br /><br />
+						<h:commandButton value=	"Adicionar" actionListener="#{pedidoBean.addProduto}" styleClass="btn btn-info"/>
+						<br /><br /><br /><br />
+						<h:commandButton value=	"Remover" actionListener="#{pedidoBean.removeProduto}" styleClass="btn btn-danger"/>
+						
+		    		</div>
+		    		<div class="col-sm-4">
+						<h:selectOneListbox value="#{pedidoBean.itemSelecionado}" 
+							converter="itemConverter" styleClass="form-control" >
+               				<f:selectItem itemValue="" itemLabel="Produtos Cadastrados" />  
+    						<f:selectItems value="#{pedidoBean.pedido.listItens}" var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.produto.valor} R$ x #{item.quantidade} #{item.produto.tipo} = #{item.total} R$"/>
+						</h:selectOneListbox >
+					</div>
+    			</div>
+                
+                <br />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Salvar" action="#{pedidoBean.addPedido}"/>
+				
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Limpar" action="#{pedidoBean.clearPedidos}"/>
+			</h:form>
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
+		<ui:define name="content">
+		<ui:include src="/gerenciador/menugerenciador.xhtml" />
+			<h:dataTable styleClass="table table-striped" var="usuario"
+				value="#{usuarioBean.usuarios}">
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+                    #{usuario.nome}
+                </h:column>
+                <h:column>
+               		 <f:facet name="header">E-mail</f:facet>
+                    <h:outputText value="#{usuario.email}">
+                    </h:outputText>
+                </h:column>
+                <h:column>
+					<f:facet name="header">Tipo</f:facet>
+                    #{usuario.tipo}
+                </h:column>
+                <h:column>
+                	<f:facet name="header">Telefone</f:facet>
+                    <h:outputText value="#{usuario.telefone}">
+                   		 <f:converter converterId="telefoneConverter" />
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                	<f:facet name="header">Opcoes</f:facet>
+                	<h:form styleClass="form">
+							<h:column>
+								<h:commandLink actionListener="#{usuarioBean.delete}" >
+											<f:attribute name="selected" value="#{usuario}" /> 
+											<p:graphicImage name="/icons/delete.png" />
+								</h:commandLink>
+								<h:commandLink action="/gerenciador/usuario/editar.xhtml">
+									 <f:setPropertyActionListener target="#{usuarioBean.usuario}"
+	                               	 value="#{usuario}" />
+	                               	 <p:graphicImage name="/icons/edit.png" />
+								</h:commandLink>
+							</h:column>
+                    </h:form>
+                </h:column>
+			</h:dataTable>
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition template="/layout/layout.xhtml">
+		<ui:define name="content">
+			<h1>
+				<h:outputText value="Login" />
+			</h1>
+			<h:form styleClass="form-horizontal">
+				<div class="form-group">
+					<h:outputLabel for="email" value="E-mail " styleClass="col-sm-2" />
+					<div class="col-sm-7">
+						<h:inputText id="email" value="#{loginBean.email}" styleClass="form-control" />
+	                </div>
+	                <div class="col-sm-3">
+						<h:message for="email" />
+					</div>
+                </div>
+                <div class="form-group">
+                
+					<h:outputLabel for="password" value="Senha: " styleClass="col-sm-2" />
+					<div class="col-sm-7">
+							<h:inputSecret id="password" value="#{loginBean.password}" styleClass="form-control"/>
+					</div>		
+					<div class="col-sm-3">
+							<h:message for="password" />
+					</div>
+				</div>
+				<h:messages />
+                <br />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Login" action="#{loginBean.login}" />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Esqueci a Senha" action="#{loginBean.lembrarSenha}" />
+				<br />
+				<br />
+				<br />
+				<h2>
+						<a href="/feira/loja/registrar.xhtml">Fazer Cadastro</a>
+				</h2>
+				
+			</h:form>
+			<br />
+			<br />
+		</ui:define>
+		<ui:define name="footer">
+		      		<ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition template="/loja/layout/layoutuser.xhtml">
+		<ui:define name="content">
+
+		<h:form styleClass="form">
+			<h:dataTable styleClass="table table-striped" var="pedido"
+				value="#{pedidoBean.pedidosPorUsuario}"> 
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+                    #{pedido.nome}
+                </h:column>
+                <h:column>
+               		 <f:facet name="header">Data Entrega</f:facet>
+                    <h:outputText value="#{pedido.data}">
+                        <f:convertDateTime pattern="dd/mm/yyyy" />
+                    </h:outputText>
+                </h:column>
+                <h:column>
+					<f:facet name="header">Endereco</f:facet>
+                    #{pedido.endereco}
+                </h:column>
+                <h:column>
+					<f:facet name="header">Bairro</f:facet>
+                    #{pedido.bairro}
+                </h:column>
+                <h:column>
+					<f:facet name="header">Cidade</f:facet>
+                    #{pedido.cidade}
+                </h:column>
+                <h:column>
+					<f:facet name="header">Observacao</f:facet>
+                    #{pedido.obs}
+                </h:column>
+                <h:column>
+                	<f:facet name="header">Produtos</f:facet>
+               		<h:selectOneMenu value="#{pedidoBean.itemSelecionado}" 
+               			converter="itemConverter" styleClass="form-control">
+               			<f:selectItem itemValue="" itemLabel="Produtos Cadastrados" />  
+    					<f:selectItems value="#{pedido.listItens}"  var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.quantidade} #{item.produto.tipo} = #{item.total} " />
+					</h:selectOneMenu>
+					<h:commandButton value="delete" actionListener="#{pedidoBean.deleteProduto}">
+						<f:attribute name="selected" value="#{pedido}" />
+					</h:commandButton>
+    			</h:column>
+                <h:column>
+                	<f:facet name="header">Opcoes</f:facet>
+            			<h:column>
+							<h:commandButton value="delete" actionListener="#{pedidoBean.deletePedido}" >
+								<f:attribute name="selected" value="#{pedido}" />
+							</h:commandButton>
+						</h:column>
+                </h:column>
+			</h:dataTable>
+			</h:form>
+			<br /><br />
+			<h:messages />
+			<br /><br />
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
