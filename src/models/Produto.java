@@ -25,14 +25,14 @@ public class Produto implements IConvertible, Serializable {
 
 	@Temporal(TemporalType.DATE)
 	private Date data;
-	private String tipo;
+	private Tipo tipo;
 	private Double valor;
 	
 	public Produto() {
 		setData(Calendar.getInstance().getTime());
 	};
 	
-	public Produto(String nome, Date data, String tipo, Double valor) {
+	public Produto(String nome, Date data, Tipo tipo, Double valor) {
 		super();
 		this.nome = nome;
 		this.data = data;
@@ -72,11 +72,11 @@ public class Produto implements IConvertible, Serializable {
 		this.data = data;
 	}
 
-	public String getTipo() {
+	public Tipo getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(String tipo) {
+	public void setTipo(Tipo tipo) {
 		this.tipo = tipo;
 	}
 

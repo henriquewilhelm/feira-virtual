@@ -4,6 +4,7 @@
 	
 		<class>models.Pedido</class>
 		<class>models.Produto</class>
+		<class>models.Tipo</class>
 		<class>models.Item</class>
 		<class>models.Usuario</class>
 		<class>models.Cidade</class>

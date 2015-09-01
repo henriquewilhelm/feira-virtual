@@ -11,12 +11,14 @@ import javax.persistence.TypedQuery;
 import util.JPA;
 import models.Produto;
 import models.Pedido;
+import models.Tipo;
 
 @ManagedBean
 @SessionScoped
 public class ProdutoBean {
 	
 	private Produto produto;
+	private Tipo tipo;
 	
 	public ProdutoBean() {	
 		produto = new Produto();
@@ -101,12 +103,29 @@ public class ProdutoBean {
 		return query.getResultList();
 	}
 	
+	public List<Tipo> getTipos() {
+
+		EntityManager em = JPA.getEM();
+		TypedQuery<Tipo> query = em.createQuery("Select c from Tipo c",
+				Tipo.class);
+		
+		return query.getResultList();
+	}
+	
 	public Produto getProduto() {
 		return produto;
 	}
 	public void setProduto(Produto produto) {
 		this.produto = produto;
 	}
+	
+	public Tipo getTipo() {
+		return tipo;
+	}
+	public void setTipo(Tipo tipo) {
+		this.tipo = tipo;
+	}
+	
 	
 	public String list() {
 		return "/gerenciador/produto/listar";

@@ -1,5 +1,6 @@
 package handlers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -11,6 +12,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 
+import models.Bairro;
+import models.Cidade;
 import models.Item;
 import models.Mail;
 import models.Produto;
@@ -31,6 +34,8 @@ public class PedidoBean {
 	private Usuario usuario;
 	private List<Pedido> pedidosPorUsuario;
 	private Mail mail;
+	private Cidade cidade;
+	private Bairro bairro;
 	 
 	public PedidoBean() {
 		pedido = new Pedido();
@@ -39,7 +44,9 @@ public class PedidoBean {
 		
         usuario =  SessionBean.getUser();
         pedido.setUsuario(usuario);
-        mail = new Mail();
+        cidade = usuario.getCidade();
+		bairro = usuario.getBairro();	
+   
 	} 
 	
 	public void addProduto(){
@@ -115,12 +122,12 @@ public class PedidoBean {
 		em.getTransaction().commit();
 //		setPedido(new Pedido());
 		
-		HttpSession session = SessionBean.getSession();
-        String email = (String) session.getAttribute("email");
-        usuario =  getUsuarioPorEmail(email);
+		usuario =  SessionBean.getUser();
         pedido.setUsuario(usuario);
+        cidade = usuario.getCidade();
+		bairro = usuario.getBairro();	        
         
-        
+		mail = new Mail();
         mail.setAssunto("LNB - Pedido realizado");
 		mail.setDestino(pedido.getUsuario().getEmail());
 		
@@ -133,7 +140,6 @@ public class PedidoBean {
 		mail.setNomeDestino(pedido.getNome());
 		mail.sendMail();
         
-		mail = new Mail();
 		//setPedido(new Pedido());
 		if (usuario.getTipo().equals(UserTipo.ADMIN))
 			return "/gerenciador/pedido/listar";
@@ -252,6 +258,47 @@ public class PedidoBean {
 		this.mail = mail;
 	}
 	
+
+	public Cidade getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(Cidade cidade) {
+		this.cidade = cidade;
+		getBairros();
+	}
+	
+	public Bairro getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(Bairro bairro) {
+		this.bairro = bairro;
+	}
+	
+	public List<Cidade> getCidades() {
+
+		EntityManager em = JPA.getEM();
+		TypedQuery<Cidade> query = em.createQuery("Select c from Cidade c",
+				Cidade.class);
+		
+		return query.getResultList();
+	}
+	
+	public List<Bairro> getBairros() {
+		try{ 				
+			EntityManager em = JPA.getEM();
+			TypedQuery<Bairro> query = em.createQuery("Select b from Bairro b where b.cidade.id = :id",
+					Bairro.class);
+			query.setParameter("id", cidade.getId());
+			
+			return query.getResultList();
+		
+		}catch (Exception e){
+			return new ArrayList<Bairro>();
+		}
+	}
+	
 	public Usuario getUsuarioPorEmail(String email) {
 		EntityManager em = JPA.getEM();
 		TypedQuery<Usuario> query = em.createQuery("Select u from Usuario u where u.email = :email",
@@ -262,12 +309,11 @@ public class PedidoBean {
 	}
 	
 	public List<Pedido> getPedidosPorUsuario() {
-		HttpSession session = SessionBean.getSession();
-        String email = (String) session.getAttribute("email");
+
 		EntityManager em = JPA.getEM();
 		TypedQuery<Pedido> query = em.createQuery("Select p from Pedido p left join fetch p.usuario u where u.email = :email",
 				Pedido.class);
-		query.setParameter("email", email);
+		query.setParameter("email", SessionBean.getUser().getEmail());
 		pedidosPorUsuario = query.getResultList();
 		return pedidosPorUsuario;
 	}

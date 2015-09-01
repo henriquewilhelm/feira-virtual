@@ -32,18 +32,29 @@
 						<h:inputText id="endereco" value="#{pedidoBean.pedido.endereco}" styleClass="form-control"/>
 					</div>
 				</div>
+                 <div class="form-group">
+	                <h:outputLabel for="cidade" value="Cidade:" styleClass="col-sm-2" />
+					<div class="col-sm-3">
+                		<h:selectOneListbox id="cidade" value="#{pedidoBean.cidade}" converter="cidadeConverter" styleClass="form-control">
+               				<f:selectItem itemValue="" itemLabel="Selecione uma Cidade" />  
+    						<f:selectItems value="#{pedidoBean.cidades}" var="cidade" itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>		
+							 <f:ajax render="bairro" /> 
+						</h:selectOneListbox >
+					</div>
+	                 <h:outputLabel for="bairro" value="Bairro:" styleClass="col-sm-1" />
+					<div class="col-sm-3">
+                		<h:selectOneListbox id="bairro" value="#{pedidoBean.bairro}"  converter="bairroConverter" styleClass="form-control">
+               				<f:selectItem itemValue="" itemLabel="Selecione uma Bairro" />  
+    						<f:selectItems value="#{pedidoBean.bairros}" var="bairro" itemValue="#{bairro}" itemLabel="#{bairro.nome}"/>		
+						</h:selectOneListbox >
+					</div>
+				   </div>
                 <div class="form-group">
-					<h:outputLabel for="bairro" value="Bairro: " styleClass="col-sm-2"/>
-					<div class="col-sm-7">
-						<h:inputText id="bairro" value="#{pedidoBean.pedido.bairro.nome}" styleClass="form-control" />
-					</div>
-				</div>
-				<div class="form-group">
-					<h:outputLabel for="cidade" value="Cidade: " styleClass="col-sm-2"/>
-					<div class="col-sm-7">
-						<h:inputText id="cidade" value="#{pedidoBean.pedido.cidade.nome}" styleClass="form-control" />
-					</div>
-				</div>
+					 <div class="col-sm-3">
+							<h:message for="cidade" />
+		             		<h:message for="bairro" />
+		             </div>
+                </div>
 				<div class="form-group">
 					<h:outputLabel for="obs" value="Observacoes: " styleClass="col-sm-2"/>
 					<div class="col-sm-7">
@@ -56,7 +67,7 @@
                 		<h:selectOneListbox value="#{pedidoBean.produtoSelecionado}"
                 				converter="produtoConverter" styleClass="form-control">
                				<f:selectItem itemValue="" itemLabel="Selecione um Produto" />  
-    						<f:selectItems value="#{pedidoBean.produtosCadastrados}" var="prod" itemValue="#{prod}" itemLabel="#{prod.nome} - #{prod.valor} R$ #{prod.tipo}"/>		
+    						<f:selectItems value="#{pedidoBean.produtosCadastrados}" var="prod" itemValue="#{prod}" itemLabel="#{prod.nome} - #{prod.valor} R$ #{prod.tipo.nome}"/>		
 						</h:selectOneListbox >
 					</div>	
 					<div class="col-sm-2">
@@ -72,7 +83,7 @@
 						<h:selectOneListbox value="#{pedidoBean.itemSelecionado}" 
 							converter="itemConverter" styleClass="form-control" >
                				<f:selectItem itemValue="" itemLabel="Produtos Cadastrados" />  
-    						<f:selectItems value="#{pedidoBean.pedido.listItens}" var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.produto.valor} R$ x #{item.quantidade} #{item.produto.tipo} = #{item.total} R$"/>
+    						<f:selectItems value="#{pedidoBean.pedido.listItens}" var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.produto.valor} R$ x #{item.quantidade} #{item.produto.tipo.nome} = #{item.total} R$"/>
 						</h:selectOneListbox >
 					</div>
     			</div>

@@ -49,28 +49,29 @@ public class LoginBean implements Serializable {
 
 	 //validate login
 	public String login() {
-		EntityManager em = JPA.getEM();
-		TypedQuery<Usuario> query = em.createQuery("Select u from Usuario u where u.email = :email and u.password = :password",
-				Usuario.class);
-		query.setParameter("email", getEmail());
-		query.setParameter("password", getPassword());
-		System.out.println(getEmail() + " "+ getPassword());
-        usuario = query.getSingleResult();
-        if (usuario!=null) {
-            HttpSession session = SessionBean.getSession();
-            session.setAttribute("usuario", usuario);
-            if (usuario.getTipo().equals(UserTipo.ADMIN))
-            		return "admin";
-            else
-            		return "usuario";
-        } else {
-            FacesContext.getCurrentInstance().addMessage(
+		try{
+			EntityManager em = JPA.getEM();
+			TypedQuery<Usuario> query = em.createQuery("Select u from Usuario u where u.email = :email and u.password = :password",
+					Usuario.class);
+			query.setParameter("email", getEmail());
+			query.setParameter("password", getPassword());
+			System.out.println(getEmail() + " "+ getPassword());
+	        usuario = query.getSingleResult();
+
+	            HttpSession session = SessionBean.getSession();
+	            session.setAttribute("usuario", usuario);
+	            if (usuario.getTipo().equals(UserTipo.ADMIN))
+	            		return "admin";
+	            else
+	            		return "usuario";
+		} catch ( Exception e){
+			FacesContext.getCurrentInstance().addMessage(
                     null,
                     new FacesMessage(FacesMessage.SEVERITY_WARN,
                             "E-mail e/ou Senha Incorretos",
                             "Por favor entre com E-mail e Senha validos"));
             return "login";
-        }
+		}
     }
  
 	public String addUsuario() {

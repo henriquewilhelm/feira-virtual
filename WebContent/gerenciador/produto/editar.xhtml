@@ -30,11 +30,12 @@
 	                </div>
                 </div>
                 <div class="form-group">
-                
 					<h:outputLabel for="tipo" value="Tipo: " styleClass="col-sm-2" />
 					<div class="col-sm-7">
-							<h:inputText id="tipo" value="#{produtoBean.produto.tipo}" styleClass="form-control"/>
-					</div>		
+							<h:selectOneListbox id="tipo" value="#{produtoBean.tipo}" converter="tipoConverter" styleClass="form-control">
+	               				<f:selectItem itemValue="" itemLabel="Selecione um Tipo" />  
+	    						<f:selectItems value="#{produtoBean.tipos}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.nome}"/>		
+							</h:selectOneListbox ></div>		
 					<div class="col-sm-3">
 							<h:message for="tipo" />
 					</div>

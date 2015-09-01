@@ -29,11 +29,11 @@
                 </h:column>
                 <h:column>
 					<f:facet name="header">Bairro</f:facet>
-                    #{pedido.bairro}
+                    #{pedido.bairro.nome}
                 </h:column>
                 <h:column>
 					<f:facet name="header">Cidade</f:facet>
-                    #{pedido.cidade}
+                    #{pedido.cidade.nome}
                 </h:column>
                 <h:column>
 					<f:facet name="header">Observacao</f:facet>
@@ -44,7 +44,7 @@
                		<h:selectOneMenu value="#{pedidoBean.itemSelecionado}" 
                			converter="itemConverter" styleClass="form-control">
                			<f:selectItem itemValue="" itemLabel="Produtos Cadastrados" />  
-    					<f:selectItems value="#{pedido.listItens}"  var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.quantidade} #{item.produto.tipo} = #{item.total} " />
+    					<f:selectItems value="#{pedido.listItens}"  var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.quantidade} #{item.produto.tipo.nome} = #{item.total} " />
 					</h:selectOneMenu>
     			</h:column>
                 <h:column>
