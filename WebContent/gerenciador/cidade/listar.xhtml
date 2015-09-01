@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
+		<ui:define name="content">
+		<ui:include src="/gerenciador/menugerenciador.xhtml" />
+			<h:dataTable styleClass="table table-striped" var="cidade"
+				value="#{cidadeBean.cidades}">
+				<h:column>
+					<f:facet name="header">Id</f:facet>
+                    #{cidade.id}
+                </h:column>
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+                    #{cidade.nome}
+                </h:column>
+                <h:column>
+                	<f:facet name="header">Opcoes</f:facet>
+                		<h:form styleClass="form">
+							<h:commandLink actionListener="#{cidadeBean.delete}" >
+								<f:attribute name="selected" value="#{cidade}" />
+								<p:graphicImage name="/icons/delete.png" />
+							</h:commandLink>
+						</h:form>
+				 </h:column>
+			</h:dataTable>
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

@@ -9,6 +9,8 @@ import javax.faces.bean.ManagedBean;
 import javax.persistence.EntityManager;
 
 import util.JPA;
+import models.Bairro;
+import models.Cidade;
 import models.UserTipo;
 import models.Usuario;
 	 
@@ -31,9 +33,9 @@ public class UsuarioService implements Serializable{
     
     private final static String[] endereco;
      
-    private final static String[] bairro;
+    private final static Bairro[] bairros;
     
-    private final static String[] cidade;
+    private final static Cidade[] cidades;
     
     private final static String[] telefone;
     
@@ -67,18 +69,17 @@ public class UsuarioService implements Serializable{
         endereco[4] = "SC 401 5000";
         endereco[5] = "Rua da Cabela 1307";
         
-        bairro = new String[6];
-        bairro[0] = "Campeche";
-        bairro[1] = "Areias do Campeche";
-        bairro[2] = "Rio Tavres";
-        bairro[3] = "Costeira";
-        bairro[4] = "Centro";
-        bairro[5] = "Itacurubi";
+        cidades = new Cidade[2];
+        cidades[0] = new Cidade("Florianopolis");
+        cidades[1] = new Cidade("Sao Jose");
         
-        cidade = new String[3];
-        cidade[0] = "Florianopolis";
-        cidade[1] = "Sao Jose";
-        cidade[2] = "Palhoca";
+        bairros = new Bairro[6];
+        bairros[0] = new Bairro("Campeche",cidades[0]);
+        bairros[1] = new Bairro("Rio Tavares",cidades[0]);
+        bairros[2] = new Bairro("Costeira",cidades[0]);
+        bairros[3] = new Bairro("Campinas",cidades[1]);
+        bairros[4] = new Bairro("Barreiros",cidades[1]);
+        bairros[5] = new Bairro("Centro",cidades[1]);
         
         telefone = new String[6];
         telefone[0] = "4833331111";
@@ -99,10 +100,20 @@ public class UsuarioService implements Serializable{
     
         public List<Usuario> createUsuarios() {
 	        List<Usuario> list = new ArrayList<Usuario>(6);
+	      
+	        EntityManager em = JPA.getEM();
+	        em = JPA.getEM();
+    		em.getTransaction().begin();
+    		em.persist(cidades[0]);
+    		em.persist(cidades[1]);
+    		for(int i = 0 ; i < 6 ; i++) 
+    			em.persist(bairros[i]);
+    		em.getTransaction().commit();
+	        
 	        
 	        Usuario usuario = new Usuario("lnborim@hotmail.com", getRandomSenha(), "Leandro Borim", getRandomEndereco(), 
-        			getRandomCidade(), getRandomBairro(), getRandomTelefone(), UserTipo.ADMIN);
-        	EntityManager em = JPA.getEM();
+	        		cidades[0], bairros[1], getRandomTelefone(), UserTipo.ADMIN);
+            em = JPA.getEM();
     		em.getTransaction().begin();
     		em.persist(usuario);
     		em.getTransaction().commit();
@@ -110,7 +121,7 @@ public class UsuarioService implements Serializable{
         	list.add(usuario);
 
         	usuario = new Usuario("admin@admin.com", getRandomSenha(), "Administrador", getRandomEndereco(), 
-        			getRandomCidade(), getRandomBairro(), getRandomTelefone(), UserTipo.ADMIN);
+        			cidades[0], bairros[0], getRandomTelefone(), UserTipo.ADMIN);
         	em = JPA.getEM();
     		em.getTransaction().begin();
     		em.persist(usuario);
@@ -119,7 +130,7 @@ public class UsuarioService implements Serializable{
     		list.add(usuario);
     		
     		usuario = new Usuario("teste@teste.com.br", getRandomSenha(), "Teste Tst", getRandomEndereco(), 
-        			getRandomCidade(), getRandomBairro(), getRandomTelefone(), UserTipo.USER);
+    				cidades[1], bairros[4], getRandomTelefone(), UserTipo.USER);
         	em = JPA.getEM();
     		em.getTransaction().begin();
     		em.persist(usuario);
@@ -128,9 +139,20 @@ public class UsuarioService implements Serializable{
         	list.add(usuario);
     		
         	
-	        for(int i = 0 ; i < 6 ; i++) {
+	        for(int i = 0 ; i < 3 ; i++) {
 	        	usuario = new Usuario(getRandomEmail(), getRandomSenha(), getRandomNome(), getRandomEndereco(), 
-	        			getRandomCidade(), getRandomBairro(), getRandomTelefone(), getRandomTipo());
+	        			cidades[0], bairros[i], getRandomTelefone(), getRandomTipo());
+	        	em = JPA.getEM();
+	    		em.getTransaction().begin();
+	    		em.persist(usuario);
+	    		em.getTransaction().commit();
+	
+	        	list.add(usuario);
+	        }
+	        
+	        for(int i = 3 ; i < 6 ; i++) {
+	        	usuario = new Usuario(getRandomEmail(), getRandomSenha(), getRandomNome(), getRandomEndereco(), 
+	        			cidades[1], bairros[i], getRandomTelefone(), getRandomTipo());
 	        	em = JPA.getEM();
 	    		em.getTransaction().begin();
 	    		em.persist(usuario);
@@ -156,14 +178,6 @@ public class UsuarioService implements Serializable{
 	     
 	    private String getRandomEndereco() {
 	        return endereco[(int) (Math.random() * 6)];
-	    }
-	    
-	    private String getRandomBairro() {
-	        return bairro[(int) (Math.random() * 6)];
-	    }
-	     
-	    private String getRandomCidade() {
-	        return cidade[(int) (Math.random() * 3)];
 	    }
 	    
 	    private long getRandomTelefone() {

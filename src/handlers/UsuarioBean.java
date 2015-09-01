@@ -1,16 +1,20 @@
 package handlers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.servlet.http.HttpSession;
 
 import handlers.SessionBean;
+import models.Bairro;
+import models.Cidade;
 import models.Mail;
 import models.UserTipo;
 import models.Usuario;
@@ -24,28 +28,37 @@ public class UsuarioBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -2003852110667669753L;
+
 	private Usuario usuario;
 	private Usuario meuUsuario;
 	private Usuario novoUsuario;
+	private Cidade cidade;
+	private Bairro bairro;
 	private Mail mail;
 	
 	public UsuarioBean() {	
 		try{ 
 			String email = (String) SessionBean.getUserEmail();
 			meuUsuario = getUsuarioPorEmail(email);
+			cidade = meuUsuario.getCidade();
+			bairro = meuUsuario.getBairro();	
 		}catch (Exception e){
-	        if (meuUsuario==null)
-	        	meuUsuario = new Usuario();
+//	        if (meuUsuario==null){
+//	        	meuUsuario = new Usuario();
+//	        }
 	        System.out.println("Usuario não logado, cadastrando");
 		}
         novoUsuario = new Usuario();
-        usuario = new Usuario();
-        mail = new Mail();
+        usuario = new Usuario();	
 	}
 	
 	public String addUsuario() {
 		System.out.println("Add Usuario");
 		String string = "";
+		
+		novoUsuario.setBairro(getBairro());
+		novoUsuario.setCidade(getCidade());
+		
 		EntityManager em = JPA.getEM();
 		em.getTransaction().begin();
 		em.persist(novoUsuario);
@@ -53,16 +66,17 @@ public class UsuarioBean implements Serializable {
 		
 		if (meuUsuario.getTipo().equals(UserTipo.ADMIN))
 			string = "/gerenciador/usuario/listar";
-		else {
+		else 
 			string = "/loja/usuario";
-		}
 
+		mail = new Mail();
 		mail.setAssunto("Cadastro realizado");
 		mail.setDestino(novoUsuario.getEmail());
 		mail.setMsg("Seu cadastro foi realizado com sucesso! Seu login de acesso é "+novoUsuario.getEmail()+" e sua senha é "+novoUsuario.getPassword()+".");
 		mail.setNomeDestino(novoUsuario.getNome());
 		mail.sendMail();
-		setUsuario(new Usuario());
+		
+		setNovoUsuario(new Usuario());
 
 		return string;
 	}
@@ -70,6 +84,10 @@ public class UsuarioBean implements Serializable {
 	public String updateMeuUsuario() {
 		System.out.println("Update Usuario");
 		String string = "";
+		
+		meuUsuario.setBairro(getBairro());
+		meuUsuario.setCidade(getCidade());
+		
 		EntityManager em = JPA.getEM();
 		em.getTransaction().begin();
 		em.merge(meuUsuario);
@@ -79,33 +97,32 @@ public class UsuarioBean implements Serializable {
 			string = "/gerenciador/usuario/listar";
 		else
 			string = "/loja/usuario";
-
+		
+		mail = new Mail();
 		mail.setAssunto("Alteração no cadastro realizada");
 		mail.setDestino(meuUsuario.getEmail());
 		mail.setMsg("Seu cadastro foi alterado com sucesso! Seu login de acesso é "+meuUsuario.getEmail()+" e sua senha é "+meuUsuario.getPassword()+"");
 		mail.setNomeDestino(meuUsuario.getNome());
 		mail.sendMail();
 		
-		mail = new Mail();
-		return "/loja/usuario";
+		return string;
 	}
 	
 	public String updateUsuario() {
 		System.out.println("Update Usuario");
 		String string = "";
+		
+		usuario.setBairro(getBairro());
+		usuario.setCidade(getCidade());
+		
 		EntityManager em = JPA.getEM();
 		em.getTransaction().begin();
 		em.merge(usuario);
 		em.getTransaction().commit();
 		
-		if (meuUsuario.getTipo().equals(UserTipo.ADMIN))
-			string = "/gerenciador/usuario/listar";
-		else
-			string = "/loja/usuario";
-		
 		setUsuario(new Usuario());
 
-		return string;
+		return "/gerenciador/usuario/listar";
 	}
 	
 	public String clearUsuarios() {
@@ -125,7 +142,11 @@ public class UsuarioBean implements Serializable {
 		em.remove(selected);
 		em.getTransaction().commit();
 	}
-
+	
+    public void bairroListener(AjaxBehaviorEvent event){
+    		System.out.println("bairroListener ");
+	}
+    
 	public List<Usuario> getUsuarios() {
 
 		EntityManager em = JPA.getEM();
@@ -140,6 +161,8 @@ public class UsuarioBean implements Serializable {
 	}
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+		this.bairro = usuario.getBairro();
+		this.cidade = usuario.getCidade();
 	}
 	public Usuario getMeuUsuario() {
 		return meuUsuario;
@@ -162,6 +185,23 @@ public class UsuarioBean implements Serializable {
 		this.mail = mail;
 	}
 
+	public Cidade getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(Cidade cidade) {
+		this.cidade = cidade;
+		getBairros();
+	}
+	
+	public Bairro getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(Bairro bairro) {
+		this.bairro = bairro;
+	}
+
 	public Usuario getUsuarioPorEmail(String email) {
 		EntityManager em = JPA.getEM();
 		TypedQuery<Usuario> query = em.createQuery("Select u from Usuario u where u.email = :email",
@@ -171,6 +211,28 @@ public class UsuarioBean implements Serializable {
 		return usuario;
 	}
 	
+	public List<Cidade> getCidades() {
+
+		EntityManager em = JPA.getEM();
+		TypedQuery<Cidade> query = em.createQuery("Select c from Cidade c",
+				Cidade.class);
+		
+		return query.getResultList();
+	}
+	
+	public List<Bairro> getBairros() {
+		try{ 				
+			EntityManager em = JPA.getEM();
+			TypedQuery<Bairro> query = em.createQuery("Select b from Bairro b where b.cidade.id = :id",
+					Bairro.class);
+			query.setParameter("id", cidade.getId());
+			return query.getResultList();
+		
+		}catch (Exception e){
+			return new ArrayList<Bairro>();
+		}
+	}
+
 	public String list() {
 		return "/gerenciador/usuario/listar";
 	}

@@ -37,9 +37,7 @@ public class PedidoBean {
 		item = new Item();
 		quantidade = item.getQuantidade();
 		
-		HttpSession session = SessionBean.getSession();
-        String email = (String) session.getAttribute("email");
-        usuario =  getUsuarioPorEmail(email);
+        usuario =  SessionBean.getUser();
         pedido.setUsuario(usuario);
         mail = new Mail();
 	} 

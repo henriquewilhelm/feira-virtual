@@ -29,8 +29,8 @@ public class Usuario implements IConvertible, Serializable {
     private String password;
     private String nome;
     private String endereco;
-    private String cidade;
-    private String bairro;
+    private Cidade cidade;
+    private Bairro bairro;
     private Long telefone;
     @Enumerated(EnumType.STRING)
     private UserTipo tipo;
@@ -40,7 +40,7 @@ public class Usuario implements IConvertible, Serializable {
     }
     
     public Usuario(String email, String password, String nome, String endereco,
-			String cidade, String bairro, Long telefone, UserTipo tipo) {
+			Cidade cidade, Bairro bairro, Long telefone, UserTipo tipo) {
 		super();
 		this.email = email;
 		this.password = password;
@@ -53,9 +53,6 @@ public class Usuario implements IConvertible, Serializable {
 	}
 
 	// get and set 
-    public boolean isAdmin() {
-        return UserTipo.ADMIN.equals(tipo);
-    }
  
     public Integer getId() {
 		return id;
@@ -113,22 +110,26 @@ public class Usuario implements IConvertible, Serializable {
 		this.endereco = endereco;
 	}
 
-	public String getCidade() {
+	public Cidade getCidade() {
 		return cidade;
 	}
 
-	public void setCidade(String cidade) {
+	public void setCidade(Cidade cidade) {
 		this.cidade = cidade;
 	}
 
-	public String getBairro() {
+	public Bairro getBairro() {
 		return bairro;
 	}
 
-	public void setBairro(String bairro) {
+	public void setBairro(Bairro bairro) {
 		this.bairro = bairro;
 	}
 
+    public boolean isAdmin() {
+        return UserTipo.ADMIN.equals(tipo);
+    }
+    
 	public boolean isUser() {
         return UserTipo.USER.equals(tipo);
     }

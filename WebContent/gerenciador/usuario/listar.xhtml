@@ -30,6 +30,18 @@
                     </h:outputText>
                 </h:column>
                 <h:column>
+					<f:facet name="header">Endereco</f:facet>
+                    #{usuario.endereco}
+                </h:column>
+                 <h:column>
+					<f:facet name="header">Bairro</f:facet>
+                    #{usuario.bairro.nome}
+                </h:column>
+                 <h:column>
+					<f:facet name="header">Cidade</f:facet>
+                    #{usuario.cidade.nome}
+                </h:column>
+                <h:column>
                 	<f:facet name="header">Opcoes</f:facet>
                 	<h:form styleClass="form">
 							<h:column>

@@ -13,7 +13,7 @@
 			</h1>
 			<h:form styleClass="form-horizontal">
 			    <div class="form-group">
-					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-2" />
+					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-1" />
 					<div class="col-sm-7">
 							<h:inputText id="nome" value="#{usuarioBean.usuario.nome}" styleClass="form-control" />
 					</div>	
@@ -22,7 +22,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<h:outputLabel for="email" value="E-mail " styleClass="col-sm-2" />
+					<h:outputLabel for="email" value="E-mail " styleClass="col-sm-1" />
 					<div class="col-sm-7">
 						<h:inputText id="email" value="#{usuarioBean.usuario.email}" styleClass="form-control">
 	<!-- 	                    <f:validator validatorId="emailEspecialValidator"/> -->
@@ -34,16 +34,16 @@
                 </div>
                 <div class="form-group">
                 
-					<h:outputLabel for="tipo" value="Tipo: " styleClass="col-sm-2" />
+					<h:outputLabel for="tipo" value="Senha: " styleClass="col-sm-1" />
 					<div class="col-sm-7">
-							<h:inputText id="tipo" value="#{usuarioBean.usuario.tipo}" styleClass="form-control"/>
+							<h:inputText id="tipo" accesskey="*" value="#{usuarioBean.usuario.password}" styleClass="form-control"/>
 					</div>		
 					<div class="col-sm-3">
 							<h:message for="tipo" />
 					</div>
 				</div>
                 <div class="form-group">
-	                <h:outputLabel for="telefone" value="Telefone: " styleClass="col-sm-2" />
+	                <h:outputLabel for="telefone" value="Telefone: " styleClass="col-sm-1" />
 	                <div class="col-sm-7">
 			                <h:inputText id="telefone" value="#{usuarioBean.usuario.telefone}" styleClass="form-control">
 		                    	<f:validator validatorId="telefoneValidator"/>
@@ -54,9 +54,39 @@
 		             		<h:message for="telefone" />
 		             </div>
                 </div>
-                <br />
+                <div class="form-group">
+	                <h:outputLabel for="endereco" value="Endereco: " styleClass="col-sm-1" />
+	                <div class="col-sm-7">
+			                <h:inputText id="endereco" value="#{usuarioBean.usuario.endereco}" styleClass="form-control"/>
+		             </div>      
+		             <div class="col-sm-3">
+		             		<h:message for="endereco" />
+		             </div>
+                </div>
+                <div class="form-group">
+	                <h:outputLabel for="cidade" value="Cidade:" styleClass="col-sm-1" />
+					<div class="col-sm-3">
+                		<h:selectOneListbox id="cidade" value="#{usuarioBean.cidade}" converter="cidadeConverter" styleClass="form-control">
+               				<f:selectItem itemValue="" itemLabel="Selecione uma Cidade" />  
+    						<f:selectItems value="#{usuarioBean.cidades}" var="cidade" itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>		
+							 <f:ajax render="bairro" listener="#{usuarioBean.bairroListener}"/> 
+						</h:selectOneListbox >
+					</div>
+	                 <h:outputLabel for="bairro" value="Bairro:" styleClass="col-sm-1" />
+					<div class="col-sm-3">
+                		<h:selectOneListbox id="bairro" value="#{usuarioBean.bairro}"  converter="bairroConverter" styleClass="form-control">
+               				<f:selectItem itemValue="" itemLabel="Selecione uma Bairro" />  
+    						<f:selectItems value="#{usuarioBean.bairros}" var="bairro" itemValue="#{bairro}" itemLabel="#{bairro.nome}"/>		
+						</h:selectOneListbox >
+					</div>
+				 </div>
+                <div class="form-group">	
+					 <div class="col-sm-3">
+		             		<h:message for="cidade" />
+		             		<h:message for="bairro" />
+		             </div>
+                </div>
 				<h:commandButton styleClass="btn btn-primary btn-lg" value="Salvar" action="#{usuarioBean.updateUsuario}"/>
-				
 				<h:commandButton styleClass="btn btn-primary btn-lg" value="Limpar" action="#{usuarioBean.clearUsuarios}"/>
 			</h:form>
 		</ui:define>

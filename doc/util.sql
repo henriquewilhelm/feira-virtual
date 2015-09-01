@@ -3,6 +3,24 @@ create database feira;
 use feira;
 show tables;
 
+insert into cidades (id, nome) values (1,'Florianopolis');
+insert into cidades (id, nome) values (2,'Sao Jose');
+
+insert into bairros (id, nome, cidade_id) values (1,'Campeche',1);
+insert into bairros (id, nome, cidade_id) values (2,'Rio Tavares',1);
+insert into bairros (id, nome, cidade_id) values (3,'Centro',1);
+insert into bairros (id, nome, cidade_id) values (4,'Costeira',1);
+
+insert into bairros (id, nome, cidade_id) values (5,'Campinas',2);
+insert into bairros (id, nome, cidade_id) values (6,'Barreiros',2);
+insert into bairros (id, nome, cidade_id) values (7,'Estreito',2);
+insert into bairros (id, nome, cidade_id) values (8,'Centro',2);
+
+
+insert into usuarios (id, email, password, nome, telefone, tipo, endereco, cidade_id, bairro_id) values (1,'henrique.wilhelm@gmail.com','123456','Henrique Wilhelm','4896545864','ADMIN','Rua Moraes 211 ',1,2);
+
+
+
 insert into produtos (nome,data,tipo,valor) values ('Entrega','2015/08/24','','12.00');
 insert into produtos (nome,data,tipo,valor) values ('Banana','2015/08/24','Kg.','2.50');
 insert into produtos (nome,data,tipo,valor) values ('Bergamota','2015/08/24','Kg.','2.50');

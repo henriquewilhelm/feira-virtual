@@ -31,7 +31,6 @@ public class LoginBean implements Serializable {
 	
 	public LoginBean() {
         	usuario = new Usuario();
-        	mail = new Mail();
 	}
 	
 	public String clearLogin() {
@@ -56,11 +55,10 @@ public class LoginBean implements Serializable {
 		query.setParameter("email", getEmail());
 		query.setParameter("password", getPassword());
 		System.out.println(getEmail() + " "+ getPassword());
-        boolean valid = query.getResultList().size()!=0;
-        if (valid) {
+        usuario = query.getSingleResult();
+        if (usuario!=null) {
             HttpSession session = SessionBean.getSession();
-            session.setAttribute("email", email);
-            usuario = query.getResultList().get(0);
+            session.setAttribute("usuario", usuario);
             if (usuario.getTipo().equals(UserTipo.ADMIN))
             		return "admin";
             else
@@ -84,8 +82,8 @@ public class LoginBean implements Serializable {
 		em.getTransaction().commit();
 
 		HttpSession session = SessionBean.getSession();
-        session.setAttribute("email", usuario.getEmail());
-		
+        session.setAttribute("usuario", usuario);
+    	mail = new Mail();
 		mail.setAssunto("Cadastro realizado");
 		mail.setDestino(usuario.getEmail());
 		mail.setMsg("Seu cadastro foi realizado com sucesso! Seu login de acesso é "+usuario.getEmail()+" e sua senha é "+usuario.getPassword()+".");
@@ -99,6 +97,7 @@ public class LoginBean implements Serializable {
     //logout event, invalidate session
     public String logout() {
         HttpSession session = SessionBean.getSession();
+        session.setAttribute("usuario", null);
         session.invalidate();
         return "/login";
     }

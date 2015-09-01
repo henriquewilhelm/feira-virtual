@@ -8,6 +8,8 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import models.Usuario;
+
 @ManagedBean
 @SessionScoped
 public class SessionBean implements Serializable{
@@ -19,7 +21,7 @@ public class SessionBean implements Serializable{
 
 	public static HttpSession getSession() {
         return (HttpSession) FacesContext.getCurrentInstance()
-                .getExternalContext().getSession(true);
+                .getExternalContext().getSession(false);
     }
  
     public static HttpServletRequest getRequest() {
@@ -29,8 +31,17 @@ public class SessionBean implements Serializable{
  
     public static String getUserEmail() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-                .getExternalContext().getSession(true);
-        return session.getAttribute("email").toString();
+                .getExternalContext().getSession(false);
+         Usuario usuario = (Usuario) session.getAttribute("usuario");
+         
+         return usuario.getEmail();
+    }
+    
+    public static Usuario getUser() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+                .getExternalContext().getSession(false);
+
+         return (Usuario) session.getAttribute("usuario");
     }
  
     public static String getUserId() {

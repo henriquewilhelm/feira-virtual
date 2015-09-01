@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
+		<ui:define name="content">
+		<ui:include src="/gerenciador/menugerenciador.xhtml" />
+			<h1>
+				<h:outputText value="Cadastro de Bairros" />
+			</h1>
+			<h:form styleClass="form-horizontal">
+			    <div class="form-group">
+					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-1" />
+					<div class="col-sm-3">
+							<h:inputText id="nome" value="#{bairroBean.bairro.nome}" styleClass="form-control" />
+					</div>	
+				</div>
+				<div class="form-group">
+					<h:outputLabel for="cidade" value="Cidade:" styleClass="col-sm-1" />
+					<div class="col-sm-3">
+                		<h:selectOneListbox id="cidade" value="#{bairroBean.cidade}" converter="cidadeConverter" styleClass="form-control">
+               				<f:selectItem itemValue="" itemLabel="Selecione uma Cidade" />  
+    						<f:selectItems value="#{bairroBean.cidades}" var="cidade" itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>		
+						</h:selectOneListbox >
+					</div>
+				</div>
+				<div class="col-sm-3">
+							<h:messages />
+				</div>
+                <br />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Send" action="#{bairroBean.addBairro}" />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Clear" action="#{bairroBean.clearBairros}" />
+			</h:form>
+			<br />
+			
+			<br />
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

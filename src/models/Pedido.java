@@ -36,8 +36,8 @@ public class Pedido implements IConvertible, Serializable  {
 	
 	private String nome;
     private String endereco;
-    private String cidade;
-    private String bairro;
+    private Cidade cidade;
+    private Bairro bairro;
     private Long telefone;
     
     private String obs;
@@ -51,6 +51,7 @@ public class Pedido implements IConvertible, Serializable  {
 	
 	public Pedido() {
 		listItens = new ArrayList<Item>();	
+		cidade = new Cidade();
 		setData(Calendar.getInstance().getTime());
 	};
 	
@@ -79,9 +80,9 @@ public class Pedido implements IConvertible, Serializable  {
 		if (this.usuario!=null){
 			this.nome = usuario.getNome();
 			this.endereco = usuario.getEndereco();
+			this.telefone = usuario.getTelefone();
 			this.cidade = usuario.getCidade();
 			this.bairro = usuario.getBairro();
-			this.telefone = usuario.getTelefone();
 		}
 		
 	}
@@ -110,19 +111,19 @@ public class Pedido implements IConvertible, Serializable  {
 		this.endereco = endereco;
 	}
 	
-	public String getBairro() {
+	public Bairro getBairro() {
 		return bairro;
 	}
 
-	public void setBairro(String bairro) {
+	public void setBairro(Bairro bairro) {
 		this.bairro = bairro;
 	}
 
-	public String getCidade() {
+	public Cidade getCidade() {
 		return cidade;
 	}
 
-	public void setCidade(String cidade) {
+	public void setCidade(Cidade cidade) {
 		this.cidade = cidade;
 	}
 

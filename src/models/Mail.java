@@ -9,10 +9,12 @@ import org.apache.commons.mail.SimpleEmail;
 
 public class Mail implements Serializable {
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2495641885555231917L;
+	private static final long serialVersionUID = -950794566290527195L;
+
 	private Email email;
 	
 	private String msg;
@@ -24,7 +26,8 @@ public class Mail implements Serializable {
     	this.email = new SimpleEmail();
 	}
 
-    public Mail(String msg, String assunto, String destino, String nomeDestino) {
+    public Mail(String msg, String assunto, String destino, String nomeDestino) throws EmailException {
+
     	this.email = new SimpleEmail();
     	this.msg = msg;
     	this.assunto = assunto;
@@ -36,7 +39,7 @@ public class Mail implements Serializable {
         try {
             String authuser = "sistema.lnb@gmail.com";
             String authpwd = "sis1234!";
-            
+
             email.setSmtpPort(587);
             email.setAuthenticator(new DefaultAuthenticator(authuser, authpwd));
             email.setDebug(true);

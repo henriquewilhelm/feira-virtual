@@ -35,13 +35,13 @@
                 <div class="form-group">
 					<h:outputLabel for="bairro" value="Bairro: " styleClass="col-sm-2"/>
 					<div class="col-sm-7">
-						<h:inputText id="bairro" value="#{pedidoBean.pedido.bairro}" styleClass="form-control" />
+						<h:inputText id="bairro" value="#{pedidoBean.pedido.bairro.nome}" styleClass="form-control" />
 					</div>
 				</div>
 				<div class="form-group">
 					<h:outputLabel for="cidade" value="Cidade: " styleClass="col-sm-2"/>
 					<div class="col-sm-7">
-						<h:inputText id="cidade" value="#{pedidoBean.pedido.cidade}" styleClass="form-control" />
+						<h:inputText id="cidade" value="#{pedidoBean.pedido.cidade.nome}" styleClass="form-control" />
 					</div>
 				</div>
 				<div class="form-group">
@@ -51,7 +51,7 @@
 					</div>
 				</div>
                 <div class="form-group">
-               		<h:outputLabel for="nome" value="Produtos: " styleClass="col-sm-2"/>
+               		<h:outputLabel for="produtos" value="Produtos: " styleClass="col-sm-2"/>
 					<div class="col-sm-3">
                 		<h:selectOneListbox value="#{pedidoBean.produtoSelecionado}"
                 				converter="produtoConverter" styleClass="form-control">
