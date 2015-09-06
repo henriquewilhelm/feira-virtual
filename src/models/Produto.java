@@ -27,6 +27,8 @@ public class Produto implements IConvertible, Serializable {
 	private Date data;
 	private Tipo tipo;
 	private Double valor;
+	private String foto = "/resources/image/produtos/produto.png";
+	
 	
 	public Produto() {
 		setData(Calendar.getInstance().getTime());
@@ -88,7 +90,11 @@ public class Produto implements IConvertible, Serializable {
 		this.valor = valor;
 	}
 	
-	public String toString(){
-		return this.getNome();
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 }

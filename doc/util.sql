@@ -77,7 +77,7 @@ insert into produtos (nome,data,tipo,valor) values ('Ovos','2015/08/24','Kg.','7
 insert into produtos (nome,data,tipo,valor) values ('Pão Integral','2015/08/24','Uni.','9.00');
 insert into produtos (nome,data,tipo,valor) values ('Sabonete','2015/08/24','Uni.','5.00');
 
-insert into usuarios (id, email, password, nome, telefone, tipo, endereco, cidade, bairro) values (1,'henrique.wilhelm@gmail.com','123456','Henrique Wilhelm','4896545864','ADMIN','Rua Moraes 211 ','Florianopolis','Rio Tavares');
+insert into usuarios (id, email, password, nome, telefone, tipo, endereco) values (1,'henrique.wilhelm@gmail.com','123456','Henrique Wilhelm','4896545864','ADMIN','Rua Moraes 211 ');
 insert into usuarios (id, email, password, nome, telefone, tipo, endereco, cidade, bairro) values (2,'lnborim@hotmail.com','123456','Leandro Nadaleto Borin','4896545864','ADMIN','Rua Coruja 555','Florianopolis','Campeche');
 insert into usuarios (id, email, password, nome, telefone, tipo, endereco, cidade, bairro) values (3,'teste@teste.com','123456','Fulaninho de Tal','4896545864','USER','Rua Coral 205','Florianopolis','Itacurubi');
 

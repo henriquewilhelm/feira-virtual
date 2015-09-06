@@ -11,43 +11,56 @@
 		<ui:define name="content">
 		<ui:include src="/gerenciador/menugerenciador.xhtml" />
 		<h:form styleClass="form">
-			<h:dataTable styleClass="table table-striped" var="pedido"
-				value="#{pedidoBean.pedidos}"> 
-				<h:column>
+			<p:dataTable id="tbl" var="pedido" value="#{pedidoBean.pedidos}"
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                 paginator="true" rows="10" style="margin-bottom:20px">
+				
+				 <f:facet name="{Exporters}">
+		            <h:commandLink>
+		                <p:graphicImage name="/image/excel.png" width="24"/>
+		                <p:dataExporter type="xls" target="tbl" ajax="false" fileName="pedidos"  />
+		            </h:commandLink>
+		 
+		            <h:commandLink>
+		                <p:graphicImage name="/image/pdf.png" width="24"/>
+		                <p:dataExporter type="pdf" target="tbl" ajax="false" fileName="pedidos"/>
+		            </h:commandLink>
+		        </f:facet>	
+				<p:column>
 					<f:facet name="header">Nome</f:facet>
                     #{pedido.nome}
-                </h:column>
-                <h:column>
+                </p:column>
+                <p:column>
                		 <f:facet name="header">Data Entrega</f:facet>
                     <h:outputText value="#{pedido.data}">
                         <f:convertDateTime pattern="dd/MM/yyyy" />
                     </h:outputText>
-                </h:column>
-                <h:column>
+                </p:column>
+                <p:column>
 					<f:facet name="header">Endereco</f:facet>
                     #{pedido.endereco}
-                </h:column>
-                <h:column>
+                </p:column>
+                <p:column>
 					<f:facet name="header">Bairro</f:facet>
                     #{pedido.bairro.nome}
-                </h:column>
-                <h:column>
+                </p:column>
+                <p:column>
 					<f:facet name="header">Cidade</f:facet>
                     #{pedido.cidade.nome}
-                </h:column>
-                <h:column>
+                </p:column>
+                <p:column>
 					<f:facet name="header">Observacao</f:facet>
                     #{pedido.obs}
-                </h:column>
-                <h:column>
+                </p:column>
+                <p:column>
                 	<f:facet name="header">Produtos</f:facet>
                		<h:selectOneMenu value="#{pedidoBean.itemSelecionado}" 
                			converter="itemConverter" styleClass="form-control">
                			<f:selectItem itemValue="" itemLabel="Produtos Cadastrados" />  
     					<f:selectItems value="#{pedido.listItens}"  var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.quantidade} #{item.produto.tipo.nome} = #{item.total} " />
 					</h:selectOneMenu>
-    			</h:column>
-                <h:column>
+    			</p:column>
+                <p:column>
                 	<f:facet name="header">Opcoes</f:facet>
 							<h:commandLink action="/gerenciador/pedido/editar.xhtml">
 											 <f:setPropertyActionListener target="#{pedidoBean.pedido}"
@@ -58,13 +71,22 @@
 								<f:attribute name="selected" value="#{pedido}" />
 								<p:graphicImage name="/icons/delete.png" />
 							</h:commandLink>
-                </h:column>
-			</h:dataTable>
-			
+                </p:column>
+			</p:dataTable>
+			 <h3>Export Page Data Only</h3>
+			    <h:commandLink>
+			        <p:graphicImage name="/image/excel.png" />
+			        <p:dataExporter type="xls" target="tbl" ajax="false" fileName="pedidos"/>
+			    </h:commandLink>
+			 
+			    <h:commandLink>
+			        <p:graphicImage name="/image/pdf.png" />
+			       <p:dataExporter type="pdf" target="tbl" ajax="false" fileName="pedidos" />
+			    </h:commandLink>
 			</h:form>
 			<br /><br />
 			<h:messages />
-			<br /><br />
+			<br /><br />	 		
 		</ui:define>
 		<ui:define name="footer">
 		      <ui:include src="/footer.xhtml"></ui:include>

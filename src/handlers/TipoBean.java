@@ -35,6 +35,19 @@ public class TipoBean {
 		return "/gerenciador/produto/tipo/listar";
 	}
 	
+	public String updateTipo() {
+		System.out.println("Add Tipo "+tipo.getNome());
+
+		EntityManager em = JPA.getEM();
+		em.getTransaction().begin();
+		em.merge(tipo);
+		em.getTransaction().commit();
+		
+		setTipo(new Tipo());
+
+		return "/gerenciador/produto/tipo/listar";
+	}
+	
 	public String clearTipos() {
 		System.out.println("Clear All");
 		setTipo(new Tipo());

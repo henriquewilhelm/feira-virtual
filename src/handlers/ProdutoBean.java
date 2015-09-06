@@ -2,11 +2,15 @@ package handlers;
 
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+
+import org.primefaces.event.FileUploadEvent;
 
 import util.JPA;
 import models.Produto;
@@ -25,28 +29,50 @@ public class ProdutoBean {
 	}
 	
 	public String addProduto() {
-		System.out.println("Add Produto");
 
+		if (getTipo()!=null){
+			System.out.println("Add Produto");
+			produto.setTipo(getTipo());
+		}
+		else{
+			FacesContext facesContext = FacesContext.getCurrentInstance(); 
+
+			facesContext.addMessage(null, new FacesMessage( 
+            FacesMessage.SEVERITY_ERROR, "Ops, faltou escolher um tipo...", null));
+			System.out.println("Favor selecione uma opcao");
+			
+			return null;
+		}
 		EntityManager em = JPA.getEM();
 		em.getTransaction().begin();
 		em.persist(produto);
 		em.getTransaction().commit();
 		
 		setProduto(new Produto());
-
 		return "/gerenciador/produto/listar";
 	}
 	
 	public String updateProduto() {
-		System.out.println("Add Produto");
+		
+		if (getTipo()!=null){
+			produto.setTipo(getTipo());
+			System.out.println("Add Produto");
+		}
+		else{
+			FacesContext facesContext = FacesContext.getCurrentInstance(); 
 
+			facesContext.addMessage(null, new FacesMessage( 
+            FacesMessage.SEVERITY_ERROR, "Ops, faltou escolher um tipo...", null));
+			System.out.println("Favor selecione uma opcao");
+			
+			return null;
+		}
 		EntityManager em = JPA.getEM();
 		em.getTransaction().begin();
 		em.merge(produto);
 		em.getTransaction().commit();
 		
 		setProduto(new Produto());
-
 		return "/gerenciador/produto/listar";
 	}
 	
@@ -56,7 +82,7 @@ public class ProdutoBean {
 		return "/gerenciador/produto/registrar";
 	}
 	
-	public void  delete(ActionEvent event){
+	public void  delete(ActionEvent event) {
 		Produto selected = (Produto) event.getComponent().getAttributes().get("selected");
 		EntityManager em = JPA.getEM();
 		em.getTransaction().begin();
@@ -73,13 +99,14 @@ public class ProdutoBean {
 					if (pedidos.get(i).getListItens() != null){
 						for (int j=0; j<pedidos.get(i).getListItens().size(); j++){
 							if (pedidos.get(i).getListItens().get(j).getProduto()!= null && pedidos.get(i).getListItens().get(j).getProduto().equals(selected)){
-								
+								System.out.println("entrei");	
 								em.remove(pedidos.get(i).getListItens().get(j).getProduto());
 								pedidos.get(i).getListItens().get(j).setProduto(null);
 								
 								em.remove(pedidos.get(i).getListItens().get(j));
 								pedidos.get(i).getListItens().remove(pedidos.get(i).getListItens().get(j));
 							}
+
 							em.persist(pedidos.get(i));
 							em.remove(selected);
 							System.out.println("Tinha Pedidos - Removeu: "+selected.getNome());
@@ -125,7 +152,6 @@ public class ProdutoBean {
 	public void setTipo(Tipo tipo) {
 		this.tipo = tipo;
 	}
-	
 	
 	public String list() {
 		return "/gerenciador/produto/listar";

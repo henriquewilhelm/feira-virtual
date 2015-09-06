@@ -20,11 +20,25 @@
                     #{tipo.nome}
                 </h:column>
                 <h:column>
+					<f:facet name="header">Minimo</f:facet>
+                    #{tipo.minimo}
+                </h:column>
+                <h:column>
+					<f:facet name="header">Maximo</f:facet>
+                    #{tipo.maximo}
+                </h:column>
+                <h:column>
                 	<f:facet name="header">Opcoes</f:facet>
                 		<h:form styleClass="form">
 							<h:commandLink actionListener="#{tipoBean.delete}" >
 								<f:attribute name="selected" value="#{tipo}" />
 								<p:graphicImage name="/icons/delete.png" />
+							</h:commandLink>
+						
+							<h:commandLink action="/gerenciador/produto/tipo/editar.xhtml">
+										 <f:setPropertyActionListener target="#{tipoBean.tipo}"
+		                               	 value="#{tipo}" />
+		                               	 <p:graphicImage name="/icons/edit.png" />
 							</h:commandLink>
 						</h:form>
 				 </h:column>

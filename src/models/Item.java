@@ -20,29 +20,29 @@ public class Item implements IConvertible, Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	private Integer quantidade;
+	private Double quantidade;
 	
 	private Produto produto;
 
 	private Double total;
 	
 	public Item() {
-		this.quantidade = 1;
+		this.quantidade = 1d;
 		this.total = 0d;
 		this.produto = new Produto();
 	}
 
-	public Item(Integer qntd, Produto produto) {
+	public Item(Double qntd, Produto produto) {
 		this.quantidade = qntd;
 		this.total = 0d;
 		this.produto = produto;
 	}
 	
-	public Integer getQuantidade() {
+	public Double getQuantidade() {
 		return quantidade;
 	}
 
-	public void setQuantidade(Integer quantidade) {
+	public void setQuantidade(Double quantidade) {
 		this.quantidade = quantidade;
 	}
 

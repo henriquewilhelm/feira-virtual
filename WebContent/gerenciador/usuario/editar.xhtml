@@ -69,7 +69,7 @@
                 		<h:selectOneListbox id="cidade" value="#{usuarioBean.cidade}" converter="cidadeConverter" styleClass="form-control">
                				<f:selectItem itemValue="" itemLabel="Selecione uma Cidade" />  
     						<f:selectItems value="#{usuarioBean.cidades}" var="cidade" itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>		
-							 <f:ajax render="bairro" listener="#{usuarioBean.bairroListener}"/> 
+							 <f:ajax render="bairro"/> 
 						</h:selectOneListbox >
 					</div>
 	                 <h:outputLabel for="bairro" value="Bairro:" styleClass="col-sm-1" />

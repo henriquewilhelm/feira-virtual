@@ -2,7 +2,8 @@
 
 <html xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 
 <h:body>
 	<ui:composition template="/loja/layout/layoutuser.xhtml">
@@ -10,15 +11,15 @@
 			<h1>
 				<h:outputText value="Cadastro de Pedidos" />
 			</h1>
-			<h:form  styleClass="form-horizontal">
+			<h:form styleClass="form-horizontal">
 			    <div class="form-group">
-					<h:outputLabel for="nome" value="Nome: " styleClass="col-sm-2"/>
+					<h:outputLabel for="nome" value="Nome: " styleClass="col-sm-1"/>
 					<div class="col-sm-7">
 						<h:inputText id="nome" value="#{pedidoBean.pedido.nome}" styleClass="form-control" />
 					</div>
 				</div>
 				<div class="form-group">
-					<h:outputLabel for="data" value="Data Entrega: " styleClass="col-sm-2" />
+					<h:outputLabel for="data" value="Data Entrega: " styleClass="col-sm-1" />
 					<div class="col-sm-7">
 						<h:inputText id="data" value="#{pedidoBean.pedido.data}" styleClass="form-control">
 		                    <f:convertDateTime pattern="dd/mm/yyyy" />
@@ -26,26 +27,26 @@
 	                </div>
                 </div>
                 <div class="form-group">
-					<h:outputLabel for="endereco" value="Endereco: "  styleClass="col-sm-2"/>
+					<h:outputLabel for="endereco" value="Endereco: "  styleClass="col-sm-1"/>
 					<div class="col-sm-7">
 						<h:inputText id="endereco" value="#{pedidoBean.pedido.endereco}" styleClass="form-control"/>
 					</div>
 				</div>
                 <div class="form-group">
-	                <h:outputLabel for="cidade" value="Cidade:" styleClass="col-sm-2" />
+	                <h:outputLabel for="cidade" value="Cidade:" styleClass="col-sm-1" />
 					<div class="col-sm-3">
-                		<h:selectOneListbox id="cidade" value="#{pedidoBean.cidade}" converter="cidadeConverter" styleClass="form-control">
+                		<p:selectOneListbox id="cidade" value="#{pedidoBean.cidade}" converter="cidadeConverter">
                				<f:selectItem itemValue="" itemLabel="Selecione uma Cidade" />  
     						<f:selectItems value="#{pedidoBean.cidades}" var="cidade" itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>		
 							 <f:ajax render="bairro" /> 
-						</h:selectOneListbox >
+						</p:selectOneListbox >
 					</div>
 	                 <h:outputLabel for="bairro" value="Bairro:" styleClass="col-sm-1" />
 					<div class="col-sm-3">
-                		<h:selectOneListbox id="bairro" value="#{pedidoBean.bairro}"  converter="bairroConverter" styleClass="form-control">
+                		<p:selectOneListbox id="bairro" value="#{pedidoBean.bairro}"  converter="bairroConverter">
                				<f:selectItem itemValue="" itemLabel="Selecione uma Bairro" />  
     						<f:selectItems value="#{pedidoBean.bairros}" var="bairro" itemValue="#{bairro}" itemLabel="#{bairro.nome}"/>		
-						</h:selectOneListbox >
+						</p:selectOneListbox >
 					</div>
 				   </div>
                 <div class="form-group">
@@ -55,43 +56,77 @@
 		             </div>
                 </div>
 				<div class="form-group">
-					<h:outputLabel for="obs" value="Observacoes: " styleClass="col-sm-2"/>
+					<h:outputLabel for="obs" value="Observacoes: " styleClass="col-sm-1"/>
 					<div class="col-sm-7">
 						<h:inputText id="obs" value="#{pedidoBean.pedido.obs}" styleClass="form-control" />
 					</div>
 				</div>
                 <div class="form-group">
-               		<h:outputLabel for="nome" value="Produtos: " styleClass="col-sm-2"/>
-					<div class="col-sm-3">
-                		<h:selectOneListbox value="#{pedidoBean.produtoSelecionado}"
-                				converter="produtoConverter" styleClass="form-control">
-               				<f:selectItem itemValue="" itemLabel="Selecione um Produto" />  
-    						<f:selectItems value="#{pedidoBean.produtosCadastrados}" var="prod" itemValue="#{prod}" itemLabel="#{prod.nome} - #{prod.valor} R$ #{prod.tipo.nome}"/>		
-						</h:selectOneListbox >
-					</div>	
-					<div class="col-sm-2">
-						<h:outputLabel value="Quantidade" styleClass="col-sm-2"/>
-						<h:inputText id="quantidade" value="#{pedidoBean.quantidade}" styleClass="form-control" />
-						<br /><br />
-						<h:commandButton value=	"Adicionar" actionListener="#{pedidoBean.addProduto}" styleClass="btn btn-info"/>
-						<br /><br /><br /><br />
-						<h:commandButton value=	"Remover" actionListener="#{pedidoBean.removeProduto}" styleClass="btn btn-danger"/>
-						
-		    		</div>
-		    		<div class="col-sm-4">
-						<h:selectOneListbox value="#{pedidoBean.itemSelecionado}" 
-							converter="itemConverter" styleClass="form-control" >
-               				<f:selectItem itemValue="" itemLabel="Produtos Cadastrados" />  
-    						<f:selectItems value="#{pedidoBean.pedido.listItens}" var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.produto.valor} R$ x #{item.quantidade} #{item.produto.tipo.nome} = #{item.total} R$"/>
-						</h:selectOneListbox >
+                	<h:outputLabel for="produtos" value="Selecione seus Produtos: " styleClass="col-sm-1"/>     
+ 					<div class="col-sm-2" >
+ 							<p:selectOneListbox id="produtos" value="#{pedidoBean.produtoSelecionado}" converter="produtoConverter" 
+					                         effect="fade" var="p"  filter="true" filterMatchMode="startsWith" maxlength="10" >					           
+					            <f:selectItems value="#{pedidoBean.produtosCadastrados}" var="produto" itemValue="#{produto}" itemLabel="#{produto.nome}"  />
+						            <p:column >
+						           	   <p:graphicImage id="imgProduto" url="#{p.foto}" width="50px" height="50px" />  
+						            </p:column>
+						            <p:column>
+						                <h:outputText value="#{p.nome} - #{p.valor} R$ #{p.tipo.nome}" />
+						            </p:column>
+						            <f:ajax render="tipos"  /> 
+						            <f:ajax render="quantidade"  /> 
+					        </p:selectOneListbox>
+					        <div class="col-sm-2" >
+					        	<p:graphicImage id="img" url="#{pedidoBean.produtoSelecionado.foto}" width="100px" height="100px" />  
+ 							</div>
+ 							<p:messages autoUpdate="true" />
 					</div>
+			
+					<div class="col-sm-3" >
+						<h:outputLabel for="tipos" value="Tipos: " styleClass="col-sm-4"/>
+						<div class="col-sm-2" >
+		                	<p:selectOneListbox id="tipos" value="#{pedidoBean.tipo}">
+		    						<f:selectItems value="#{pedidoBean.tipos}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.nome}"/>		
+							</p:selectOneListbox >
+						 </div>
+						 <br /><br />
+						<h:outputLabel for="quantidade" value="Quantidade" styleClass="col-sm-4"/>
+						<div class="col-sm-2" >
+							<p:selectOneListbox id="quantidade" value="#{pedidoBean.quantidade}" >
+		    						<f:selectItems value="#{pedidoBean.quantidades}" var="quantidade" itemValue="#{quantidade}" itemLabel="#{quantidade}"/>		
+							</p:selectOneListbox >
+							<br />
+							<h:commandButton value=	"Adicionar" actionListener="#{pedidoBean.addProduto}" styleClass="btn btn-info"/>
+							<h:commandButton value=	"Remover" actionListener="#{pedidoBean.removeProduto}" styleClass="btn btn-danger"/>
+						</div>
+		    	
+		    	 	</div>
+		    	 	<h:outputLabel for="itens" value="Produtos Cadastrados: " styleClass="col-sm-3"/>  
+		    		<div class="col-sm-5">
+						<p:selectOneListbox id="itens" value="#{pedidoBean.itemSelecionado}" converter="itemConverter" 
+					                         effect="fade" var="i"  filter="true" filterMatchMode="startsWith" >
+    						<f:selectItems value="#{pedidoBean.pedido.listItens}" var="item" itemValue="#{item}" itemLabel="#{item.produto.nome}"/>
+								<p:column >
+					           	   <p:graphicImage id="imgItem" url="#{i.produto.foto}" width="50px" height="50px" />  
+					            </p:column>
+					            <p:column>
+					                <h:outputText value="#{i.produto.nome} - #{i.produto.valor} R$ x #{i.quantidade} #{i.produto.tipo.nome} = #{i.total} R$" />
+					            </p:column>
+						</p:selectOneListbox >
+					</div>
+					<div class="form-group">
+						 <div class="col-sm-3">
+								<h:message for="produtos" />
+			             		<h:message for="tipos" />
+			             </div>
+                	</div>
+                 		
     			</div>
                 <br />
 				<h:commandButton styleClass="btn btn-default" value="Enviar" action="#{pedidoBean.addPedido}" />
 				<h:commandButton styleClass="btn btn-danger" value="Limpar" action="#{pedidoBean.clearPedidos}" />
 				<br />
 				<br />
-				<h:messages />
 				<br />
 			
 			</h:form>

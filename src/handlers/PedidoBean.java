@@ -8,7 +8,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 
@@ -18,6 +20,7 @@ import models.Item;
 import models.Mail;
 import models.Produto;
 import models.Pedido;
+import models.Tipo;
 import models.UserTipo;
 import models.Usuario;
 import util.JPA;
@@ -26,17 +29,20 @@ import util.JPA;
 @SessionScoped
 public class PedidoBean {
 	
+	private Tipo tipo;
 	private Produto produtoSelecionado;
 	private Item itemSelecionado;
 	private Pedido pedido;
 	private Item item;
-	private Integer quantidade;
+	
 	private Usuario usuario;
 	private List<Pedido> pedidosPorUsuario;
 	private Mail mail;
 	private Cidade cidade;
 	private Bairro bairro;
-	 
+	private Double quantidade;
+	private List<Double> quantidades;
+	
 	public PedidoBean() {
 		pedido = new Pedido();
 		item = new Item();
@@ -83,7 +89,7 @@ public class PedidoBean {
 						FacesContext facesContext = FacesContext.getCurrentInstance(); 
 						
 						facesContext.addMessage(null, new FacesMessage( 
-			            FacesMessage.SEVERITY_ERROR, "Ops, produto só deve ser cadastrado uma vez...", null));
+			            FacesMessage.SEVERITY_INFO, "O produto só deve ser cadastrado uma vez, sua quantidade será alterada...", null));
 						System.out.println("Nao add, produto ja cadastrado...");
 					}
 				}
@@ -197,16 +203,17 @@ public class PedidoBean {
 	}
 	
 	public Produto getProdutoSelecionado() {
-		if (produtoSelecionado!=null)
+		if (produtoSelecionado!=null){	
 			System.out.println("*** ProdutoSelecionado: "+produtoSelecionado.getNome());
+		}
 		return produtoSelecionado;
 	}
 	
 	public void setProdutoSelecionado(Produto produtoSelecionado) {
 		this.produtoSelecionado = produtoSelecionado;
-		
+
 	}
-	
+
 	public Item getItemSelecionado() {
 		if (itemSelecionado!=null)
 			System.out.println("*** ItemSelecionado: "+itemSelecionado.getId());
@@ -217,11 +224,11 @@ public class PedidoBean {
 		this.itemSelecionado = itemSelecionado;
 	}
 
-	public Integer getQuantidade() {
+	public Double getQuantidade() {
 		return quantidade;
 	}
 
-	public void setQuantidade(Integer quantidade) {
+	public void setQuantidade(Double quantidade) {
 		this.quantidade = quantidade;
 	}
 	
@@ -276,6 +283,14 @@ public class PedidoBean {
 		this.bairro = bairro;
 	}
 	
+	public Tipo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Tipo tipo) {
+		this.tipo = tipo;
+	}
+
 	public List<Cidade> getCidades() {
 
 		EntityManager em = JPA.getEM();
@@ -297,6 +312,55 @@ public class PedidoBean {
 		}catch (Exception e){
 			return new ArrayList<Bairro>();
 		}
+	}
+	
+	public List<Tipo> getTipos() {
+		Double minimo = 1d;
+		Double maximo = 1d;
+		Double de = 0.5d;
+//		try{ 			
+		if (getProdutoSelecionado()!=null){
+			EntityManager em = JPA.getEM();
+			TypedQuery<Tipo> query = em.createQuery("Select t from Tipo t where t.id = :id",
+					Tipo.class);
+			query.setParameter("id", getProdutoSelecionado().getTipo().getId());
+			
+			Query queryMinMax = em.createQuery("select t.minimo,t.maximo from Tipo t where t.id = :id");
+			queryMinMax.setParameter("id", getProdutoSelecionado().getTipo().getId());
+			List<Object[]> rows = queryMinMax.getResultList();
+
+			for (Object[] row: rows) {
+			    minimo = (Double) row[0];
+			    maximo = (Double) row[1];
+			}
+			if (minimo < 1){
+				quantidades = new ArrayList<Double>();
+				for (Double contador = minimo; contador <= maximo;){
+					quantidades.add(contador);
+					contador = contador + de;
+				}
+			}
+			else{
+				quantidades = new ArrayList<Double>();
+				for (Double contador = minimo; contador <= maximo; contador++){
+					quantidades.add(contador);
+				}
+			}
+			return query.getResultList();
+		}
+		else 
+			return new ArrayList<Tipo>();
+//		}catch (Exception e){
+//			return new ArrayList<Tipo>();
+//		}
+	}
+	
+	public List<Double> getQuantidades() {
+		return this.quantidades;
+	}
+	
+	public void setQuantidades(List<Double> quantidades) {
+		this.quantidades = quantidades;
 	}
 	
 	public Usuario getUsuarioPorEmail(String email) {

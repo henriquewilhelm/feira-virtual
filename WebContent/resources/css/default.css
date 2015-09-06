@@ -1,3 +1,9 @@
 body {
 	margin-top:60px;
 }
+.ui-selectonemenu{
+     width: 100% !important;
+}
+.ui-selectonemenu-label{
+     width: 100% !important;
+} 

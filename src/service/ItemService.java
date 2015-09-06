@@ -27,17 +27,17 @@ public class ItemService implements Serializable{
 	
 	private List<Produto> produtos;
 	
-		private final static Integer[] quantidade;
+		private final static Double[] quantidade;
 	    
 	    static {
 	        
-	        quantidade = new Integer[6];
-	        quantidade[0] = 1;
-	        quantidade[1] = 2;
-	        quantidade[2] = 3;
-	        quantidade[3] = 4;
-	        quantidade[4] = 5;
-	        quantidade[5] = 1;
+	        quantidade = new Double[6];
+	        quantidade[0] = 1d;
+	        quantidade[1] = 2d;
+	        quantidade[2] = 3d;
+	        quantidade[3] = 4d;
+	        quantidade[4] = 5d;
+	        quantidade[5] = 1d;
 	    }
 	     
 	    public List<Item> createItens(int size) {
@@ -57,8 +57,8 @@ public class ItemService implements Serializable{
 	        return list;
 	    }
 	    
-	    private Integer getRandomQuantidade() {
-	        return quantidade[(int) (Math.random() * 6)];
+	    private Double getRandomQuantidade() {
+	        return quantidade[(int) (Math.random() * 6d)];
 	    }
 	    
 	    public List<Produto> getRandomListProdutos() {

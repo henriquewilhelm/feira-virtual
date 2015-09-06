@@ -143,10 +143,6 @@ public class UsuarioBean implements Serializable {
 		em.getTransaction().commit();
 	}
 	
-    public void bairroListener(AjaxBehaviorEvent event){
-    		System.out.println("bairroListener ");
-	}
-    
 	public List<Usuario> getUsuarios() {
 
 		EntityManager em = JPA.getEM();

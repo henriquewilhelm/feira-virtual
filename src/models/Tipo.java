@@ -20,6 +20,8 @@ public class Tipo implements IConvertible, Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+	private Double minimo;
+	private Double maximo;
 	
 	public Integer getId() {
 		return this.id;
@@ -35,6 +37,22 @@ public class Tipo implements IConvertible, Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public Double getMinimo() {
+		return minimo;
+	}
+
+	public void setMinimo(Double minimo) {
+		this.minimo = minimo;
+	}
+
+	public Double getMaximo() {
+		return maximo;
+	}
+
+	public void setMaximo(Double maximo) {
+		this.maximo = maximo;
 	}
 
 }

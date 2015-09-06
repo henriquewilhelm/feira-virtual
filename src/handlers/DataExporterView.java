@@ -51,7 +51,7 @@ public class DataExporterView implements Serializable {
     @PostConstruct
     public void init() {
     	produtoService.createProdutos();
-    	pedidos = pedidoService.createPedidos(100);
+    	pedidos = pedidoService.createPedidos(10);
     }
     /*
     public DataExporterView() {

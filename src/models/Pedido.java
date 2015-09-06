@@ -41,7 +41,7 @@ public class Pedido implements IConvertible, Serializable  {
     private Long telefone;
     
     private String obs;
-	@OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(cascade=CascadeType.ALL)
 	@JoinTable(name = "pedido_itens",  inverseJoinColumns = { 
 			@JoinColumn(name = "item_id", 
 						table="itens", 

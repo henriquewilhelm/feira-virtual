@@ -2,7 +2,8 @@
 
 <html xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 
 <h:body>
 	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
@@ -11,7 +12,7 @@
 			<h1>
 				<h:outputText value="Cadastro de Produtos" />
 			</h1>
-			<h:form styleClass="form-horizontal">
+			<h:form styleClass="form-horizontal" enctype="multipart/form-data">
 			    <div class="form-group">
 					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-2" />
 					<div class="col-sm-7">
@@ -32,7 +33,7 @@
                 <div class="form-group">
                 
 					<h:outputLabel for="tipo" value="Tipo: " styleClass="col-sm-2" />
-					<div class="col-sm-7"> <h:outputLabel for="cidade" value="Cidade:" styleClass="col-sm-1" />
+					<div class="col-sm-7"> 
 	                		<h:selectOneListbox id="tipo" value="#{produtoBean.tipo}" converter="tipoConverter" styleClass="form-control">
 	               				<f:selectItem itemValue="" itemLabel="Selecione um Tipo" />  
 	    						<f:selectItems value="#{produtoBean.tipos}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.nome}"/>		
@@ -53,6 +54,23 @@
 		             		<h:message for="valor" />
 		             </div>
                 </div>
+                <div class="form-group">
+                	 <h:outputLabel for="upload" value="Imagem: " styleClass="col-sm-2" />
+	                 <div class="col-sm-1">
+			 			<p:graphicImage id="img" url="#{produtoBean.produto.foto}" width="100px" height="100px" />  
+			 		</div>
+			 		<div class="col-sm-6">
+			 			<p:growl id="messages" showDetail="true" />
+   						<p:fileUpload id="upload" value="#{fileUploadView.file}" mode="simple" skinSimple="true"/>
+    					<p:commandButton value="Submit" update="img" ajax="false" actionListener="#{fileUploadView.upload}" disabled="false" >
+    							<f:attribute name="selected" value="#{produtoBean.produto}" /> 
+    					</p:commandButton>
+					</div>      
+		             <div class="col-sm-3">
+		             		<h:message for="upload" />
+		             </div>
+				 </div>
+
                 <br />
 				<h:commandButton styleClass="btn btn-primary btn-lg" value="Send" action="#{produtoBean.addProduto}" />
 				<h:commandButton styleClass="btn btn-primary btn-lg" value="Clear" action="#{produtoBean.clearProdutos}" />

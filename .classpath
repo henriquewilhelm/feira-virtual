@@ -26,7 +26,6 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="WebContent/WEB-INF/lib/primefaces-5.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/itext-2.1.7.jar"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/EclipseLink">
 		<attributes>
@@ -34,6 +33,7 @@
 			<attribute name="owner.project.facets" value="jpt.jpa"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-email-1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="WebContent/WEB-INF/lib/commons-email-1.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/primefaces-5.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
