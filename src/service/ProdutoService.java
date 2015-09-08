@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import util.JPA;
+import models.Categoria;
 import models.Produto;
 import models.Tipo;
 	 
@@ -56,65 +57,73 @@ public class ProdutoService implements Serializable {
 	     
 	    		EntityManager em = JPA.getEM();
 	    		em.getTransaction().begin();
-		    	Query query = em.createNativeQuery("insert into tipos (nome,minimo,maximo) values ('Uni.',1,5);");query.executeUpdate();
-				  	  query = em.createNativeQuery("insert into tipos (nome,minimo,maximo) values ('Kg.',0.5,3);");query.executeUpdate();
-				  	  query = em.createNativeQuery("insert into tipos (nome,minimo,maximo) values ('Maço',1,5);");query.executeUpdate();
+		    	Query query = em.createNativeQuery("insert into categorias (nome) values ('Frutas');");query.executeUpdate();
+			  	  	  query = em.createNativeQuery("insert into categorias (nome) values ('Verduras');");query.executeUpdate();
+			  	  	  query = em.createNativeQuery("insert into categorias (nome) values ('Hortaliças');");query.executeUpdate();
+			  	  	  query = em.createNativeQuery("insert into categorias (nome) values ('Grãos');");query.executeUpdate();
+			  	  	  query = em.createNativeQuery("insert into categorias (nome) values ('Outros');");query.executeUpdate();
+			  	  	
+			  	  	  query = em.createNativeQuery("insert into tipos (nome,minimo,maximo) values ('Uni.',1,5);");query.executeUpdate();
+			  	  	  query = em.createNativeQuery("insert into tipos (nome,minimo,maximo) values ('Kg.',0.5,3);");query.executeUpdate();
+			  	  	  query = em.createNativeQuery("insert into tipos (nome,minimo,maximo) values ('Maço',1,5);");query.executeUpdate();
 		    	
-		    		  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Entrega','2015/08/24',1,'12.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Banana','2015/08/24',1,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Bergamota','2015/08/24',1,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Laranja Açucar','2015/08/24',1,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Limão','2015/08/24',1,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Couve Flor','2015/08/24',2,'1.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Repolho Roxo','2015/08/24',2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Repolho Verde','2015/08/24',2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Beterraba Maço','2015/08/24',2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Beterraba','2015/08/24',1,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Cenoura Maço','2015/08/24',2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Cenoura','2015/08/24',1,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Chuchu','2015/08/24',1,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Rabanete','2015/08/24',1,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Abóbora Cabotiá','2015/08/24',1,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Batata Doce','2015/08/24',1,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Batata Inglesa','2015/08/24',1,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Inhame','2015/08/24',1,'5.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Mandioca','2015/08/24',1,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Agrião','2015/08/24',2,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Alface Americana','2015/08/24',2,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Alface Crespa','2015/08/24',2,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Alface Roxa','2015/08/24',2,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Brocolis','2015/08/24',2,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Coentro','2015/08/24',2,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Couve Manteiga','2015/08/24',2,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Coyve Mineira','2015/08/24',2,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Espinafre','2015/08/24',2,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Hortelã','2015/08/24',2,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Rúcula','2015/08/24',2,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Salsinha','2015/08/24',2,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Cebolinha','2015/08/24',2,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Acelga','2015/08/24',2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Alho Poró','2015/08/24',2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Alho','2015/08/24',1,'4.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Tomate','2015/08/24',1,'7.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Batata Salva Branca','2015/08/24',1,'4.80','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Batata Yacon','2015/08/24',1,'3.80','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Berinjela','2015/08/24',1,'5.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Cebola','2015/08/24',1,'5.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Limão Siciliano','2015/08/24',1,'6.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Abacate','2015/08/24',1,'5.80','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Abacaxi','2015/08/24',1,'7.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Caqui','2015/08/24',1,'5.20','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Kiwi','2015/08/24',1,'12.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Laranja Açucar','2015/08/24',1,'3.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Laranja Valencia','2015/08/24',1,'3.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Maça A','2015/08/24',1,'8.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Maça Verde','2015/08/24',1,'12.80','//resources//image//produtos//produto.png');");query.executeUpdate();	
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Manga','2015/08/24',1,'6.50','//resources//image//produtos//produto.png');");query.executeUpdate();  	
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Maracuja','2015/08/24',1,'8.00','//resources//image//produtos//produto.png');");query.executeUpdate();	    	
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Melão','2015/08/24',1,'6.50','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Ovos','2015/08/24',1,'7.00','//resources//image//produtos//produto.png');");query.executeUpdate();	  
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Pão Integral','2015/08/24',2,'9.00','//resources//image//produtos//produto.png');");query.executeUpdate();
-					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,valor,foto) values ('Sabonete','2015/08/24',2,'5.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+		    		  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Entrega','2015/08/24',1,5,'12.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Banana','2015/08/24',1,1,'2.50','//resources//image//produtos//bananaunidade.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Bergamota','2015/08/24',1,1,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Laranja Açucar','2015/08/24',1,1,'2.50','//resources//image//produtos//laranja.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Limão','2015/08/24',1,1,'2.50','//resources//image//produtos//limao.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Couve Flor','2015/08/24',2,3,'1.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Repolho Roxo','2015/08/24',2,3,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Repolho Verde','2015/08/24',2,3,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Beterraba Maço','2015/08/24',2,2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Beterraba','2015/08/24',1,2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Cenoura Maço','2015/08/24',2,2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Cenoura','2015/08/24',1,2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Chuchu','2015/08/24',1,2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Rabanete','2015/08/24',1,2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Abóbora Cabotiá','2015/08/24',1,2,'2.50','//resources//image//produtos//abobora.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Batata Doce','2015/08/24',1,2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Batata Inglesa','2015/08/24',1,2,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Inhame','2015/08/24',1,'5.00',2,'//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Mandioca','2015/08/24',1,'2.50',2,'//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Agrião','2015/08/24',2,3,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Alface Americana','2015/08/24',2,3,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Alface Crespa','2015/08/24',2,3,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Alface Roxa','2015/08/24',2,3,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Brocolis','2015/08/24',2,3,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Coentro','2015/08/24',2,3,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Couve Manteiga','2015/08/24',2,3,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Coyve Mineira','2015/08/24',2,3,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Espinafre','2015/08/24',2,3,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Hortelã','2015/08/24',2,3,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Rúcula','2015/08/24',2,3,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Salsinha','2015/08/24',2,3,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Cebolinha','2015/08/24',2,3,'1.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Acelga','2015/08/24',2,3,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Alho Poró','2015/08/24',2,3,'2.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Alho','2015/08/24',1,3,'4.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Tomate','2015/08/24',1,2,'7.00','//resources//image//produtos//tomate.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Batata Salva Branca','2015/08/24',1,2,'4.80','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Batata Yacon','2015/08/24',1,2,'3.80','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Berinjela','2015/08/24',1,2,'5.00','//resources//image//produtos//beringela.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Cebola','2015/08/24',1,2,'5.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Limão Siciliano','2015/08/24',1,1,'6.00','//resources//image//produtos//limao.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Abacate','2015/08/24',1,1,'5.80','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Abacaxi','2015/08/24',1,1,'7.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Caqui','2015/08/24',1,1,'5.20','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Kiwi','2015/08/24',1,1,'12.00','//resources//image//produtos//kiwi.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Laranja Valencia','2015/08/24',1,1,'3.00','//resources//image//produtos//laranja.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Maça A','2015/08/24',1,1,'8.50','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Maça Verde','2015/08/24',1,1,'12.80','//resources//image//produtos//macaverde.png');");query.executeUpdate();	
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Manga','2015/08/24',1,1,'6.50','//resources//image//produtos//produto.png');");query.executeUpdate();  	
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Maracuja','2015/08/24',1,1,'8.00','//resources//image//produtos//produto.png');");query.executeUpdate();	    	
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Melão','2015/08/24',1,1,'6.50','//resources//image//produtos//melao.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Ovos','2015/08/24',1,5,'7.00','//resources//image//produtos//produto.png');");query.executeUpdate();	  
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Pão Integral','2015/08/24',2,5,'9.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Sabonete','2015/08/24',1,5,'5.00','//resources//image//produtos//produto.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Morango','2015/08/24',2,5,'15.00','//resources//image//produtos//morango.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Pepino','2015/08/24',2,5,'2.00','//resources//image//produtos//pepino.png');");query.executeUpdate();
+					  query = em.createNativeQuery("insert into produtos (nome,data,tipo_id,categoria_id,valor,foto) values ('Pimentão Amarelo','2015/08/24',2,5,'2.50','//resources//image//produtos//pimentaoamarelo.png');");query.executeUpdate();
 		    	em.getTransaction().commit();
 	    }
 	    
@@ -122,15 +131,22 @@ public class ProdutoService implements Serializable {
 	        List<Produto> list = new ArrayList<Produto>(size);
 	        
 	        List<Tipo> tipoList = null;
-        	
+	        List<Categoria> categoriaList = null;
+	        
 	        EntityManager em = JPA.getEM();
 	    	TypedQuery<Tipo> queryTipos = em.createQuery("select t from Tipo t",
 	    			Tipo.class);
 	    	tipoList = queryTipos.getResultList();	
 	        
+	   
+	    	TypedQuery<Categoria> queryCategorias = em.createQuery("select p from Categoria p",
+	    			Categoria.class);
+	    	categoriaList = queryCategorias.getResultList();	
+
+	    	
 	        for(int i = 0 ; i < size ; i++) {
 
-	        	Produto produto = new Produto(getRandomNome(), getRandomDatas(), getRandomTipos(tipoList), getRandomValores());
+	        	Produto produto = new Produto(getRandomNome(), getRandomDatas(), getRandomTipos(tipoList), getRandomValores(), getRandomCategorias(categoriaList));
 	            list.add(produto);
 	            
 	    		em.getTransaction().begin();
@@ -149,6 +165,7 @@ public class ProdutoService implements Serializable {
 	    	list = queryProdutos.getResultList();	
 	    	return list;
 	    }
+	    
 	   
 	    private String getRandomNome() {
 	        return nomes[(int) (Math.random() * 3)];
@@ -157,6 +174,11 @@ public class ProdutoService implements Serializable {
 	    private Tipo getRandomTipos(List<Tipo> tipoList) {
 	    	return tipoList.get((int) (Math.random() * 2));
 	    }
+	    
+	    private Categoria getRandomCategorias(List<Categoria> tipoList) {
+	    	return tipoList.get((int) (Math.random() * 2));
+	    }
+	    
 	    
 	    private Date getRandomDatas() {
 	        return datas[(int) (Math.random() * 3)];

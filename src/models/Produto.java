@@ -27,19 +27,20 @@ public class Produto implements IConvertible, Serializable {
 	private Date data;
 	private Tipo tipo;
 	private Double valor;
+	private Categoria categoria;
 	private String foto = "/resources/image/produtos/produto.png";
-	
 	
 	public Produto() {
 		setData(Calendar.getInstance().getTime());
 	};
 	
-	public Produto(String nome, Date data, Tipo tipo, Double valor) {
+	public Produto(String nome, Date data, Tipo tipo, Double valor, Categoria categoria) {
 		super();
 		this.nome = nome;
 		this.data = data;
 		this.tipo = tipo;
 		this.valor = valor;
+		this.categoria = categoria;
 	}
 	
 	public Produto(Produto produto) {
@@ -47,6 +48,7 @@ public class Produto implements IConvertible, Serializable {
 		setData(produto.getData());
 		setTipo(produto.getTipo());
 		setValor(produto.getValor());
+		setCategoria(produto.getCategoria());
 		setData(Calendar.getInstance().getTime());
 	}
 
@@ -96,5 +98,13 @@ public class Produto implements IConvertible, Serializable {
 
 	public void setFoto(String foto) {
 		this.foto = foto;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 }

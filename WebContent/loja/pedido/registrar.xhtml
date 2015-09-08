@@ -9,45 +9,40 @@
 	<ui:composition template="/loja/layout/layoutuser.xhtml">
 		<ui:define name="content">
 			<h1>
-				<h:outputText value="Cadastro de Pedidos" />
+				<h:outputText value="Meu Pedido" />
 			</h1>
 			<h:form styleClass="form-horizontal">
 			    <div class="form-group">
 					<h:outputLabel for="nome" value="Nome: " styleClass="col-sm-1"/>
 					<div class="col-sm-7">
-						<h:inputText id="nome" value="#{pedidoBean.pedido.nome}" styleClass="form-control" />
+						<h:outputText id="nome" value="#{pedidoBean.pedido.nome}" styleClass="form-control" />
 					</div>
 				</div>
 				<div class="form-group">
 					<h:outputLabel for="data" value="Data Entrega: " styleClass="col-sm-1" />
 					<div class="col-sm-7">
-						<h:inputText id="data" value="#{pedidoBean.pedido.data}" styleClass="form-control">
-		                    <f:convertDateTime pattern="dd/mm/yyyy" />
-		                </h:inputText>
+						<h:outputText id="data" value="#{pedidoBean.pedido.data}" styleClass="form-control">
+		                    <f:convertDateTime pattern="dd/MM/yyyy" />
+		                </h:outputText>
 	                </div>
                 </div>
                 <div class="form-group">
 					<h:outputLabel for="endereco" value="Endereco: "  styleClass="col-sm-1"/>
 					<div class="col-sm-7">
-						<h:inputText id="endereco" value="#{pedidoBean.pedido.endereco}" styleClass="form-control"/>
+						<h:outputText id="endereco" value="#{pedidoBean.pedido.endereco}" styleClass="form-control"/>
 					</div>
 				</div>
                 <div class="form-group">
-	                <h:outputLabel for="cidade" value="Cidade:" styleClass="col-sm-1" />
-					<div class="col-sm-3">
-                		<p:selectOneListbox id="cidade" value="#{pedidoBean.cidade}" converter="cidadeConverter">
-               				<f:selectItem itemValue="" itemLabel="Selecione uma Cidade" />  
-    						<f:selectItems value="#{pedidoBean.cidades}" var="cidade" itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>		
-							 <f:ajax render="bairro" /> 
-						</p:selectOneListbox >
+						<h:outputLabel for="cidade" value="Cidade: "  styleClass="col-sm-1"/>
+						<div class="col-sm-7">
+							<h:outputText id="cidade" value="#{pedidoBean.pedido.cidade.nome}" styleClass="form-control"/>
+						</div>
 					</div>
-	                 <h:outputLabel for="bairro" value="Bairro:" styleClass="col-sm-1" />
-					<div class="col-sm-3">
-                		<p:selectOneListbox id="bairro" value="#{pedidoBean.bairro}"  converter="bairroConverter">
-               				<f:selectItem itemValue="" itemLabel="Selecione uma Bairro" />  
-    						<f:selectItems value="#{pedidoBean.bairros}" var="bairro" itemValue="#{bairro}" itemLabel="#{bairro.nome}"/>		
-						</p:selectOneListbox >
-					</div>
+	                <div class="form-group">
+						<h:outputLabel for="bairro" value="Bairro "  styleClass="col-sm-1"/>
+						<div class="col-sm-7">
+							<h:outputText id="bairro" value="#{pedidoBean.pedido.bairro.nome}" styleClass="form-control"/>
+						</div>
 				   </div>
                 <div class="form-group">
 					 <div class="col-sm-3">
@@ -101,6 +96,11 @@
 						</div>
 		    	
 		    	 	</div>
+		    	 	<div class="col-sm-4	">
+		    	 		<h:outputLabel for="total" value="Total: " />
+		    		
+						<h:outputText id="total" value="#{pedidoBean.pedido.total}" />
+					</div>
 		    	 	<h:outputLabel for="itens" value="Produtos Cadastrados: " styleClass="col-sm-3"/>  
 		    		<div class="col-sm-5">
 						<p:selectOneListbox id="itens" value="#{pedidoBean.itemSelecionado}" converter="itemConverter" 

@@ -26,7 +26,8 @@ public class PedidoService implements Serializable{
 		 */
 		private static final long serialVersionUID = -3418441511903269362L;
 		private final static String[] obs;
-		    
+		private Double total = 0d;
+		
 		static {  
 			
         obs = new String[6];
@@ -44,7 +45,7 @@ public class PedidoService implements Serializable{
 	    	
 	        List<Pedido> list = new ArrayList<Pedido>(size);
 	        for(int i = 0 ; i < size ; i++) {
-	        	Pedido pedido = new Pedido(Calendar.getInstance().getTime(), getRandomUsuario(), getRandomObs(), getRandomListItens());
+	        	Pedido pedido = new Pedido(Calendar.getInstance().getTime(), getRandomUsuario(), getRandomObs(), getRandomListItens(), total);
 	        	EntityManager em = JPA.getEM();
 	    		em.getTransaction().begin();
 	    		em.persist(pedido);
@@ -57,9 +58,12 @@ public class PedidoService implements Serializable{
 	    }
 	 
 	    public List<Item> getRandomListItens() {
+        	total = 0d;
 	    	itemService = new ItemService();
-	    	List<Item> listItem = itemService.createItens((int) (Math.random() * 9)); 
+	    	List<Item> listItem = itemService.createItens((int) (Math.random() * 5)); 
 	    	for (int i=0; i< listItem.size(); i++){
+	    		total = total + listItem.get(i).getTotal();
+	    		
 	    		EntityManager em = JPA.getEM();
 	    		em.getTransaction().begin();
 	    		em.persist(listItem.get(i));

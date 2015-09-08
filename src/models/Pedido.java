@@ -48,6 +48,7 @@ public class Pedido implements IConvertible, Serializable  {
 						referencedColumnName = "id",
 						unique=false) } )
 	private List<Item> listItens;
+	private Double total = 0d;
 	
 	public Pedido() {
 		listItens = new ArrayList<Item>();	
@@ -55,12 +56,13 @@ public class Pedido implements IConvertible, Serializable  {
 		setData(Calendar.getInstance().getTime());
 	};
 	
-	public Pedido(Date data, Usuario usuario, String obs, List<Item> listItens) {
+	public Pedido(Date data, Usuario usuario, String obs, List<Item> listItens, Double total) {
 		super();
 		setUsuario(usuario);
 		this.data = data;
 		this.obs = obs;
 		this.listItens = listItens;
+		this.total = total;
 	}
 
 	public Integer getId() {
@@ -149,5 +151,12 @@ public class Pedido implements IConvertible, Serializable  {
 
 	public List<Item> getListItens() {
 		return listItens;
+	}
+
+	public Double getTotal() {
+		return total;
+	}
+	public void setTotal(Double total) {
+		this.total = total;
 	}
 }

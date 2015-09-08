@@ -10,12 +10,12 @@ import javax.faces.event.ActionEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import org.primefaces.event.FileUploadEvent;
-
 import util.JPA;
+import models.Categoria;
 import models.Produto;
 import models.Pedido;
 import models.Tipo;
+import models.Usuario;
 
 @ManagedBean
 @SessionScoped
@@ -23,6 +23,7 @@ public class ProdutoBean {
 	
 	private Produto produto;
 	private Tipo tipo;
+	private Categoria categoria;
 	
 	public ProdutoBean() {	
 		produto = new Produto();
@@ -43,6 +44,20 @@ public class ProdutoBean {
 			
 			return null;
 		}
+		
+		if (getCategoria()!=null){
+			produto.setCategoria(getCategoria());
+			System.out.println("Add Categoria");
+		}
+		else{
+			FacesContext facesContext = FacesContext.getCurrentInstance(); 
+
+			facesContext.addMessage(null, new FacesMessage( 
+            FacesMessage.SEVERITY_ERROR, "Ops, faltou escolher uma categoria...", null));
+			System.out.println("Favor selecione uma opcao");
+			
+			return null;
+		}
 		EntityManager em = JPA.getEM();
 		em.getTransaction().begin();
 		em.persist(produto);
@@ -56,7 +71,7 @@ public class ProdutoBean {
 		
 		if (getTipo()!=null){
 			produto.setTipo(getTipo());
-			System.out.println("Add Produto");
+			System.out.println("Add Tipo");
 		}
 		else{
 			FacesContext facesContext = FacesContext.getCurrentInstance(); 
@@ -67,6 +82,21 @@ public class ProdutoBean {
 			
 			return null;
 		}
+
+		if (getCategoria()!=null){
+			produto.setCategoria(getCategoria());
+			System.out.println("Add Categoria");
+		}
+		else{
+			FacesContext facesContext = FacesContext.getCurrentInstance(); 
+
+			facesContext.addMessage(null, new FacesMessage( 
+            FacesMessage.SEVERITY_ERROR, "Ops, faltou escolher uma categoria...", null));
+			System.out.println("Favor selecione uma opcao");
+			
+			return null;
+		}
+		
 		EntityManager em = JPA.getEM();
 		em.getTransaction().begin();
 		em.merge(produto);
@@ -121,6 +151,17 @@ public class ProdutoBean {
 		em.getTransaction().commit();
 	}
 
+	public List<Produto> getProdutosPorCategoria() {
+
+		EntityManager em = JPA.getEM();
+		TypedQuery<Produto> query = em.createQuery("Select p from Produto p left join fetch p.categoria c where c.id = :id",
+				Produto.class);
+		if (categoria!=null)
+		query.setParameter("id", categoria.getId());
+		
+		return query.getResultList();
+	}
+	
 	public List<Produto> getProdutos() {
 
 		EntityManager em = JPA.getEM();
@@ -139,6 +180,15 @@ public class ProdutoBean {
 		return query.getResultList();
 	}
 	
+	public List<Categoria> getCategorias() {
+
+		EntityManager em = JPA.getEM();
+		TypedQuery<Categoria> query = em.createQuery("Select c from Categoria c",
+				Categoria.class);
+		
+		return query.getResultList();
+	}
+	
 	public Produto getProduto() {
 		return produto;
 	}
@@ -153,6 +203,14 @@ public class ProdutoBean {
 		this.tipo = tipo;
 	}
 	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
 	public String list() {
 		return "/gerenciador/produto/listar";
 	}

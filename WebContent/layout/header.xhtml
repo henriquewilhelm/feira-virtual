@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 <h:body>
 
 
@@ -14,7 +16,9 @@
                     aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span> 
                 </button>
-                <a class="navbar-brand" href="/feira/index.xhtml">Comida de Verdade</a>
+                <a class="navbar-header" href="/feira/index.xhtml">	
+                	  <p:graphicImage name="/image/logo.png" />
+				</a>
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
@@ -39,6 +43,6 @@
             </div>
         </div>
     </nav>
-
+	<br /><br /><br />
 </h:body>
 </html>

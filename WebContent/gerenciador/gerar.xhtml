@@ -42,11 +42,11 @@
                 </p:column>
                 <p:column>
 					<f:facet name="header">Bairro</f:facet>
-                     <h:outputText value="#{pedido.bairro}"/>
+                     <h:outputText value="#{pedido.bairro.nome}"/>
                 </p:column>
                 <p:column>
 					<f:facet name="header">Cidade</f:facet>
-                     <h:outputText value="#{pedido.cidade}"/>
+                     <h:outputText value="#{pedido.cidade.nome}"/>
                 </p:column>
                 <p:column>
 					<f:facet name="header">Observacao</f:facet>
@@ -56,7 +56,7 @@
                 	<f:facet name="header">Produtos</f:facet>
                		<h:selectOneMenu >
                			<f:selectItem itemValue="" itemLabel="Produtos Cadastrados" />  
-    					<f:selectItems value="#{pedido.listItens}"  var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.quantidade} #{item.produto.tipo} = #{item.total} " />
+    					<f:selectItems value="#{pedido.listItens}"  var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.quantidade} #{item.produto.tipo.nome} = #{item.total} " />
 					</h:selectOneMenu>
     			</p:column>
                 <p:column>

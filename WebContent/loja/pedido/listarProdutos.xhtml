@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<ui:composition template="/loja/layout/layoutuser.xhtml">
+		<ui:define name="content">
+
+		<h:form styleClass="form">
+			<h:dataTable styleClass="table table-striped" var="produto"
+				value="#{produtoBean.produtosPorCategoria}"> 
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+                    #{produto.nome}
+                </h:column>
+                <h:column>
+               		 <f:facet name="header">Data</f:facet>
+                    <h:outputText value="#{produto.data}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </h:column>
+                <h:column>
+					<f:facet name="header">Categoria</f:facet>
+                    #{produto.categoria.nome}
+                </h:column>
+                <h:column>
+					<f:facet name="header">Tipo</f:facet>
+                    #{produto.tipo.nome}
+                </h:column>
+                <h:column>
+                	<f:facet name="header">Valor</f:facet>
+                    <h:outputText value="#{produto.valor}">
+                        <f:convertNumber pattern="#0.00" />
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                	<f:facet name="header">Foto</f:facet>
+			 			<p:graphicImage url="#{produto.foto}" width="100px" height="100px" />  
+                </h:column>
+                <h:column>
+                	<f:facet name="header">Opcoes</f:facet>
+							<h:column>
+								<h:commandLink actionListener="#{pedidoBean.addProduto}">
+									 <f:setPropertyActionListener target="#{pedidoBean.produtoSelecionado}"
+	                               	 value="#{produto}" />
+	                               	 <p:graphicImage name="/icons/basket-go.png" />
+								</h:commandLink>
+							</h:column>
+                </h:column>
+			</h:dataTable>
+			</h:form>
+			<br /><br />
+			<h:messages />
+			<br /><br />
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

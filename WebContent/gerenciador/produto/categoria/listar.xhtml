@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
+		<ui:define name="content">
+		<ui:include src="/gerenciador/menugerenciador.xhtml" />
+			<h:dataTable styleClass="table table-striped" var="categoria"
+				value="#{categoriaBean.categorias}">
+				<h:column>
+					<f:facet name="header">Id</f:facet>
+                    #{categoria.id}
+                </h:column>
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+                    #{categoria.nome}
+                </h:column>
+                <h:column>
+                	<f:facet name="header">Opcoes</f:facet>
+                		<h:form styleClass="form">
+							<h:commandLink actionListener="#{categoriaBean.delete}" >
+								<f:attribute name="selected" value="#{categoria}" />
+								<p:graphicImage name="/icons/delete.png" />
+							</h:commandLink>
+						
+							<h:commandLink action="/gerenciador/produto/categoria/editar.xhtml">
+										 <f:setPropertyActionListener target="#{categoriaBean.categoria}"
+		                               	 value="#{categoria}" />
+		                               	 <p:graphicImage name="/icons/edit.png" />
+							</h:commandLink>
+						</h:form>
+				 </h:column>
+			</h:dataTable>
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

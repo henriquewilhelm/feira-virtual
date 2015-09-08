@@ -42,6 +42,8 @@ public class PedidoBean {
 	private Bairro bairro;
 	private Double quantidade;
 	private List<Double> quantidades;
+	private Integer quantidadeItens = 0;
+	private Double total = 0d;
 	
 	public PedidoBean() {
 		pedido = new Pedido();
@@ -74,23 +76,31 @@ public class PedidoBean {
 						item.setProduto(produtoSelecionado);
 						if (getQuantidade()!=null)
 							item.setQuantidade(getQuantidade());
+						
 						pedido.getListItens().add(item);
+						total = total + item.getTotal();
+						pedido.setTotal(total);
+						
 						EntityManager em = JPA.getEM();
 						em.getTransaction().begin();
 						em.persist(item);
 						em.getTransaction().commit();
 						
 						System.out.println("Add "+item.getId()+ " - " + produtoSelecionado.getNome()+" no Pedido "+getPedido().getNome());
-
+						
 						item = new Item();
 						quantidade = item.getQuantidade();
+
+						this.quantidadeItens++;
 					}
 					else{
-						FacesContext facesContext = FacesContext.getCurrentInstance(); 
-						
-						facesContext.addMessage(null, new FacesMessage( 
-			            FacesMessage.SEVERITY_INFO, "O produto só deve ser cadastrado uma vez, sua quantidade será alterada...", null));
-						System.out.println("Nao add, produto ja cadastrado...");
+						if (!produtoSelecionado.getNome().equals("Entrega")){
+							FacesContext facesContext = FacesContext.getCurrentInstance(); 
+							
+							facesContext.addMessage(null, new FacesMessage( 
+				            FacesMessage.SEVERITY_INFO, "O produto só deve ser cadastrado uma vez, sua quantidade será alterada...", null));
+							System.out.println("Nao add, produto ja cadastrado...");
+						}
 					}
 				}
 				else
@@ -104,19 +114,23 @@ public class PedidoBean {
 							verificacao=false;
 					}
 					if (!verificacao){
+						total = total - itemSelecionado.getTotal();
+						pedido.setTotal(total);
+						
 						pedido.getListItens().remove(getItemSelecionado());
 						System.out.println("Remove "+itemSelecionado.getProduto().getNome()+" no Pedido "+getPedido().getNome());
+						this.quantidadeItens--;
 					}
 					else{
 						FacesContext facesContext = FacesContext.getCurrentInstance(); 
 
 						facesContext.addMessage(null, new FacesMessage( 
-			            FacesMessage.SEVERITY_ERROR, "Ops, produto só deve ser cadastrado uma vez...", null));
+			            FacesMessage.SEVERITY_ERROR, "Ops, erro ao remover produto, tente outra vez...", null));
 						System.out.println("Nao add, produto ja cadastrado...");
 					}
 				}
 				else
-					System.out.println("Nao remove...");
+					System.out.println("Nao remove...");		
 	}
 	
 	public String addPedido() {
@@ -155,8 +169,10 @@ public class PedidoBean {
 	
 	public String clearPedidos() {
 		System.out.println("Clear All");
-		setPedido(new Pedido());
-		return "/gerenciador/pedido/registrar";
+		getPedido().setObs("");
+		getPedido().getListItens().clear();
+		getProdutosCadastrados();
+		return "";
 	}
 	
 	public void  deletePedido(ActionEvent event){
@@ -232,22 +248,6 @@ public class PedidoBean {
 		this.quantidade = quantidade;
 	}
 	
-	public List<Produto> getProdutosCadastrados() {
-		EntityManager em = JPA.getEM();
-		TypedQuery<Produto> query = em.createQuery("Select c from Produto c",
-				Produto.class);
-		
-		return query.getResultList();
-	}
-	
-	public List<Pedido> getPedidos() {
-		EntityManager em = JPA.getEM();
-		TypedQuery<Pedido> query = em.createQuery("Select v from Pedido v",
-				Pedido.class);
-		
-		return query.getResultList();
-	}
-	
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -290,7 +290,61 @@ public class PedidoBean {
 	public void setTipo(Tipo tipo) {
 		this.tipo = tipo;
 	}
+	
+	public Integer getQuantidadeItens() {
+		return quantidadeItens;
+	}
 
+	public void setQuantidadeItens(Integer quantidadeItens) {
+		this.quantidadeItens = quantidadeItens;
+	}
+	
+	public List<Double> getQuantidades() {
+		return this.quantidades;
+	}
+	
+	public void setQuantidades(List<Double> quantidades) {
+		this.quantidades = quantidades;
+	}
+	
+	public Double getTotal() {
+		return total;
+	}
+
+	public void setTotal(Double total) {
+		this.total = total;
+	}
+
+	public List<Produto> getProdutosCadastrados() {
+		EntityManager em = JPA.getEM();
+		TypedQuery<Produto> query = em.createQuery("Select c from Produto c",
+				Produto.class);
+		List<Produto> listProdutos = (List<Produto>) query.getResultList();
+		
+		TypedQuery<Produto> queryEntrega = em.createQuery("Select c from Produto c WHERE c.nome = :nome",
+				Produto.class);
+		queryEntrega.setParameter("nome", "Entrega");
+		Produto entrega = queryEntrega.getSingleResult();
+		
+		listProdutos.remove(entrega);
+		
+		produtoSelecionado = entrega;
+		
+		addProduto();
+		
+//		pedido.getListItens().add(new Item(1d,entrega));
+		
+		return listProdutos;
+	}
+	
+	public List<Pedido> getPedidos() {
+		EntityManager em = JPA.getEM();
+		TypedQuery<Pedido> query = em.createQuery("Select v from Pedido v",
+				Pedido.class);
+		
+		return query.getResultList();
+	}
+	
 	public List<Cidade> getCidades() {
 
 		EntityManager em = JPA.getEM();
@@ -353,14 +407,6 @@ public class PedidoBean {
 //		}catch (Exception e){
 //			return new ArrayList<Tipo>();
 //		}
-	}
-	
-	public List<Double> getQuantidades() {
-		return this.quantidades;
-	}
-	
-	public void setQuantidades(List<Double> quantidades) {
-		this.quantidades = quantidades;
 	}
 	
 	public Usuario getUsuarioPorEmail(String email) {

@@ -60,6 +60,10 @@
     					<f:selectItems value="#{pedido.listItens}"  var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.quantidade} #{item.produto.tipo.nome} = #{item.total} " />
 					</h:selectOneMenu>
     			</p:column>
+    			 <p:column>
+					<f:facet name="header">Total</f:facet>
+                    #{pedido.total}
+                </p:column>
                 <p:column>
                 	<f:facet name="header">Opcoes</f:facet>
 							<h:commandLink action="/gerenciador/pedido/editar.xhtml">

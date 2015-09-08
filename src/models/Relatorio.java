@@ -8,7 +8,7 @@ public class Relatorio {
 		private String produtoDisponivel;
 		private String produtoPreco;
 		private String produtoTipo;
-		private List<Relacao> pedidoXproduto;	
+		private List<Relacao> pedidoXproduto;
 	
 		public Relatorio() {
 			pedidoXproduto = new ArrayList<Relacao>();

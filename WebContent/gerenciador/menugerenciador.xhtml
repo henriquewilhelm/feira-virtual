@@ -1,66 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 <h:body>
-		<ul class="nav nav-tabs">
-			<li role="presentation" class="active"><a href="#">Menu</a></li>
-		  <li role="presentation" class="dropdown">
-		    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
-		      Usuários <span class="caret"></span>
-		    </a>
-		    <ul class="dropdown-menu" role="menu">
-		    	<li role="presentation"><a href="/feira/gerenciador/usuario/registrar.xhtml">Registrar Usuário</a></li>
-			    <li role="presentation"><a href="/feira/gerenciador/usuario/listar.xhtml">Listar Usuários</a></li>
-			 </ul>
-		  </li>
-		  <li role="presentation" class="dropdown">
-		    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
-		      Produtos <span class="caret"></span>
-		    </a>
-		    <ul class="dropdown-menu" role="menu">
-		    	<li role="presentation"><a href="/feira/gerenciador/produto/registrar.xhtml">Registrar Produto</a></li>
-			  	<li role="presentation"><a href="/feira/gerenciador/produto/listar.xhtml">Listar Produtos</a></li>
-			  	<li role="presentation"><a href="/feira/gerenciador/produto/tipo/registrar.xhtml">Registrar Tipo</a></li>
-			  	<li role="presentation"><a href="/feira/gerenciador/produto/tipo/listar.xhtml">Listar Tipo</a></li>
-		 	</ul>
-		  </li>
-		  <li role="presentation" class="dropdown">
-		    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
-		      Pedidos <span class="caret"></span>
-		    </a>
-		    <ul class="dropdown-menu" role="menu">
-		    	<li role="presentation"><a href="/feira/gerenciador/pedido/registrar.xhtml">Registrar Pedido</a></li>
-			  <li role="presentation"><a href="/feira/gerenciador/pedido/listar.xhtml">Listar Pedidos</a></li>
-		 	</ul>
-		  </li>
-		  <li role="presentation" class="dropdown">
-		    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
-		      Cidades <span class="caret"></span>
-		    </a>
-		    <ul class="dropdown-menu" role="menu">
-		    	<li role="presentation"><a href="/feira/gerenciador/cidade/registrar.xhtml">Registrar Cidade</a></li>
-			  <li role="presentation"><a href="/feira/gerenciador/cidade/listar.xhtml">Listar Cidades</a></li>
-		 	</ul>
-		  </li>
-		  <li role="presentation" class="dropdown">
-		    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
-		      Bairros <span class="caret"></span>
-		    </a>
-		    <ul class="dropdown-menu" role="menu">
-		    	<li role="presentation"><a href="/feira/gerenciador/bairro/registrar.xhtml">Registrar Bairro</a></li>
-			  <li role="presentation"><a href="/feira/gerenciador/bairro/listar.xhtml">Listar Bairros</a></li>
-		 	</ul>
-		  </li>
-		   <li role="presentation" class="dropdown">
-		    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
-		      Simular <span class="caret"></span>
-		    </a>
-		    <ul class="dropdown-menu" role="menu">
-		    	<li role="presentation"><a href="/feira/gerenciador/gerar.xhtml">Pedidos</a></li>
-		    	<li role="presentation"><a href="/feira/gerenciador/relatorio/gerar.xhtml">Relatorio</a></li>
-		 	</ul>
-		  </li>
-		 </ul>
+	<p:menubar>
+        <p:submenu label="Usuários" icon="ui-icon-document">
+            <p:menuitem value="Registrar Usuário"  icon="ui-icon-contact" url="/gerenciador/usuario/registrar.xhtml" />
+            <p:menuitem value="Listar Usuários" icon="ui-icon-document" url="/gerenciador/usuario/listar.xhtml" />
+        </p:submenu>
+
+        <p:submenu label="Produtos" icon="ui-icon-help">
+            <p:submenu label="Cadastro" icon="ui-icon-search">
+                <p:menuitem value="Registrar Produto" url="/gerenciador/produto/registrar.xhtml" />
+                <p:menuitem value="Listar Produtos" url="/gerenciador/produto/listar.xhtml" />
+            </p:submenu>
+            <p:submenu label="Tipos" icon="ui-icon-search">
+                <p:menuitem value="Registrar Tipo" url="/gerenciador/produto/tipo/registrar.xhtml" />
+                <p:menuitem value="Listar Tipos" url="/gerenciador/produto/tipo/listar.xhtml" />
+           	</p:submenu>
+            <p:submenu label="Categorias" icon="ui-icon-search">
+                <p:menuitem value="Registrar Categoria" url="/gerenciador/produto/categoria/registrar.xhtml" />
+                <p:menuitem value="Listar Categorias" url="/gerenciador/produto/categoria/listar.xhtml" />
+            </p:submenu>
+        </p:submenu>
+        
+        <p:submenu label="Pedidos" icon="ui-icon-gear">
+            <p:menuitem value="Registrar Pedido"  icon="ui-icon-contact" url="/gerenciador/pedido/registrar.xhtml" />
+            <p:menuitem value="Listar Pedidos" icon="ui-icon-document" url="/gerenciador/pedido/listar.xhtml" />
+        </p:submenu>
+		<p:submenu label="Locais" icon="ui-icon-help"> 
+		    <p:submenu label="Cidades" icon="ui-icon-help"> 
+	            <p:menuitem value="Registrar Cidade"  icon="ui-icon-contact" url="/gerenciador/cidade/registrar.xhtml" />
+	            <p:menuitem value="Listar Cidades" icon="ui-icon-document" url="/gerenciador/cidade/listar.xhtml" />
+		    </p:submenu>
+		        
+		    <p:submenu label="Bairros" icon="ui-icon-help">
+		        <p:menuitem value="Registrar Cidade"  icon="ui-icon-contact" url="/gerenciador/bairro/registrar.xhtml" />
+	            <p:menuitem value="Listar Cidades" icon="ui-icon-document" url="/gerenciador/bairro/listar.xhtml" />
+		    </p:submenu>
+		</p:submenu>
+		         
+	    <p:submenu label="Administrador" icon="ui-icon-help">
+	            <p:menuitem value="Simular" url="/gerenciador/gerar.xhtml" />
+	            <p:submenu label="Relatorios" icon="ui-icon-search">
+	                    <p:menuitem value="Pedidos X Produtos" url="/gerenciador/relatorio/gerar.xhtml" />
+	                <p:menuitem value="Outro" url="#" />
+	            </p:submenu>
+	     </p:submenu>
+   	
+        <f:facet name="options">
+            <p:inputText style="margin-right:10px" placeholder="Search"/>
+        </f:facet>
+    </p:menubar>
 </h:body>
 </html>

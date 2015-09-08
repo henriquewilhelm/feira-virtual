@@ -25,7 +25,7 @@
 					<h:outputLabel for="data" value="Data Entrega " styleClass="col-sm-2" />
 					<div class="col-sm-7">
 						<h:inputText id="data" value="#{pedidoBean.pedido.data}" styleClass="form-control">
-								 <f:convertDateTime pattern="dd/MM/yyyy" timeZone="EST" type="date" />
+								<f:convertDateTime pattern="dd/MM/yyyy" />
 		                </h:inputText>
 	                </div>	
 					<div class="col-sm-3">

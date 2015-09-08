@@ -39,21 +39,36 @@ public class ItemService implements Serializable{
 	        quantidade[4] = 5d;
 	        quantidade[5] = 1d;
 	    }
-	     
+
 	    public List<Item> createItens(int size) {
 	    	produtoService = new ProdutoService();
 	    	produtos = produtoService.selectProdutos();
 	        List<Item> list = new ArrayList<Item>(size);
-	        for(int i = 0 ; i < size ; i++) {
-	        	Item item = new Item(getRandomQuantidade(), produtos.get((int) (Math.random() * produtos.size())));
-	        	EntityManager em = JPA.getEM();
-	    		em.getTransaction().begin();
-	    		em.persist(item);
-	    		em.getTransaction().commit();
-	
-	        	list.add(item);
-	        }
-	         
+	        list.add(new Item(1d, produtos.get(0)));
+	       
+		    for(int i = 0 ; i < size ; i++) {
+		    	 	int contador = 0;
+		    		Produto produto = produtos.get( (int) (Math.random() * produtos.size()) );
+		        	while ( contador < list.size() ){
+		        		if (produto.getId() != list.get(contador).getProduto().getId())
+		        			contador++;
+		        		else {
+		        			produto = produtos.get( (int) (Math.random() * produtos.size()) );
+		        			contador = 0;
+		        		}
+		        	}
+		        	Item item = new Item(getRandomQuantidade(), produto);
+		        	
+		        	
+		        	EntityManager em = JPA.getEM();
+		    		em.getTransaction().begin();
+		    		em.persist(item);
+		    		em.getTransaction().commit();
+		    		
+		        	list.add(item);
+		     }
+		       
+	    	
 	        return list;
 	    }
 	    
