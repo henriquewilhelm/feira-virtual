@@ -20,16 +20,13 @@
 	<div class="container">
 		<ui:insert name="header">
 			<ui:include src="headeruser.xhtml" />
-			
-			
-			<p:stack icon="/resources/image/stack.png" expanded="true">
-			 	<c:forEach items="${pedidoBean.pedido.listItens}" var="item">
-			    	<p:menuitem value="${item.produto.nome}" icon="${item.produto.foto}" url="#"/>
-			    </c:forEach>
-			</p:stack>
 		</ui:insert>
 		<ui:insert name="content">
-	       Página ainda não definida
+	      <p align="center">
+	       <p:graphicImage name="/image/construction.png"/>
+	       <br /><br />
+	       Desculpe, estamos em construção.
+	       </p>
 	    </ui:insert>
 
         <ui:insert name="footer">

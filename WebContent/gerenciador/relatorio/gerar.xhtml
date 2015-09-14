@@ -9,7 +9,6 @@
 <h:body>
 	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
 		<ui:define name="content">
-		<ui:include src="/gerenciador/menugerenciador.xhtml" />
 		<h:form styleClass="form">
 			<p:dataTable id="tbl" var="relatorio" value="#{relatorioBean.relatorios}"
                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"

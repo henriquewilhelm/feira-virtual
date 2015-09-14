@@ -7,7 +7,6 @@
 <h:body>
 	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
 		<ui:define name="content">
-		<ui:include src="/gerenciador/menugerenciador.xhtml" />
 			<h1>
 				<h:outputText value="Editar Perfil do Usuario" />
 			</h1>
@@ -34,12 +33,12 @@
                 </div>
                 <div class="form-group">
                 
-					<h:outputLabel for="tipo" value="Senha: " styleClass="col-sm-1" />
+					<h:outputLabel for="senha" value="Senha: " styleClass="col-sm-1" />
 					<div class="col-sm-7">
-							<h:inputText id="tipo" accesskey="*" value="#{usuarioBean.usuario.password}" styleClass="form-control"/>
+							<h:inputSecret id="senha" accesskey="*" value="#{usuarioBean.usuario.password}" styleClass="form-control"/>
 					</div>		
 					<div class="col-sm-3">
-							<h:message for="tipo" />
+							<h:message for="senha" />
 					</div>
 				</div>
                 <div class="form-group">

@@ -9,8 +9,21 @@
 	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
 	
 		<ui:define name="content">
-		<ui:include src="/gerenciador/menugerenciador.xhtml" />
+		<br />
 		<h:form styleClass="form">
+					<h:outputLabel for="de" value="Filtrar por Status - DE: " styleClass="col-sm-2"/>
+	               	<h:selectOneMenu value="#{pedidoBean.statusPedido}" styleClass="col-sm-2">
+	    					<f:selectItem itemValue="" itemLabel="TODOS" />
+	    					<f:selectItems value="#{pedidoBean.listStatusPedido}" />
+	    					<f:ajax render="tbl"  /> 
+					</h:selectOneMenu>
+					<h:outputLabel for="para" value="PARA: " styleClass="col-sm-1"/>
+	               		<h:selectOneMenu value="#{pedidoBean.statusPedidoPara}" styleClass="col-sm-2">
+	    					<f:selectItems value="#{pedidoBean.listStatusPedido}" />
+	    					<f:ajax listener="#{pedidoBean.mudaStatus}" render="tbl"/>
+					</h:selectOneMenu>
+				
+			
 			<p:dataTable id="tbl" var="pedido" value="#{pedidoBean.pedidos}"
                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                  paginator="true" rows="10" style="margin-bottom:20px">
@@ -63,6 +76,10 @@
     			 <p:column>
 					<f:facet name="header">Total</f:facet>
                     #{pedido.total}
+                </p:column>
+                 <p:column>
+					<f:facet name="header">Status</f:facet>
+                    #{pedido.status}
                 </p:column>
                 <p:column>
                 	<f:facet name="header">Opcoes</f:facet>

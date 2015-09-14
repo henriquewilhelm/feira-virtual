@@ -5,11 +5,11 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 <h:body>
-
-
+	
 	<nav class="navbar navbar-inverse navbar-fixed-top"
         role="navigation">
         <div class="container">
+        <br /><br /><br /><br /><br />
              <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed"
                     data-toggle="collapse" data-target="#navbar"
@@ -40,6 +40,55 @@
    					</li>
                 </ul>
             </div>
+            <p:menubar>
+        <p:submenu label="Usuários" icon="ui-icon-document">
+            <p:menuitem value="Registrar Usuário"  icon="ui-icon-contact" url="/gerenciador/usuario/registrar.xhtml" />
+            <p:menuitem value="Listar Usuários" icon="ui-icon-document" url="/gerenciador/usuario/listar.xhtml" />
+        </p:submenu>
+
+        <p:submenu label="Produtos" icon="ui-icon-help">
+            <p:submenu label="Cadastro" icon="ui-icon-search">
+                <p:menuitem value="Registrar Produto" url="/gerenciador/produto/registrar.xhtml" />
+                <p:menuitem value="Listar Produtos" url="/gerenciador/produto/listar.xhtml" />
+            </p:submenu>
+            <p:submenu label="Tipos" icon="ui-icon-search">
+                <p:menuitem value="Registrar Tipo" url="/gerenciador/produto/tipo/registrar.xhtml" />
+                <p:menuitem value="Listar Tipos" url="/gerenciador/produto/tipo/listar.xhtml" />
+           	</p:submenu>
+            <p:submenu label="Categorias" icon="ui-icon-search">
+                <p:menuitem value="Registrar Categoria" url="/gerenciador/produto/categoria/registrar.xhtml" />
+                <p:menuitem value="Listar Categorias" url="/gerenciador/produto/categoria/listar.xhtml" />
+            </p:submenu>
+        </p:submenu>
+        
+        <p:submenu label="Pedidos" icon="ui-icon-gear">
+            <p:menuitem value="Registrar Pedido"  icon="ui-icon-contact" url="/gerenciador/pedido/registrar.xhtml" />
+            <p:menuitem value="Listar Pedidos" icon="ui-icon-document" url="/gerenciador/pedido/listar.xhtml" />
+        </p:submenu>
+		<p:submenu label="Locais" icon="ui-icon-help"> 
+		    <p:submenu label="Cidades" icon="ui-icon-help"> 
+	            <p:menuitem value="Registrar Cidade"  icon="ui-icon-contact" url="/gerenciador/cidade/registrar.xhtml" />
+	            <p:menuitem value="Listar Cidades" icon="ui-icon-document" url="/gerenciador/cidade/listar.xhtml" />
+		    </p:submenu>
+		        
+		    <p:submenu label="Bairros" icon="ui-icon-help">
+		        <p:menuitem value="Registrar Cidade"  icon="ui-icon-contact" url="/gerenciador/bairro/registrar.xhtml" />
+	            <p:menuitem value="Listar Cidades" icon="ui-icon-document" url="/gerenciador/bairro/listar.xhtml" />
+		    </p:submenu>
+		</p:submenu>
+		         
+	    <p:submenu label="Administrador" icon="ui-icon-help">
+	            <p:menuitem value="Simular" url="/gerenciador/gerar.xhtml" />
+	            <p:submenu label="Relatorios" icon="ui-icon-search">
+	                    <p:menuitem value="Pedidos X Produtos" url="/gerenciador/relatorio/gerar.xhtml" />
+	                <p:menuitem value="Outro" url="#" />
+	            </p:submenu>
+	     </p:submenu>
+   	
+        <f:facet name="options">
+            <p:inputText style="margin-right:10px" placeholder="Search"/>
+        </f:facet>
+    </p:menubar>
         </div>
     </nav>
 	<br /><br /><br />

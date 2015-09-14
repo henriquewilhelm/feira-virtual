@@ -2,13 +2,20 @@
 
 <html xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+ 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <h:body>
 	<ui:composition template="/loja/layout/layoutuser.xhtml">
 		<ui:define name="content">
 
 		<h:form styleClass="form">
+			<p:stack id="stack" icon="/resources/image/stack.png" expanded="true">
+				 	<c:forEach items="${pedidoBean.pedido.listItens}" var="item">
+				    	<p:menuitem value="${item.produto.nome}" icon="${item.produto.foto}" url="#"/>
+				    </c:forEach>
+			</p:stack>
 			<h:dataTable styleClass="table table-striped" var="pedido"
 				value="#{pedidoBean.pedidosPorUsuario}"> 
 				<h:column>

@@ -7,12 +7,20 @@
 <h:body>
 	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
 		<ui:define name="content">
-		<ui:include src="/gerenciador/menugerenciador.xhtml" />
 			<h1>
-				<h:outputText value="Editar Pedido" />
+				<h:outputText value="Editar Pedido" />	
 			</h1>
+			<br />
 			<h:form styleClass="form-horizontal">
 			    <div class="form-group">
+			     	<h:outputLabel for="status" value="Status: " styleClass="col-sm-2"/>
+			    	<div class="col-sm-7">						
+		               	<h:selectOneMenu value="#{pedidoBean.pedido.status}"  styleClass="form-control"	>
+		    					<f:selectItems value="#{pedidoBean.listStatusPedido}" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+				<div class="form-group">
 					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-2" />
 					<div class="col-sm-7">
 							<h:inputText id="nome" value="#{pedidoBean.pedido.nome}" styleClass="form-control" />

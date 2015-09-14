@@ -35,10 +35,10 @@
 						<h:link value="Minha Cesta" outcome="/loja/pedido/registrar.xhtml"/>
 					</li>
    					<li>
-   						<h:link value="Sobre" outcome="/sobre.xhtml" />
+   						<h:link value="Sobre" outcome="/loja/sobre.xhtml" />
    					</li>
    					<li>
-   						<h:link value="Contato" outcome="/contato.xhtml" />
+   						<h:link value="Contato" outcome="/loja/contato.xhtml" />
    					</li>
    					
                 </ul>
@@ -63,16 +63,12 @@
 		   						<c:forEach items="${produtoBean.categorias}" var="categoria">
 		   						
 					   					<h:commandLink class="btn btn-primary btn-xs" value="${categoria.nome}" action="/loja/pedido/listarProdutos.xhtml">
-						   								 <f:setPropertyActionListener target="#{produtoBean.categoria}" value="#{categoria}" />
+						   								 <f:setPropertyActionListener target="#{pedidoBean.categoria}" value="#{categoria}" />
 					   					</h:commandLink>
 					   				
 		   						</c:forEach>
 		   					</div>
 	   					</h:form>
-	              
-                 
-            	
-            
         </div>
     </nav>
     <br /><br /><br />

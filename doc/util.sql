@@ -1,3 +1,23 @@
+
+		<properties> 
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/feira" />
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.password" value="admin" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.schema-generation.database.action"
+ 				value="create" />
+		</properties>
+		
+
+	<properties>
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://mysql66018-env-2739445.jelasticlw.com.br/feira" />
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.password" value="FHMbcv06820" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.schema-generation.database.action"
+ 				value="create" /> 
+		</properties>
+		
 drop database feira;
 create database feira;
 use feira;

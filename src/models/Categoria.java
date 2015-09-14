@@ -1,5 +1,7 @@
 package models;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,7 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 @Entity
 @Table(name="categorias")
-public class Categoria {
+public class Categoria implements IConvertible, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1660264993306740829L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;

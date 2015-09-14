@@ -3,54 +3,71 @@
 <html xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+ 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <h:body>
 	<ui:composition template="/loja/layout/layoutuser.xhtml">
 		<ui:define name="content">
+		
+		 <h:form id="form" >
+		 	<p:growl id="growl" showDetail="true" sticky="true" />
+		 
+		 	<p:growl id="msgs" showDetail="true"/>
+			<p:stack id="stack" icon="/resources/image/stack.png" expanded="true">
+			 	<c:forEach items="${pedidoBean.pedido.listItens}" var="item">
+			    	<p:menuitem  value="+${item.total}" icon="${item.produto.foto}" action="#{pedidoBean.sendMessage}" update="growl" />
+			    </c:forEach>
+			</p:stack>
+			<p:dataTable id="produtos" styleClass="table table-striped" var="produtoEspecial"
+				value="#{pedidoBean.produtosPorCategoria}" editable="true"> 
 
-		<h:form styleClass="form">
-			<h:dataTable styleClass="table table-striped" var="produto"
-				value="#{produtoBean.produtosPorCategoria}"> 
-				<h:column>
+			    <f:facet name="header">
+		           Lista de Produtos por Categoria
+		        </f:facet>
+		 
+		        <p:ajax event="rowEdit" listener="#{pedidoBean.onRowEdit}" update=":form:stack" />
+		        <p:ajax event="rowEditCancel" listener="#{pedidoBean.onRowCancel}" update=":form:msgs" />
+
+				<p:column>
 					<f:facet name="header">Nome</f:facet>
-                    #{produto.nome}
-                </h:column>
-                <h:column>
-               		 <f:facet name="header">Data</f:facet>
-                    <h:outputText value="#{produto.data}">
-                        <f:convertDateTime pattern="dd/MM/yyyy" />
-                    </h:outputText>
-                </h:column>
-                <h:column>
+                    #{produtoEspecial.produto.nome}
+                </p:column>
+                <p:column>
 					<f:facet name="header">Categoria</f:facet>
-                    #{produto.categoria.nome}
-                </h:column>
-                <h:column>
+                    #{produtoEspecial.produto.categoria.nome}
+                </p:column>
+                <p:column>
 					<f:facet name="header">Tipo</f:facet>
-                    #{produto.tipo.nome}
-                </h:column>
-                <h:column>
+                    #{produtoEspecial.produto.tipo.nome}
+                </p:column>
+                <p:column>
                 	<f:facet name="header">Valor</f:facet>
-                    <h:outputText value="#{produto.valor}">
+                    <h:outputText value="#{produtoEspecial.produto.valor}">
                         <f:convertNumber pattern="#0.00" />
                     </h:outputText>
-                </h:column>
-                <h:column>
+                </p:column>
+                <p:column>
                 	<f:facet name="header">Foto</f:facet>
-			 			<p:graphicImage url="#{produto.foto}" width="100px" height="100px" />  
-                </h:column>
-                <h:column>
-                	<f:facet name="header">Opcoes</f:facet>
-							<h:column>
-								<h:commandLink actionListener="#{pedidoBean.addProduto}">
-									 <f:setPropertyActionListener target="#{pedidoBean.produtoSelecionado}"
-	                               	 value="#{produto}" />
-	                               	 <p:graphicImage name="/icons/basket-go.png" />
-								</h:commandLink>
-							</h:column>
-                </h:column>
-			</h:dataTable>
+			 			<p:graphicImage url="#{produtoEspecial.produto.foto}" width="100px" height="100px" />  
+                </p:column>
+                <p:column headerText="Quantidade">
+			           <p:cellEditor >
+			               <f:facet name="output"><h:outputText value="Adicione" /></f:facet>
+			               <f:facet name="input">
+			                   <h:selectOneMenu value="#{pedidoBean.quantidade}" style="width:100%">
+			                       <f:selectItems value="#{produtoEspecial.quantidades}"  var="quantidade" itemValue="#{quantidade}" itemLabel="#{quantidade}"/>
+			                   </h:selectOneMenu>
+			               </f:facet>
+			           </p:cellEditor>
+			     </p:column>
+			     <p:column headerText="+" style="width:42px">
+			           <p:rowEditor >
+			             
+			           </p:rowEditor>
+			         
+			     </p:column>            
+			</p:dataTable>
 			</h:form>
 			<br /><br />
 			<h:messages />

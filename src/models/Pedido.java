@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,11 +51,14 @@ public class Pedido implements IConvertible, Serializable  {
 						unique=false) } )
 	private List<Item> listItens;
 	private Double total = 0d;
+	@Enumerated(EnumType.STRING)
+	private StatusPedido status;
 	
 	public Pedido() {
 		listItens = new ArrayList<Item>();	
 		cidade = new Cidade();
 		setData(Calendar.getInstance().getTime());
+		status = StatusPedido.AGUARDANDO;
 	};
 	
 	public Pedido(Date data, Usuario usuario, String obs, List<Item> listItens, Double total) {
@@ -63,6 +68,7 @@ public class Pedido implements IConvertible, Serializable  {
 		this.obs = obs;
 		this.listItens = listItens;
 		this.total = total;
+		status = StatusPedido.AGUARDANDO;
 	}
 
 	public Integer getId() {
@@ -159,4 +165,12 @@ public class Pedido implements IConvertible, Serializable  {
 	public void setTotal(Double total) {
 		this.total = total;
 	}
+
+	public StatusPedido getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusPedido status) {
+		this.status = status;
+	}	
 }

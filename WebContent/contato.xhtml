@@ -8,25 +8,9 @@
 </h:head>
 <h:body>
 	<ui:composition template="/layout/layout.xhtml">
-		<ui:define name="content">
-			<h1>		
-						<strong>Contato</strong> <small> do LNB</small>
-			</h1>
-			<ul>
-					<li>Feria Organica precisa salvar sua lista de itens.</li>
-					<li>Estes itens possuem: nome, tipo e
-						a valor.</li>
-					<li>Além dos itens é necessário cadastrar os pedidos, estes
-						possuem como dados: nome, endereço e a sua lista
-						de itens, mais a quantidade de cada item </li>
-					<li>Desenvolver uma app JSF que gerencie o cadastro, a listagem e
-						a remoção destes dados</li>
-					<li>Tente deixar a aplicação bonita se for capaz</li>
-			</ul>
-			<h2>
-						<a href="/feira/index.xhtml">Index</a>
-			</h2>
-		</ui:define>
+		<ui:insert name="content">
+		
+	    </ui:insert>
 		<ui:define name="footer">
 		      		<ui:include src="/footer.xhtml"></ui:include>
 		</ui:define>

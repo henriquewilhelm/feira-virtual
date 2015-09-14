@@ -7,7 +7,6 @@
 <h:body>
 	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
 		<ui:define name="content">
-		<ui:include src="/gerenciador/menugerenciador.xhtml" />
 			<h:dataTable styleClass="table table-striped" var="usuario"
 				value="#{usuarioBean.usuarios}">
 				<h:column>

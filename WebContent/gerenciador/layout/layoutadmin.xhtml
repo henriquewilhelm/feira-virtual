@@ -5,7 +5,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
 		<h:outputScript library="js" name="jquery-1.11.1.min.js"/>
@@ -21,7 +22,11 @@
 			<ui:include src="headeradmin.xhtml" />
 		</ui:insert>
 		<ui:insert name="content">
-	       Página ainda não definida
+	      <p align="center">
+	       <p:graphicImage name="/image/construction.png"/>
+	       <br /><br />
+	       Desculpe, estamos em construção.
+	       </p>
 	    </ui:insert>
 
         <ui:insert name="footer">

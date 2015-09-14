@@ -3,7 +3,8 @@
 <html xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+ 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <h:body>
 	<ui:composition template="/loja/layout/layoutuser.xhtml">
@@ -12,6 +13,11 @@
 				<h:outputText value="Meu Pedido" />
 			</h1>
 			<h:form styleClass="form-horizontal">
+				<p:stack id="stack" icon="/resources/image/stack.png" expanded="true">
+				 	<c:forEach items="${pedidoBean.pedido.listItens}" var="item">
+				    	<p:menuitem value="${item.produto.nome}" icon="${item.produto.foto}" url="#"/>
+				    </c:forEach>
+				</p:stack>
 			    <div class="form-group">
 					<h:outputLabel for="nome" value="Nome: " styleClass="col-sm-1"/>
 					<div class="col-sm-7">
@@ -91,12 +97,14 @@
 		    						<f:selectItems value="#{pedidoBean.quantidades}" var="quantidade" itemValue="#{quantidade}" itemLabel="#{quantidade}"/>		
 							</p:selectOneListbox >
 							<br />
-							<h:commandButton value=	"Adicionar" actionListener="#{pedidoBean.addProduto}" styleClass="btn btn-info"/>
+							<h:commandButton value=	"Adicionar" actionListener="#{pedidoBean.addProduto}" styleClass="btn btn-info">
+									<f:attribute name="selected" value="#{pedidoBean.produtoSelecionado}" />
+							</h:commandButton>
 							<h:commandButton value=	"Remover" actionListener="#{pedidoBean.removeProduto}" styleClass="btn btn-danger"/>
 						</div>
 		    	
 		    	 	</div>
-		    	 	<div class="col-sm-4	">
+		    	 	<div class="col-sm-4">
 		    	 		<h:outputLabel for="total" value="Total: " />
 		    		
 						<h:outputText id="total" value="#{pedidoBean.pedido.total}" />
@@ -119,8 +127,8 @@
 								<h:message for="produtos" />
 			             		<h:message for="tipos" />
 			             </div>
-                	</div>
-                 		
+                	</div>			
+					
     			</div>
                 <br />
 				<h:commandButton styleClass="btn btn-default" value="Enviar" action="#{pedidoBean.addPedido}" />

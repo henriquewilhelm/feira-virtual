@@ -1,11 +1,15 @@
 package handlers;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.ViewHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -13,13 +17,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
+import javax.faces.event.ActionEvent;
+
+import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.RowEditEvent;
 
 import models.Bairro;
+import models.Categoria;
 import models.Cidade;
 import models.Item;
 import models.Mail;
 import models.Produto;
 import models.Pedido;
+import models.ProdutoEspecial;
+import models.StatusPedido;
 import models.Tipo;
 import models.UserTipo;
 import models.Usuario;
@@ -27,13 +38,22 @@ import util.JPA;
 
 @ManagedBean
 @SessionScoped
-public class PedidoBean {
+public class PedidoBean implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4200623463565962506L;
 	
 	private Tipo tipo;
 	private Produto produtoSelecionado;
 	private Item itemSelecionado;
 	private Pedido pedido;
 	private Item item;
+
+
+	private Categoria categoria;
+	private ArrayList<ProdutoEspecial> listProdutoEspecial;
 	
 	private Usuario usuario;
 	private List<Pedido> pedidosPorUsuario;
@@ -45,6 +65,9 @@ public class PedidoBean {
 	private Integer quantidadeItens = 0;
 	private Double total = 0d;
 	
+	private StatusPedido statusPedido = StatusPedido.AGUARDANDO;
+	private StatusPedido statusPedidoPara;
+	
 	public PedidoBean() {
 		pedido = new Pedido();
 		item = new Item();
@@ -54,9 +77,23 @@ public class PedidoBean {
         pedido.setUsuario(usuario);
         cidade = usuario.getCidade();
 		bairro = usuario.getBairro();	
-   
+		
+		EntityManager em = JPA.getEM();
+		TypedQuery<Produto> queryEntrega = em.createQuery("Select c from Produto c WHERE c.nome = :nome",
+				Produto.class);
+		queryEntrega.setParameter("nome", "Entrega");
+		Produto entrega = queryEntrega.getSingleResult();
+		
+		pedido.getListItens().add(new Item(1d, entrega));
 	} 
 	
+	public void addProdutoEspecial(ActionEvent event){
+		ProdutoEspecial produtoEspecial = (ProdutoEspecial) event.getComponent().getAttributes().get("selected");
+		produtoSelecionado = produtoEspecial.getProduto();
+		
+		System.out.println(produtoEspecial.getProduto().getNome()+" "+getQuantidade());
+		addProduto();
+	}
 	public void addProduto(){
 		boolean verificacao = true;
 				if (produtoSelecionado !=null){
@@ -110,7 +147,8 @@ public class PedidoBean {
 		boolean verificacao = true;
 				if (itemSelecionado !=null){
 					for (int i=0; i<pedido.getListItens().size(); i++){
-						if (pedido.getListItens().get(i).getId() == itemSelecionado.getId())
+						if (pedido.getListItens().get(i).getId() == itemSelecionado.getId() || 
+								pedido.getListItens().get(i).getProduto().getNome().equals("Entrega"))
 							verificacao=false;
 					}
 					if (!verificacao){
@@ -126,7 +164,7 @@ public class PedidoBean {
 
 						facesContext.addMessage(null, new FacesMessage( 
 			            FacesMessage.SEVERITY_ERROR, "Ops, erro ao remover produto, tente outra vez...", null));
-						System.out.println("Nao add, produto ja cadastrado...");
+					
 					}
 				}
 				else
@@ -315,6 +353,81 @@ public class PedidoBean {
 		this.total = total;
 	}
 
+	public StatusPedido getStatusPedido() {
+		return statusPedido;
+	}
+	
+	public void setStatusPedido(StatusPedido statusPedido) {
+		this.statusPedido = statusPedido;
+	}
+	
+	public StatusPedido getStatusPedidoPara() {
+		return statusPedidoPara;
+	}
+
+	public void setStatusPedidoPara(StatusPedido statusPedidoPara) {
+		this.statusPedidoPara = statusPedidoPara;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+	
+	public List<ProdutoEspecial> getProdutosPorCategoria() {
+
+		listProdutoEspecial = new ArrayList<ProdutoEspecial>();
+		
+		EntityManager em = JPA.getEM();
+		TypedQuery<Produto> query = em.createQuery("Select p from Produto p left join fetch p.categoria c where c.id = :id",
+				Produto.class);
+		if (categoria!=null)
+		query.setParameter("id", categoria.getId());
+		
+		
+		List<Produto> listProduto = query.getResultList();
+		ArrayList<Double> quantidades = new ArrayList<Double>();
+		
+		for (int i= 0; i< listProduto.size(); i++){
+			
+			Double minimo = 1d;
+			Double maximo = 1d;
+			Double de = 0.5d;
+ 		
+			if (listProduto.get(i)!=null){
+				
+				Query queryMinMax = em.createQuery("select t.minimo,t.maximo from Tipo t where t.id = :id");
+				queryMinMax.setParameter("id", listProduto.get(i).getTipo().getId());
+				List<Object[]> rows = queryMinMax.getResultList();
+				
+				for (Object[] row: rows) {
+				    minimo = (Double) row[0];
+				    maximo = (Double) row[1];
+				}
+				
+				if (minimo < 1){
+					quantidades = new ArrayList<Double>();
+					for (Double contador = minimo; contador <= maximo;){
+						quantidades.add(contador);
+						contador = contador + de;
+					}
+				}
+				else{
+					quantidades = new ArrayList<Double>();
+					for (Double contador = minimo; contador <= maximo; contador++){
+						quantidades.add(contador);
+					}
+				}
+			}
+			
+			listProdutoEspecial.add(new ProdutoEspecial(listProduto.get(i), 1d, quantidades));
+		}
+		return listProdutoEspecial;
+	}
+	
 	public List<Produto> getProdutosCadastrados() {
 		EntityManager em = JPA.getEM();
 		TypedQuery<Produto> query = em.createQuery("Select c from Produto c",
@@ -328,20 +441,19 @@ public class PedidoBean {
 		
 		listProdutos.remove(entrega);
 		
-		produtoSelecionado = entrega;
-		
-		addProduto();
-		
-//		pedido.getListItens().add(new Item(1d,entrega));
-		
 		return listProdutos;
 	}
 	
 	public List<Pedido> getPedidos() {
 		EntityManager em = JPA.getEM();
-		TypedQuery<Pedido> query = em.createQuery("Select v from Pedido v",
-				Pedido.class);
-		
+		TypedQuery<Pedido> query;
+		if (getStatusPedido()!=null){
+			query = em.createQuery("Select p from Pedido p WHERE p.status = :status", Pedido.class);
+			query.setParameter("status", getStatusPedido());
+		}
+		else {
+			query = em.createQuery("Select p from Pedido p",	Pedido.class);
+		}
 		return query.getResultList();
 	}
 	
@@ -427,10 +539,63 @@ public class PedidoBean {
 		pedidosPorUsuario = query.getResultList();
 		return pedidosPorUsuario;
 	}
+	
+	public List<StatusPedido> getListStatusPedido() {
 
+		 List<StatusPedido> list = new ArrayList<StatusPedido>();
+		 list.add(StatusPedido.AGUARDANDO);
+		 list.add(StatusPedido.CONFIRMADO);
+		 list.add(StatusPedido.ENVIADO);
+		 list.add(StatusPedido.CANCELADO);
+		 return list;
+	}
+	
+	public void mudaStatus(AjaxBehaviorEvent abe){
+		System.out.println("mudaStatus");
+		List<Pedido> pedidos = getPedidos();
+		for (int i=0; i< pedidos.size(); i++){
+			pedidos.get(i).setStatus(getStatusPedidoPara());
+			EntityManager em = JPA.getEM();
+			em.getTransaction().begin();
+			em.merge(pedidos.get(i));
+			em.getTransaction().commit();
+		}
+	}
 	public String list() {
 		return "/gerenciador/pedido/listar";
 	}
 
-
+    public void onRowEdit(RowEditEvent event) {
+    	ProdutoEspecial produtoEspecial = ((ProdutoEspecial) event.getObject());
+        FacesMessage msg = new FacesMessage("Produto Adicionado", produtoEspecial.getProduto().getId().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        produtoSelecionado = produtoEspecial.getProduto();
+		System.out.println("Add: "+produtoEspecial.getProduto().getNome()+" "+getQuantidade());
+		addProduto();
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Adicao Cancelada", ((ProdutoEspecial) event.getObject()).getProduto().getId().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+     
+    public void onCellEdit(CellEditEvent event) {
+        Object oldValue = event.getOldValue();
+        Object newValue = event.getNewValue();
+         
+        if(newValue != null && !newValue.equals(oldValue)) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+    
+    public void sendMessage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+         
+        context.addMessage(null, new FacesMessage("Successful",  "Your message ") );
+        context.addMessage(null, new FacesMessage("Second Message", "Additional Message Detail"));
+    }
 }

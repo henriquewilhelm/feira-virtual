@@ -36,7 +36,7 @@
                 
 					<h:outputLabel for="password" value="Senha: " styleClass="col-sm-2" />
 					<div class="col-sm-7">
-							<h:inputText id="password" accesskey="*" value="#{loginBean.usuario.password}" styleClass="form-control"/>
+							<h:inputSecret id="password" accesskey="*" value="#{loginBean.usuario.password}" styleClass="form-control"/>
 					</div>		
 					<div class="col-sm-3">
 							<h:message for="password" />
@@ -61,6 +61,29 @@
 		             </div>      
 		             <div class="col-sm-3">
 		             		<h:message for="endereco" />
+		             </div>
+                </div>
+                <div class="form-group">
+	                <h:outputLabel for="cidade" value="Cidade:" styleClass="col-sm-2" />
+					<div class="col-sm-3">
+                		<h:selectOneListbox id="cidade" value="#{usuarioBean.cidade}" converter="cidadeConverter" styleClass="form-control">
+               				<f:selectItem itemValue="" itemLabel="Selecione uma Cidade" />  
+    						<f:selectItems value="#{usuarioBean.cidades}" var="cidade" itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>		
+							 <f:ajax render="bairro" /> 
+						</h:selectOneListbox >
+					</div>
+	                 <h:outputLabel for="bairro" value="Bairro:" styleClass="col-sm-1" />
+					<div class="col-sm-3">
+                		<h:selectOneListbox id="bairro" value="#{usuarioBean.bairro}"  converter="bairroConverter" styleClass="form-control">
+               				<f:selectItem itemValue="" itemLabel="Selecione uma Bairro" />  
+    						<f:selectItems value="#{usuarioBean.bairros}" var="bairro" itemValue="#{bairro}" itemLabel="#{bairro.nome}"/>		
+						</h:selectOneListbox >
+					</div>
+				   </div>
+                <div class="form-group">
+					 <div class="col-sm-3">
+							<h:message for="cidade" />
+		             		<h:message for="bairro" />
 		             </div>
                 </div>
                 <br />
