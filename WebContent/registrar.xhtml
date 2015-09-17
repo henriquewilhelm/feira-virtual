@@ -4,91 +4,105 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 
+<meta charset="UTF-8" />	
 <h:body>
 	<ui:composition template="/layout/layout.xhtml">
 		<ui:define name="content">
-	
 			<h1>
 				<h:outputText value="Cadastro de Usuario" />
 			</h1>
 			<h:form styleClass="form-horizontal">
 			    <div class="form-group">
 					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-2" />
-					<div class="col-sm-7">
-							<h:inputText id="nome" value="#{loginBean.usuario.nome}" styleClass="form-control" />
+					<div class="col-sm-8">
+							<h:inputText id="nome" value="#{loginBean.usuario.nome}" styleClass="form-control" required="true" requiredMessage="Campo Obrigatório"/>
 					</div>	
-					<div class="col-sm-3">
+					<div class="col-sm-2">
 							<h:message for="nome" />
 					</div>
 				</div>
 				<div class="form-group">
 					<h:outputLabel for="email" value="E-mail " styleClass="col-sm-2" />
-					<div class="col-sm-7">
-						<h:inputText id="email" value="#{loginBean.usuario.email}" styleClass="form-control">
+					<div class="col-sm-8">
+						<h:inputText id="email" value="#{loginBean.usuario.email}" styleClass="form-control" required="true" requiredMessage="Campo Obrigatório">
 		                    <f:validator validatorId="emailValidator"/>
 		                </h:inputText>
 	                </div>
-	                <div class="col-sm-3">
+	                <div class="col-sm-2">
 						<h:message for="email" />
 					</div>
                 </div>
                 <div class="form-group">
                 
 					<h:outputLabel for="password" value="Senha: " styleClass="col-sm-2" />
-					<div class="col-sm-7">
-							<h:inputSecret id="password" accesskey="*" value="#{loginBean.usuario.password}" styleClass="form-control"/>
+					<div class="col-sm-8">
+							<h:inputSecret id="password" accesskey="*" value="#{loginBean.usuario.password}" styleClass="form-control" required="true" requiredMessage="Campo Obrigatório"/>
 					</div>		
-					<div class="col-sm-3">
+					<div class="col-sm-2">
 							<h:message for="password" />
 					</div>
 				</div>
                 <div class="form-group">
 	                <h:outputLabel for="telefone" value="Telefone: " styleClass="col-sm-2" />
-	                <div class="col-sm-7">
-			                <h:inputText id="telefone" value="#{loginBean.usuario.telefone}" styleClass="form-control">
+	                <div class="col-sm-8">
+			                <h:inputText id="telefone" value="#{loginBean.usuario.telefone}" styleClass="form-control" >
 		                    	<f:validator validatorId="telefoneValidator"/>
                             	<f:converter converterId="telefoneConverter"/>
 		                   	</h:inputText>
 		             </div>      
-		             <div class="col-sm-3">
+		             <div class="col-sm-2">
 		             		<h:message for="telefone" />
 		             </div>
                 </div>
                 <div class="form-group">
 	                <h:outputLabel for="endereco" value="Endereco: " styleClass="col-sm-2" />
-	                <div class="col-sm-7">
-			                <h:inputText id="endereco" value="#{loginBean.usuario.endereco}" styleClass="form-control" />
-		             </div>      
-		             <div class="col-sm-3">
+	                <div class="col-sm-8">
+			                <h:inputText id="endereco" value="#{loginBean.usuario.endereco}" styleClass="form-control"  required="true" requiredMessage="Campo Obrigatório"/>
+		             </div>    
+		          	<div class="col-sm-2">
 		             		<h:message for="endereco" />
+		             </div>
+               	 </div>
+               	 <div class="form-group">
+		             <h:outputLabel for="numero" value="Numero: " styleClass="col-sm-2" />
+	                 <div class="col-sm-2">
+			                <h:inputText id="numero" value="#{loginBean.usuario.numero}" styleClass="form-control"  required="true" requiredMessage="Numero é Obrigatório"/>
+		             </div>  
+		             <h:outputLabel for="complemento" value="Complemento: " styleClass="col-sm-2" />
+	                 <div class="col-sm-4">
+			                <h:inputText id="complemento" value="#{loginBean.usuario.complemento}" styleClass="form-control"/>
+		             </div>  
+		             <div class="col-sm-2">
+		            		 <h:message for="numero" />
+		             		<h:message for="complemento" />
 		             </div>
                 </div>
                 <div class="form-group">
 	                <h:outputLabel for="cidade" value="Cidade:" styleClass="col-sm-2" />
 					<div class="col-sm-3">
-                		<h:selectOneListbox id="cidade" value="#{usuarioBean.cidade}" converter="cidadeConverter" styleClass="form-control">
+                		<h:selectOneListbox id="cidade" value="#{loginBean.cidade}" converter="cidadeConverter" styleClass="form-control"  required="true" requiredMessage="Cidade é Obrigatória">
                				<f:selectItem itemValue="" itemLabel="Selecione uma Cidade" />  
-    						<f:selectItems value="#{usuarioBean.cidades}" var="cidade" itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>		
+    						<f:selectItems value="#{loginBean.cidades}" var="cidade" itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>		
 							 <f:ajax render="bairro" /> 
 						</h:selectOneListbox >
+						<div class="col-sm-3">
+							<h:message for="cidade" />
+						</div>
 					</div>
 	                 <h:outputLabel for="bairro" value="Bairro:" styleClass="col-sm-1" />
-					<div class="col-sm-3">
-                		<h:selectOneListbox id="bairro" value="#{usuarioBean.bairro}"  converter="bairroConverter" styleClass="form-control">
+					<div class="col-sm-4">
+                		<h:selectOneListbox id="bairro" value="#{loginBean.bairro}"  converter="bairroConverter" styleClass="form-control"  required="true" requiredMessage="Bairro é Obrigatório">
                				<f:selectItem itemValue="" itemLabel="Selecione uma Bairro" />  
-    						<f:selectItems value="#{usuarioBean.bairros}" var="bairro" itemValue="#{bairro}" itemLabel="#{bairro.nome}"/>		
+    						<f:selectItems value="#{loginBean.bairros}" var="bairro" itemValue="#{bairro}" itemLabel="#{bairro.nome}"/>		
 						</h:selectOneListbox >
+						<div class="col-sm-3">
+							<h:message for="bairro" />
+						</div>
 					</div>
 				   </div>
-                <div class="form-group">
-					 <div class="col-sm-3">
-							<h:message for="cidade" />
-		             		<h:message for="bairro" />
-		             </div>
-                </div>
                 <br />
-				<h:commandButton styleClass="btn btn-primary btn-lg" value="Send" action="#{loginBean.addUsuario}" />
-				<h:commandButton styleClass="btn btn-primary btn-lg" value="Clear" action="#{loginBean.clearLogin}" />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Cadastrar" action="#{loginBean.addUsuario}" />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Limpar" action="#{loginBean.clearLogin}" />
 			</h:form>
 			<br />
 			<br />

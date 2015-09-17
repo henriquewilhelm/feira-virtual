@@ -29,6 +29,8 @@ public class Usuario implements IConvertible, Serializable {
     private String password;
     private String nome;
     private String endereco;
+    private Integer numero;
+    private String complemento;
     private Cidade cidade;
     private Bairro bairro;
     private Long telefone;
@@ -39,13 +41,15 @@ public class Usuario implements IConvertible, Serializable {
     	tipo = UserTipo.USER;
     }
     
-    public Usuario(String email, String password, String nome, String endereco,
+    public Usuario(String email, String password, String nome, String endereco, Integer numero, String complemento,
 			Cidade cidade, Bairro bairro, Long telefone, UserTipo tipo) {
 		super();
 		this.email = email;
 		this.password = password;
 		this.nome = nome;
 		this.endereco = endereco;
+		this.complemento = complemento;
+		this.numero = numero;
 		this.cidade = cidade;
 		this.bairro = bairro;
 		this.telefone = telefone;
@@ -125,8 +129,24 @@ public class Usuario implements IConvertible, Serializable {
 	public void setBairro(Bairro bairro) {
 		this.bairro = bairro;
 	}
+	
+    public Integer getNumero() {
+		return numero;
+	}
 
-    public boolean isAdmin() {
+	public void setNumero(Integer numero) {
+		this.numero = numero;
+	}
+
+	public String getComplemento() {
+		return complemento;
+	}
+
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+
+	public boolean isAdmin() {
         return UserTipo.ADMIN.equals(tipo);
     }
     

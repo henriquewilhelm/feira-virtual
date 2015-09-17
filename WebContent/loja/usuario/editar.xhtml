@@ -4,18 +4,18 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
+<meta charset="UTF-8" />	
 
 <h:body>
 	<ui:composition template="/loja/layout/layoutuser.xhtml">
 		<ui:define name="content">
-	
 			<h1>
 				<h:outputText value="Editar Perfil do Usuario" />
 			</h1>
 			<h:form styleClass="form-horizontal">
 			    <div class="form-group">
 					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-1" />
-					<div class="col-sm-7">
+					<div class="col-sm-8">
 							<h:inputText id="nome" value="#{usuarioBean.meuUsuario.nome}" styleClass="form-control" />
 					</div>	
 					<div class="col-sm-3">
@@ -24,7 +24,7 @@
 				</div>
 				<div class="form-group">
 					<h:outputLabel for="email" value="E-mail " styleClass="col-sm-1" />
-					<div class="col-sm-7">
+					<div class="col-sm-8">
 						<h:inputText id="email" value="#{usuarioBean.meuUsuario.email}" styleClass="form-control">
 		                    <f:validator validatorId="emailEspecialValidator"/>
 		                </h:inputText>
@@ -36,7 +36,7 @@
                  <div class="form-group">
                 
 					<h:outputLabel for="senha" value="Senha: " styleClass="col-sm-1" />
-					<div class="col-sm-7">
+					<div class="col-sm-8">
 							<h:inputSecret id="senha" value="#{usuarioBean.meuUsuario.password}" styleClass="form-control"/>
 					</div>		
 					<div class="col-sm-3">
@@ -45,7 +45,7 @@
 				</div>
                 <div class="form-group">
 	                <h:outputLabel for="telefone" value="Telefone: " styleClass="col-sm-1" />
-	                <div class="col-sm-7">
+	                <div class="col-sm-8">
 			                <h:inputText id="telefone" value="#{usuarioBean.meuUsuario.telefone}" styleClass="form-control">
 		                    	<f:validator validatorId="telefoneValidator"/>
                             	<f:converter converterId="telefoneConverter"/>
@@ -56,12 +56,26 @@
 		             </div>
                 </div>
                 <div class="form-group">
-	                <h:outputLabel for="endereco" value="Endereco: " styleClass="col-sm-1" />
-	                <div class="col-sm-7">
-			                <h:inputText id="endereco" value="#{usuarioBean.meuUsuario.endereco}" styleClass="form-control"/>
-		             </div>      
-		             <div class="col-sm-3">
+	                <h:outputLabel for="endereco" value="Endereço: " styleClass="col-sm-1" />
+	                <div class="col-sm-8">
+			                <h:inputText id="endereco" value="#{usuarioBean.meuUsuario.endereco}" styleClass="form-control"  required="true" requiredMessage="Campo Obrigatório"/>
+		             </div>    
+		          	<div class="col-sm-2">
 		             		<h:message for="endereco" />
+		             </div>
+               	 </div>
+               	 <div class="form-group">
+		             <h:outputLabel for="numero" value="Numero: " styleClass="col-sm-1" />
+	                 <div class="col-sm-2">
+			                <h:inputText id="numero" value="#{usuarioBean.meuUsuario.numero}" styleClass="form-control"  required="true" requiredMessage="Campo Obrigatório"/>
+		             </div>  
+		             <h:outputLabel for="complemento" value="Complemento: " styleClass="col-sm-2" />
+	                 <div class="col-sm-4">
+			                <h:inputText id="complemento" value="#{usuarioBean.meuUsuario.complemento}" styleClass="form-control"  required="true" requiredMessage="Campo Obrigatório"/>
+		             </div>  
+		             <div class="col-sm-2">
+		            		 <h:message for="numero" />
+		             		 <h:message for="complemento" />
 		             </div>
                 </div>
                  <div class="form-group">
@@ -74,7 +88,7 @@
 						</h:selectOneListbox >
 					</div>
 	                <h:outputLabel for="bairro" value="Bairro:" styleClass="col-sm-1" />
-					<div class="col-sm-3">
+					<div class="col-sm-4">
                 		<h:selectOneListbox id="bairro" value="#{usuarioBean.bairro}"  converter="bairroConverter" styleClass="form-control">
                				<f:selectItem itemValue="" itemLabel="Selecione uma Bairro" />  
     						<f:selectItems value="#{usuarioBean.bairros}" var="bairro" itemValue="#{bairro}" itemLabel="#{bairro.nome}"/>		

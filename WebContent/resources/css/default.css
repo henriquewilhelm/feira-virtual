@@ -1,10 +1,219 @@
-body {
-	margin-top:60px;
-}
-.ui-selectonemenu{
-     width: 100% !important;
-}
-.ui-selectonemenu-label{
-     width: 100% !important;
-} 
 
+.wrap{
+	margin:0 auto;
+	width:80%;
+}
+/* footer menu */
+.footer_menu{
+	
+	background: #40C4B2;	
+	height: 300px;
+}
+.footer{
+	padding: 2%;
+}
+/* start grids */
+.grids{
+	margin: 2% 0;
+}
+.grid{
+	float: left;
+	width: 21.333%;
+	margin-left: 4.3333%;
+}
+.grid:first-child{
+	margin-left: 0;
+}
+.grid h4{
+	font-size: 1.8em;
+	color: #ffffff;
+}
+.ul_nav{
+	margin-top: 4%;
+}
+.ul_nav li{
+	display: block;
+}
+.ul_nav li a{
+	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 1em;
+	color: #fefefe;
+	line-height: 1.8em;	
+	text-transform: capitalize;
+}
+.ul_nav li a:hover{
+	color: #ffffff;
+	text-decoration: underline;
+}
+/* footer info */
+.footer_info{
+	background: #2DA89B;	
+}
+#toTop {
+	display: none;
+	text-decoration: none;
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+	overflow: hidden;
+	width: 34px;
+	height: 34px;
+	border: none;
+	text-indent: 100%;
+	background: url(../resources/images/top_move.png) no-repeat right top;
+}
+.direitos{
+	text-align:center;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+.direitos p{
+	font-size: 0.9725em;
+	line-height: 1.8em;
+	color: #ffffff;
+}
+.direitos p a{
+	color:#fefefe;
+	text-decoration: underline;
+}
+.direitos p a:hover{
+	text-decoration: none;
+}
+
+/* cesta style */
+.h_cesta{
+	float: right;
+	width: 10.777%;
+}
+.cesta:before,.cesta:after {
+	content: "";
+	display: table;
+}
+.cesta:after {
+	clear: both;
+}
+.cesta li {
+	float: left;
+	position: relative;
+}
+.cesta li:last-child{
+	border-right:none;
+}
+.cesta li:hover > a {
+	color: #fafafa;
+}
+*html .icon1 li a:hover { /* IE6 only */
+	color: #fafafa;
+}
+.cesta ul {
+	width:300px;
+	margin: 20px 0 0 0;
+	opacity: 0;
+	visibility: hidden;
+	position: absolute;
+	top: 50px;
+	z-index: 1;
+	right: -60px;
+	background: #ffffff;
+	-webkit-transition: all .2s ease-in-out;
+	-moz-transition: all .2s ease-in-out;
+	-ms-transition: all .2s ease-in-out;
+	-o-transition: all .2s ease-in-out;
+	transition: all .2s ease-in-out;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+	box-shadow: 0px 2px 6px #777777;
+	-webkit-box-shadow: 0px 2px 6px #777777;
+	-moz-box-shadow: 0px 2px 6px #777777;
+	-o-box-shadow: 0px 2px 6px #777777;
+}
+.cesta li:hover > ul {
+	opacity: 1;
+	visibility: visible;
+	margin: 0;
+}
+.cesta ul ul {
+	top: 6px;
+	left: 20px;
+	margin: 0 0 0 20px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+}
+.cesta ul li {
+	float: none;
+	display: block;
+	border: 0;
+}
+.cesta ul li:first-child{
+	border-top:none;
+}
+.cesta ul li:first-child a{
+	border-top-left-radius: 5px;
+	-webkit-border-top-left-radius: 5px;
+	-moz-border-top-left-radius: 5px;
+	-o-border-top-left-radius: 5px;
+}
+.cesta ul li:last-child {   
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;    
+}
+.cesta ul a {    
+	_height: 10px; /*IE6 only*/
+	white-space: nowrap;
+	float: none;
+	text-transform: none;
+}
+.active-icon{
+	display: block;
+}
+.cesta ul li:first-child > a:after {
+	content: '';
+	position: absolute;
+	right: 0%;
+	top: -30px;
+	border-left: 10px solid transparent;
+	border-right:10px solid transparent;
+	border-bottom:10px solid #f0f0f0;
+}
+.cesta ul ul li:first-child a:after {
+	left: -100px;
+	top: 0%;
+	margin-top: 20px;
+	border-left: 0;	
+	border-bottom:20px solid transparent;
+	border-top: 20px solid transparent;
+	border-right:20px solid #323757;
+}
+
+/* Mobile */
+.cesta-trigger {
+	display: none;
+}
+.sub-cesta ul li h3{
+	text-align:center;
+	font-size: 1.5em;
+	color: #4CCFC1;
+	margin-bottom: 4%;
+}
+.sub-cesta ul li p{
+	font-family: 'Source Sans Pro', sans-serif;
+	text-align:center;
+	font-size: 0.8925em;
+	color: #555555;
+	line-height: 1.8em;
+}
+.sub-cesta.list{
+	padding: 20px 10px;
+	z-index: 999;
+}
+.sub-cesta ul li p a{
+	color: #4CCFC1;
+}
+.sub-cesta ul li p a:hover{
+	color: #555555;
+	text-decoration:underline;
+}

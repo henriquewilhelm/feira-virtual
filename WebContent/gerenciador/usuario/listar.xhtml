@@ -4,6 +4,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 
+<meta charset="UTF-8" />	
 <h:body>
 	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
 		<ui:define name="content">
@@ -30,7 +31,7 @@
                 </h:column>
                 <h:column>
 					<f:facet name="header">Endereco</f:facet>
-                    #{usuario.endereco}
+                    <h:outputText value="#{usuario.telefone}, Nª #{usuario.endereco}. #{usuario.complemento}" />
                 </h:column>
                  <h:column>
 					<f:facet name="header">Bairro</f:facet>

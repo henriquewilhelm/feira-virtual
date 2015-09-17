@@ -179,7 +179,7 @@ public class RelatorioBean {
 		TypedQuery<Pedido> query = em.createQuery("Select v from Pedido v",
 				Pedido.class);
 		List<Pedido> pedidos = query.getResultList();
-		Usuario usuario = new Usuario("", "", "Total", "", null, null, 0l, null);
+		Usuario usuario = new Usuario("", "", "Total", "", 0, "", null, null, 0l, null);
 		Pedido pedido = new Pedido(null, usuario, "", new ArrayList<Item>(),0d);
 		pedidos.add(pedido);
 		

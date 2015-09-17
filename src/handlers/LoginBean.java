@@ -1,6 +1,8 @@
 package handlers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -10,6 +12,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 
+import models.Bairro;
+import models.Cidade;
 import models.Mail;
 import models.UserTipo;
 import models.Usuario;
@@ -27,6 +31,8 @@ public class LoginBean implements Serializable {
 	private String email;
 	private String password;
 	private Usuario usuario;
+	private Cidade cidade;
+	private Bairro bairro;
 	private Mail mail;
 	
 	public LoginBean() {
@@ -77,6 +83,10 @@ public class LoginBean implements Serializable {
 	public String addUsuario() {
 		System.out.println("Add Usuario");
 
+		usuario.setBairro(getBairro());
+		usuario.setCidade(getCidade());
+		
+		
 		EntityManager em = JPA.getEM();
 		em.getTransaction().begin();
 		em.persist(usuario);
@@ -90,8 +100,6 @@ public class LoginBean implements Serializable {
 		mail.setMsg("Seu cadastro foi realizado com sucesso! Seu login de acesso é "+usuario.getEmail()+" e sua senha é "+usuario.getPassword()+".");
 		mail.setNomeDestino(usuario.getNome());
 		mail.sendMail();
-		setUsuario(new Usuario());
-
 		return "usuario";
 	}
 	
@@ -102,6 +110,28 @@ public class LoginBean implements Serializable {
         session.invalidate();
         return "/login";
     }
+    
+	public List<Cidade> getCidades() {
+
+		EntityManager em = JPA.getEM();
+		TypedQuery<Cidade> query = em.createQuery("Select c from Cidade c",
+				Cidade.class);
+		
+		return query.getResultList();
+	}
+	
+	public List<Bairro> getBairros() {
+		try{ 				
+			EntityManager em = JPA.getEM();
+			TypedQuery<Bairro> query = em.createQuery("Select b from Bairro b where b.cidade.id = :id",
+					Bairro.class);
+			query.setParameter("id", cidade.getId());
+			return query.getResultList();
+		
+		}catch (Exception e){
+			return new ArrayList<Bairro>();
+		}
+	}
 	
 	public String getEmail() {
 		return email;
@@ -121,5 +151,22 @@ public class LoginBean implements Serializable {
 	}
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+	
+	public Cidade getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(Cidade cidade) {
+		this.cidade = cidade;
+		getBairros();
+	}
+	
+	public Bairro getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(Bairro bairro) {
+		this.bairro = bairro;
 	}
 }

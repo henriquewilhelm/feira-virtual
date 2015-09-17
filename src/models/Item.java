@@ -27,7 +27,7 @@ public class Item implements IConvertible, Serializable{
 	private Double total;
 	
 	public Item() {
-		this.quantidade = 1d;
+		this.quantidade = 0d;
 		this.total = 0d;
 		this.produto = new Produto();
 	}

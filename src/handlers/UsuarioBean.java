@@ -160,7 +160,14 @@ public class UsuarioBean implements Serializable {
 		this.bairro = usuario.getBairro();
 		this.cidade = usuario.getCidade();
 	}
+	
 	public Usuario getMeuUsuario() {
+		if (meuUsuario==null){
+			String email = (String) SessionBean.getUserEmail();
+			meuUsuario = getUsuarioPorEmail(email);
+			cidade = meuUsuario.getCidade();
+			bairro = meuUsuario.getBairro();
+		}
 		return meuUsuario;
 	}
 	public void setMeuUsuario(Usuario usuario) {

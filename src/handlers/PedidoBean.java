@@ -4,20 +4,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
-import javax.faces.application.ViewHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.servlet.http.HttpSession;
-import javax.faces.event.ActionEvent;
 
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
@@ -50,8 +46,9 @@ public class PedidoBean implements Serializable {
 	private Item itemSelecionado;
 	private Pedido pedido;
 	private Item item;
-
-
+	private ProdutoEspecial produtoEspecialSelecionado;
+	
+	private List<Categoria> categorias;
 	private Categoria categoria;
 	private ArrayList<ProdutoEspecial> listProdutoEspecial;
 	
@@ -63,7 +60,6 @@ public class PedidoBean implements Serializable {
 	private Double quantidade;
 	private List<Double> quantidades;
 	private Integer quantidadeItens = 0;
-	private Double total = 0d;
 	
 	private StatusPedido statusPedido = StatusPedido.AGUARDANDO;
 	private StatusPedido statusPedidoPara;
@@ -78,6 +74,10 @@ public class PedidoBean implements Serializable {
         cidade = usuario.getCidade();
 		bairro = usuario.getBairro();	
 		
+		carregaCesta(pedido);
+	} 
+	
+	public void carregaCesta(Pedido pedido){
 		EntityManager em = JPA.getEM();
 		TypedQuery<Produto> queryEntrega = em.createQuery("Select c from Produto c WHERE c.nome = :nome",
 				Produto.class);
@@ -85,25 +85,69 @@ public class PedidoBean implements Serializable {
 		Produto entrega = queryEntrega.getSingleResult();
 		
 		pedido.getListItens().add(new Item(1d, entrega));
-	} 
+		pedido.setTotal(entrega.getValor());
+	}
 	
-	public void addProdutoEspecial(ActionEvent event){
+	public void addQntdProdutoEspecial(ActionEvent event){
 		ProdutoEspecial produtoEspecial = (ProdutoEspecial) event.getComponent().getAttributes().get("selected");
 		produtoSelecionado = produtoEspecial.getProduto();
+		if (getProdutoEspecialSelecionado()!=null){
+			if (getProdutoEspecialSelecionado().getProduto().getId() == produtoEspecial.getProduto().getId()){
+				
+			}
+			else 
+				setProdutoEspecialSelecionado(produtoEspecial);
+		}
+		else 
+			setProdutoEspecialSelecionado(produtoEspecial);
 		
-		System.out.println(produtoEspecial.getProduto().getNome()+" "+getQuantidade());
+		getProdutoEspecialSelecionado().setQuantidade(getProdutoEspecialSelecionado().getQuantidade() + produtoSelecionado.getTipo().getMinimo());
+		quantidade = getProdutoEspecialSelecionado().getQuantidade();
+		System.out.println("Adicionando Qntd do Produto: "+ produtoEspecial.getProduto().getNome()+" Total: "+quantidade);
 		addProduto();
 	}
+	
+	public void removeQntdProdutoEspecial(ActionEvent event){
+		ProdutoEspecial produtoEspecial = (ProdutoEspecial) event.getComponent().getAttributes().get("selected");
+		produtoSelecionado = produtoEspecial.getProduto();
+		if (getProdutoEspecialSelecionado()!=null){
+			if (getProdutoEspecialSelecionado().getProduto().getId() == produtoEspecial.getProduto().getId()){
+				
+			}
+			else {
+				for (int i=0; i<pedido.getListItens().size(); i++){
+					if (pedido.getListItens().get(i).getProduto().getId() == produtoEspecial.getProduto().getId()){	
+						setProdutoEspecialSelecionado(produtoEspecial);
+						getProdutoEspecialSelecionado().setQuantidade(pedido.getListItens().get(i).getQuantidade());
+					}
+				}
+			}
+		}
+		else 
+			setProdutoEspecialSelecionado(produtoEspecial);
+		
+		getProdutoEspecialSelecionado().setQuantidade(getProdutoEspecialSelecionado().getQuantidade() - produtoSelecionado.getTipo().getMinimo());
+		quantidade = getProdutoEspecialSelecionado().getQuantidade();
+		if (quantidade<=0){
+			removeProduto(produtoSelecionado);
+			quantidade = 0d;
+		}
+		else{
+			System.out.println("Removendo Qntd do Produto"+produtoEspecial.getProduto().getNome()+" Total: "+quantidade);
+			addProduto();
+		}
+	}
+	
 	public void addProduto(){
 		boolean verificacao = true;
 				if (produtoSelecionado !=null){
 					for (int i=0; i<pedido.getListItens().size(); i++){
-						if (pedido.getListItens().get(i).getProduto().getId() == produtoSelecionado.getId()){
-
+						if (pedido.getListItens().get(i).getProduto().getId() == produtoSelecionado.getId()){					
+							pedido.setTotal(pedido.getTotal() - pedido.getListItens().get(i).getTotal() + (getQuantidade() * pedido.getListItens().get(i).getProduto().getValor()) );
 							pedido.getListItens().get(i).setQuantidade(getQuantidade());
 							EntityManager em = JPA.getEM();
 							em.getTransaction().begin();
-							em.persist(pedido.getListItens().get(i));
+							em.merge(pedido.getListItens().get(i));
 							em.getTransaction().commit();
 							
 							verificacao=false;
@@ -115,15 +159,14 @@ public class PedidoBean implements Serializable {
 							item.setQuantidade(getQuantidade());
 						
 						pedido.getListItens().add(item);
-						total = total + item.getTotal();
-						pedido.setTotal(total);
+						pedido.setTotal(pedido.getTotal() + item.getTotal());
 						
 						EntityManager em = JPA.getEM();
 						em.getTransaction().begin();
 						em.persist(item);
 						em.getTransaction().commit();
 						
-						System.out.println("Add "+item.getId()+ " - " + produtoSelecionado.getNome()+" no Pedido "+getPedido().getNome());
+						System.out.println("Add produto "+item.getId()+ " - " + produtoSelecionado.getNome()+" no Pedido "+getPedido().getNome());
 						
 						item = new Item();
 						quantidade = item.getQuantidade();
@@ -141,22 +184,26 @@ public class PedidoBean implements Serializable {
 					}
 				}
 				else
-					System.out.println("Nao add...");
+					System.out.println("Nao Add - Produto nao selecionado...");
 	}
-	public void removeProduto(){
+	
+
+	public void removeProduto(Produto produto){
 		boolean verificacao = true;
-				if (itemSelecionado !=null){
+		 		Item itemSelecionado = null;
+				if (produto !=null){
 					for (int i=0; i<pedido.getListItens().size(); i++){
-						if (pedido.getListItens().get(i).getId() == itemSelecionado.getId() || 
-								pedido.getListItens().get(i).getProduto().getNome().equals("Entrega"))
-							verificacao=false;
+						if (pedido.getListItens().get(i).getProduto().getId() == produto.getId() || 
+								pedido.getListItens().get(i).getProduto().getNome().equals("Entrega")){
+										verificacao=false;
+										itemSelecionado = pedido.getListItens().get(i);
+						}
 					}
 					if (!verificacao){
-						total = total - itemSelecionado.getTotal();
-						pedido.setTotal(total);
+						pedido.setTotal(pedido.getTotal() - itemSelecionado.getTotal());
 						
-						pedido.getListItens().remove(getItemSelecionado());
-						System.out.println("Remove "+itemSelecionado.getProduto().getNome()+" no Pedido "+getPedido().getNome());
+						pedido.getListItens().remove(itemSelecionado);
+						System.out.println("Remove produto "+itemSelecionado.getProduto().getNome()+" do Pedido "+getPedido().getNome());
 						this.quantidadeItens--;
 					}
 					else{
@@ -168,7 +215,34 @@ public class PedidoBean implements Serializable {
 					}
 				}
 				else
-					System.out.println("Nao remove...");		
+					System.out.println("Nao remove - Produto nao selecionado...");		
+	}
+	
+	public void removeProduto(){
+		boolean verificacao = true;
+				if (itemSelecionado !=null){
+					for (int i=0; i<pedido.getListItens().size(); i++){
+						if (pedido.getListItens().get(i).getId() == itemSelecionado.getId() || 
+								pedido.getListItens().get(i).getProduto().getNome().equals("Entrega"))
+							verificacao=false;
+					}
+					if (!verificacao){
+						pedido.setTotal(pedido.getTotal() - itemSelecionado.getTotal());
+						
+						pedido.getListItens().remove(getItemSelecionado());
+						System.out.println("Remove Produto "+itemSelecionado.getProduto().getNome()+" no Pedido "+getPedido().getNome());
+						this.quantidadeItens--;
+					}
+					else{
+						FacesContext facesContext = FacesContext.getCurrentInstance(); 
+
+						facesContext.addMessage(null, new FacesMessage( 
+			            FacesMessage.SEVERITY_ERROR, "Ops, erro ao remover produto, tente outra vez...", null));
+					
+					}
+				}
+				else
+					System.out.println("Nao remove - Produto nao selecionado...");			
 	}
 	
 	public String addPedido() {
@@ -210,6 +284,8 @@ public class PedidoBean implements Serializable {
 		getPedido().setObs("");
 		getPedido().getListItens().clear();
 		getProdutosCadastrados();
+		carregaCesta(pedido);
+
 		return "";
 	}
 	
@@ -279,11 +355,22 @@ public class PedidoBean implements Serializable {
 	}
 
 	public Double getQuantidade() {
+
+		System.out.println("get" +quantidade);
 		return quantidade;
 	}
 
 	public void setQuantidade(Double quantidade) {
+
+		System.out.println("set" +quantidade);
 		this.quantidade = quantidade;
+	}
+	
+
+	public void quantidadeChanged(ValueChangeEvent e){
+		//assign new value to localeCode
+		quantidade = (Double) e.getNewValue();
+		
 	}
 	
 	public Usuario getUsuario() {
@@ -344,14 +431,6 @@ public class PedidoBean implements Serializable {
 	public void setQuantidades(List<Double> quantidades) {
 		this.quantidades = quantidades;
 	}
-	
-	public Double getTotal() {
-		return total;
-	}
-
-	public void setTotal(Double total) {
-		this.total = total;
-	}
 
 	public StatusPedido getStatusPedido() {
 		return statusPedido;
@@ -377,16 +456,47 @@ public class PedidoBean implements Serializable {
 		this.categoria = categoria;
 	}
 	
+	public ProdutoEspecial getProdutoEspecialSelecionado() {
+		return produtoEspecialSelecionado;
+	}
+
+	public void setProdutoEspecialSelecionado(
+			ProdutoEspecial produtoEspecialSelecionado) {
+		this.produtoEspecialSelecionado = produtoEspecialSelecionado;
+	}
+
+	public String proximaCategoria () {
+		
+		 
+		Integer quantidadeCategorias = categorias.size();
+		
+		if (categoria.getId()+1 <= quantidadeCategorias)
+			categoria = categorias.get(categoria.getId());
+		else
+			categoria = categorias.get(0);
+		return "/loja/pedido/listarProdutos.xhtml";
+	}
+	
+	public List<Categoria> getCategorias() {
+
+		EntityManager em = JPA.getEM();
+		TypedQuery<Categoria> query = em.createQuery("Select c from Categoria c",
+				Categoria.class);
+		return query.getResultList();
+	}
+	
 	public List<ProdutoEspecial> getProdutosPorCategoria() {
 
+		
+		categorias = getCategorias();
+		
 		listProdutoEspecial = new ArrayList<ProdutoEspecial>();
 		
 		EntityManager em = JPA.getEM();
 		TypedQuery<Produto> query = em.createQuery("Select p from Produto p left join fetch p.categoria c where c.id = :id",
 				Produto.class);
 		if (categoria!=null)
-		query.setParameter("id", categoria.getId());
-		
+			query.setParameter("id", categoria.getId());
 		
 		List<Produto> listProduto = query.getResultList();
 		ArrayList<Double> quantidades = new ArrayList<Double>();
@@ -423,7 +533,7 @@ public class PedidoBean implements Serializable {
 				}
 			}
 			
-			listProdutoEspecial.add(new ProdutoEspecial(listProduto.get(i), 1d, quantidades));
+			listProdutoEspecial.add(new ProdutoEspecial(listProduto.get(i), 0d, quantidades));
 		}
 		return listProdutoEspecial;
 	}
@@ -560,7 +670,8 @@ public class PedidoBean implements Serializable {
 			em.merge(pedidos.get(i));
 			em.getTransaction().commit();
 		}
-	}
+	} 
+	
 	public String list() {
 		return "/gerenciador/pedido/listar";
 	}

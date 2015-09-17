@@ -62,12 +62,12 @@ public class UsuarioService implements Serializable{
         senhas[0] = "123456";
         
         endereco = new String[6];
-        endereco[0] = "Rua Coral 205";
-        endereco[1] = "Rua Moras 211";
-        endereco[2] = "Rua Pinguem Sem Numero";
-        endereco[3] = "Av. Pequeno Principe 2005";
-        endereco[4] = "SC 401 5000";
-        endereco[5] = "Rua da Cabela 1307";
+        endereco[0] = "Rua Coral";
+        endereco[1] = "Rua Moras ";
+        endereco[2] = "Rua Pinguem";
+        endereco[3] = "Av. Pequeno Principe";
+        endereco[4] = "SC 401";
+        endereco[5] = "Rua da Cabela";
         
         cidades = new Cidade[2];
         cidades[0] = new Cidade("Florianopolis");
@@ -111,7 +111,7 @@ public class UsuarioService implements Serializable{
     		em.getTransaction().commit();
 	        
 	        
-	        Usuario usuario = new Usuario("lnborim@hotmail.com", getRandomSenha(), "Leandro Borim", getRandomEndereco(), 
+	        Usuario usuario = new Usuario("lnborim@hotmail.com", getRandomSenha(), "Leandro Borim", getRandomEndereco(), (int) (Math.random() * 600), "",
 	        		cidades[0], bairros[1], getRandomTelefone(), UserTipo.ADMIN);
             em = JPA.getEM();
     		em.getTransaction().begin();
@@ -120,7 +120,7 @@ public class UsuarioService implements Serializable{
 
         	list.add(usuario);
 
-        	usuario = new Usuario("admin@admin.com", getRandomSenha(), "Administrador", getRandomEndereco(), 
+        	usuario = new Usuario("admin@admin.com", getRandomSenha(), "Administrador", getRandomEndereco(), (int) (Math.random() * 600), "", 
         			cidades[0], bairros[0], getRandomTelefone(), UserTipo.ADMIN);
         	em = JPA.getEM();
     		em.getTransaction().begin();
@@ -129,7 +129,7 @@ public class UsuarioService implements Serializable{
     		
     		list.add(usuario);
     		
-    		usuario = new Usuario("teste@teste.com.br", getRandomSenha(), "Teste Tst", getRandomEndereco(), 
+    		usuario = new Usuario("teste@teste.com.br", getRandomSenha(), "Teste Tst", getRandomEndereco(), (int) (Math.random() * 600), "", 
     				cidades[1], bairros[4], getRandomTelefone(), UserTipo.USER);
         	em = JPA.getEM();
     		em.getTransaction().begin();
@@ -140,7 +140,7 @@ public class UsuarioService implements Serializable{
     		
         	
 	        for(int i = 0 ; i < 3 ; i++) {
-	        	usuario = new Usuario(getRandomEmail(), getRandomSenha(), getRandomNome(), getRandomEndereco(), 
+	        	usuario = new Usuario(getRandomEmail(), getRandomSenha(), getRandomNome(), getRandomEndereco(), (int) (Math.random() * 600), "", 
 	        			cidades[0], bairros[i], getRandomTelefone(), getRandomTipo());
 	        	em = JPA.getEM();
 	    		em.getTransaction().begin();
@@ -151,7 +151,7 @@ public class UsuarioService implements Serializable{
 	        }
 	        
 	        for(int i = 3 ; i < 6 ; i++) {
-	        	usuario = new Usuario(getRandomEmail(), getRandomSenha(), getRandomNome(), getRandomEndereco(), 
+	        	usuario = new Usuario(getRandomEmail(), getRandomSenha(), getRandomNome(), getRandomEndereco(), (int) (Math.random() * 600), "", 
 	        			cidades[1], bairros[i], getRandomTelefone(), getRandomTipo());
 	        	em = JPA.getEM();
 	    		em.getTransaction().begin();

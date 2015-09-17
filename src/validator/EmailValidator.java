@@ -50,7 +50,7 @@ public class EmailValidator implements Validator
 		TypedQuery<Usuario> query = em.createQuery("Select u from Usuario u where u.email = :email",
 				Usuario.class);
 		query.setParameter("email", email);
-		if  (query.getResultList().size()!=0)
+		if  (query.getResultList().size()==1)
 			status = true;
 		return status;
 	}

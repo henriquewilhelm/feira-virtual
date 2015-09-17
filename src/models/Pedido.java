@@ -87,7 +87,7 @@ public class Pedido implements IConvertible, Serializable  {
 		this.usuario = usuario;
 		if (this.usuario!=null){
 			this.nome = usuario.getNome();
-			this.endereco = usuario.getEndereco();
+			this.endereco = usuario.getEndereco() + " Nº "+usuario.getNumero() +". "+ usuario.getComplemento();
 			this.telefone = usuario.getTelefone();
 			this.cidade = usuario.getCidade();
 			this.bairro = usuario.getBairro();

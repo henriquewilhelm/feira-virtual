@@ -30,10 +30,12 @@ public class ProdutoEspecial implements Serializable {
 	}
 
 	public Double getQuantidade() {
+//		System.out.println("get"+quantidade);
 		return quantidade;
 	}
 
 	public void setQuantidade(Double quantidade) {
+//		System.out.println("set"+quantidade);
 		this.quantidade = quantidade;
 	}
 

@@ -22,7 +22,7 @@ public class TelefoneValidator implements Validator
         Matcher matcher = mask.matcher(telefone);
         FacesMessage message = new FacesMessage();
         if (!matcher.matches()) {
-            message.setDetail("Por favor entre com um telefone valido...");
+            message.setDetail("Por favor entre com um telefone valido. Ex: (48) XXXX-XXXX...");
             message.setSummary("Telefone invalido!");
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(message);

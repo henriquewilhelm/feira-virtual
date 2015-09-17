@@ -5,11 +5,10 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://java.sun.com/jsf/core"
  	xmlns:c="http://java.sun.com/jsp/jstl/core">
-
+<meta charset="UTF-8" />	
 <h:body>
 	<ui:composition template="/loja/layout/layoutuser.xhtml">
 		<ui:define name="content">
-
 		<h:form styleClass="form">
 			<p:stack id="stack" icon="/resources/image/stack.png" expanded="true">
 				 	<c:forEach items="${pedidoBean.pedido.listItens}" var="item">
@@ -51,17 +50,14 @@
                			<f:selectItem itemValue="" itemLabel="Produtos Cadastrados" />  
     					<f:selectItems value="#{pedido.listItens}"  var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.quantidade} #{item.produto.tipo.nome} = #{item.total} " />
 					</h:selectOneMenu>
-					<h:commandButton value="delete" actionListener="#{pedidoBean.deleteProduto}">
-						<f:attribute name="selected" value="#{pedido}" />
-					</h:commandButton>
     			</h:column>
                 <h:column>
-                	<f:facet name="header">Opcoes</f:facet>
-            			<h:column>
-							<h:commandButton value="delete" actionListener="#{pedidoBean.deletePedido}" >
-								<f:attribute name="selected" value="#{pedido}" />
-							</h:commandButton>
-						</h:column>
+                		<f:facet name="header">Total</f:facet>
+                   		 #{pedido.total}
+                </h:column>
+                 <h:column>
+                		<f:facet name="header">Status</f:facet>
+                   		 #{pedido.status}
                 </h:column>
 			</h:dataTable>
 			</h:form>
