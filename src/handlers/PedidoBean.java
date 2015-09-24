@@ -1,7 +1,10 @@
 package handlers;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -15,22 +18,24 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.primefaces.event.CellEditEvent;
-import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.SelectEvent;
 
 import models.Bairro;
 import models.Categoria;
 import models.Cidade;
 import models.Item;
-import models.Mail;
 import models.Produto;
 import models.Pedido;
 import models.ProdutoEspecial;
+import models.Status;
 import models.StatusPedido;
+import models.StatusProduto;
 import models.Tipo;
 import models.UserTipo;
 import models.Usuario;
+import service.EmailService;
 import util.JPA;
+import util.Util;
 
 @ManagedBean
 @SessionScoped
@@ -54,28 +59,63 @@ public class PedidoBean implements Serializable {
 	
 	private Usuario usuario;
 	private List<Pedido> pedidosPorUsuario;
-	private Mail mail;
 	private Cidade cidade;
 	private Bairro bairro;
 	private Double quantidade;
 	private List<Double> quantidades;
-	private Integer quantidadeItens = 0;
+	private Integer quantidadeItens;
 	
-	private StatusPedido statusPedido = StatusPedido.AGUARDANDO;
+	private StatusPedido statusPedido = StatusPedido.EMANDAMENTO;
 	private StatusPedido statusPedidoPara;
 	
+	private Date dataDe;
+	private Date dataPara;
+	
 	public PedidoBean() {
-		pedido = new Pedido();
+		usuario =  SessionBean.getUser();
+		pedido = buscaUltimoPedido();
+		
 		item = new Item();
 		quantidade = item.getQuantidade();
-		
-        usuario =  SessionBean.getUser();
-        pedido.setUsuario(usuario);
+
         cidade = usuario.getCidade();
 		bairro = usuario.getBairro();	
 		
-		carregaCesta(pedido);
+		categorias = getCategorias();
+		if (categorias!=null && categorias.size()>0)
+			categoria = getCategorias().get(0); 	 	 	
+		
+		
+		if (pedido!=null){
+			quantidadeItens = pedido.getListItens().size();
+		}
+		else{
+			pedido = new Pedido();
+	        pedido.setUsuario(usuario);
+			carregaCesta(pedido);
+			quantidadeItens = 1;
+		}
 	} 
+	
+	public Pedido buscaUltimoPedido(){
+		
+			EntityManager em = JPA.getEM();
+			TypedQuery<Pedido> query = em.createQuery("Select c from Pedido c "
+															+ "WHERE (c.status = :statusConfirmado "
+															+ "OR c.status = :statusAguardando) "
+															+ "AND c.usuario.id = :id", Pedido.class);
+			query.setParameter("statusAguardando", StatusPedido.EMANDAMENTO);
+			query.setParameter("statusConfirmado", StatusPedido.CONFIRMADO);
+			query.setParameter("id", usuario.getId());
+			List<Pedido> entrega = query.getResultList();
+			
+			if (entrega!=null && entrega.size() > 0){
+				return entrega.get(0);
+			}
+			else {
+				return null;
+			}
+	}
 	
 	public void carregaCesta(Pedido pedido){
 		EntityManager em = JPA.getEM();
@@ -86,73 +126,104 @@ public class PedidoBean implements Serializable {
 		
 		pedido.getListItens().add(new Item(1d, entrega));
 		pedido.setTotal(entrega.getValor());
+		
+		em.getTransaction().begin();
+		em.persist(pedido.getListItens().get(0));
+		em.getTransaction().commit();
 	}
 	
 	public void addQntdProdutoEspecial(ActionEvent event){
-		ProdutoEspecial produtoEspecial = (ProdutoEspecial) event.getComponent().getAttributes().get("selected");
-		produtoSelecionado = produtoEspecial.getProduto();
-		if (getProdutoEspecialSelecionado()!=null){
-			if (getProdutoEspecialSelecionado().getProduto().getId() == produtoEspecial.getProduto().getId()){
-				
+		if (getPedido().getStatus() == null || getPedido().getStatus() != StatusPedido.CONFIRMADO){
+			ProdutoEspecial produtoEspecial = (ProdutoEspecial) event.getComponent().getAttributes().get("selected");
+			produtoSelecionado = produtoEspecial.getProduto();
+			if (getProdutoEspecialSelecionado()!=null){
+				if (getProdutoEspecialSelecionado().getProduto().getId() == produtoEspecial.getProduto().getId()){
+					
+				}
+				else 
+					setProdutoEspecialSelecionado(produtoEspecial);
 			}
 			else 
 				setProdutoEspecialSelecionado(produtoEspecial);
-		}
-		else 
-			setProdutoEspecialSelecionado(produtoEspecial);
-		
-		getProdutoEspecialSelecionado().setQuantidade(getProdutoEspecialSelecionado().getQuantidade() + produtoSelecionado.getTipo().getMinimo());
-		quantidade = getProdutoEspecialSelecionado().getQuantidade();
-		System.out.println("Adicionando Qntd do Produto: "+ produtoEspecial.getProduto().getNome()+" Total: "+quantidade);
-		addProduto();
-	}
-	
-	public void removeQntdProdutoEspecial(ActionEvent event){
-		ProdutoEspecial produtoEspecial = (ProdutoEspecial) event.getComponent().getAttributes().get("selected");
-		produtoSelecionado = produtoEspecial.getProduto();
-		if (getProdutoEspecialSelecionado()!=null){
-			if (getProdutoEspecialSelecionado().getProduto().getId() == produtoEspecial.getProduto().getId()){
-				
-			}
-			else {
-				for (int i=0; i<pedido.getListItens().size(); i++){
-					if (pedido.getListItens().get(i).getProduto().getId() == produtoEspecial.getProduto().getId()){	
-						setProdutoEspecialSelecionado(produtoEspecial);
-						getProdutoEspecialSelecionado().setQuantidade(pedido.getListItens().get(i).getQuantidade());
-					}
-				}
-			}
-		}
-		else 
-			setProdutoEspecialSelecionado(produtoEspecial);
-		
-		getProdutoEspecialSelecionado().setQuantidade(getProdutoEspecialSelecionado().getQuantidade() - produtoSelecionado.getTipo().getMinimo());
-		quantidade = getProdutoEspecialSelecionado().getQuantidade();
-		if (quantidade<=0){
-			removeProduto(produtoSelecionado);
-			quantidade = 0d;
-		}
-		else{
-			System.out.println("Removendo Qntd do Produto"+produtoEspecial.getProduto().getNome()+" Total: "+quantidade);
+			
+			getProdutoEspecialSelecionado().setQuantidade(getProdutoEspecialSelecionado().getQuantidade() + produtoSelecionado.getTipo().getMinimo());
+			quantidade = produtoSelecionado.getTipo().getMinimo();
+			System.out.println("Adicionando Qntd do Produto: "+ produtoEspecial.getProduto().getNome()+" Qntd Produto: ");
 			addProduto();
 		}
 	}
 	
+	public void removeQntdProdutoEspecial(ActionEvent event){
+		if (getPedido().getStatus() == null || getPedido().getStatus() != StatusPedido.CONFIRMADO){
+				ProdutoEspecial produtoEspecial = (ProdutoEspecial) event.getComponent().getAttributes().get("selected");
+				produtoSelecionado = produtoEspecial.getProduto();
+				if (getProdutoEspecialSelecionado()!=null){ // se ja removeu ou add
+					if (getProdutoEspecialSelecionado().getProduto().getId() == produtoEspecial.getProduto().getId()){
+						// se continua removendo do mesmo
+						System.out.println(" se continua removendo do mesmo");
+					}
+					else { // se esta removendo, mas outro produto da lista
+						setProdutoEspecialSelecionado(produtoEspecial);
+						for (int i=0; i < pedido.getListItens().size(); i++){
+							if (pedido.getListItens().get(i).getProduto().getId() == produtoSelecionado.getId()){
+								getProdutoEspecialSelecionado().setQuantidade(pedido.getListItens().get(i).getQuantidade());
+								System.out.println("se esta removendo, mas outro produto da lista");
+							}
+						}
+					}
+				}
+				else { //se null - primeiro click
+					setProdutoEspecialSelecionado(produtoEspecial);
+					for (int i=0; i < pedido.getListItens().size(); i++){
+						if (pedido.getListItens().get(i).getProduto().getId() == produtoSelecionado.getId()){
+							getProdutoEspecialSelecionado().setQuantidade(pedido.getListItens().get(i).getQuantidade());
+							System.out.println("se null - primeiro click");
+						}
+					}
+				}
+			
+				getProdutoEspecialSelecionado().setQuantidade(getProdutoEspecialSelecionado().getQuantidade() - produtoSelecionado.getTipo().getMinimo());
+				quantidade = -produtoSelecionado.getTipo().getMinimo();
+				System.out.println("Removendo Qntd do Produto: "+ produtoEspecial.getProduto().getNome()+" Qntd Produto: "+getProdutoEspecialSelecionado().getQuantidade());
+				
+				if (getProdutoEspecialSelecionado().getQuantidade()>0){
+					System.out.println("Add Qntd: "+getProdutoEspecialSelecionado().getQuantidade());
+			
+					addProduto();
+				}
+				else {
+					System.out.println("Remove Qntd: "+getProdutoEspecialSelecionado().getQuantidade());
+					removeProdutoEspecifico(produtoSelecionado);
+				}
+				
+				
+			
+		}
+	}
+	
 	public void addProduto(){
+		Item itemAux = null;
 		boolean verificacao = true;
 				if (produtoSelecionado !=null){
 					for (int i=0; i<pedido.getListItens().size(); i++){
 						if (pedido.getListItens().get(i).getProduto().getId() == produtoSelecionado.getId()){					
-							pedido.setTotal(pedido.getTotal() - pedido.getListItens().get(i).getTotal() + (getQuantidade() * pedido.getListItens().get(i).getProduto().getValor()) );
-							pedido.getListItens().get(i).setQuantidade(getQuantidade());
-							EntityManager em = JPA.getEM();
+							
+							pedido.getListItens().get(i).setQuantidade(pedido.getListItens().get(i).getQuantidade() + getQuantidade());
+							pedido.setTotal(pedido.getTotal() + (getQuantidade() * pedido.getListItens().get(i).getProduto().getValor()) );
+							
+							itemAux = pedido.getListItens().get(i);
+							pedido.getListItens().remove(i);
+							
+							EntityManager em = JPA.getEM(); 
 							em.getTransaction().begin();
-							em.merge(pedido.getListItens().get(i));
+							em.merge(item);
 							em.getTransaction().commit();
 							
 							verificacao=false;
 						}
 					}
+					if (itemAux != null)
+						pedido.getListItens().add(itemAux);
 					if (verificacao){
 						item.setProduto(produtoSelecionado);
 						if (getQuantidade()!=null)
@@ -188,7 +259,7 @@ public class PedidoBean implements Serializable {
 	}
 	
 
-	public void removeProduto(Produto produto){
+	public void removeProdutoEspecifico(Produto produto){
 		boolean verificacao = true;
 		 		Item itemSelecionado = null;
 				if (produto !=null){
@@ -219,7 +290,7 @@ public class PedidoBean implements Serializable {
 	}
 	
 	public void removeProduto(){
-		boolean verificacao = true;
+			boolean verificacao = true;
 				if (itemSelecionado !=null){
 					for (int i=0; i<pedido.getListItens().size(); i++){
 						if (pedido.getListItens().get(i).getId() == itemSelecionado.getId() || 
@@ -242,41 +313,66 @@ public class PedidoBean implements Serializable {
 					}
 				}
 				else
-					System.out.println("Nao remove - Produto nao selecionado...");			
+					System.out.println("Nao remove - Produto nao selecionado...");
 	}
 	
 	public String addPedido() {
-		System.out.println("Add Pedido "+pedido.getNome());
-
-		EntityManager em = JPA.getEM();
-		em.getTransaction().begin();
-		em.merge(pedido);
-		em.getTransaction().commit();
-//		setPedido(new Pedido());
-		
-		usuario =  SessionBean.getUser();
-        pedido.setUsuario(usuario);
-        cidade = usuario.getCidade();
-		bairro = usuario.getBairro();	        
-        
-		mail = new Mail();
-        mail.setAssunto("LNB - Pedido realizado");
-		mail.setDestino(pedido.getUsuario().getEmail());
-		
-		String msg = "Olá "+pedido.getNome()+", seu pedido foi realizado com sucesso!\n\nQuantidade de Produtos: "+pedido.getListItens().size() +" \n";
-		for (int i = 0; i< pedido.getListItens().size(); i++){
-			msg = msg + " " + pedido.getListItens().get(i).getProduto().getNome() + " - " + pedido.getListItens().get(i).getQuantidade() + "x " + pedido.getListItens().get(i).getProduto().getTipo() + " = " + pedido.getListItens().get(i).getTotal()+ "\n";
+		if (usuario.getTipo().equals(UserTipo.ADMIN)){
+				System.out.println("Novo Pedido "+pedido.getNome());
+	
+				EntityManager em = JPA.getEM();
+				em.getTransaction().begin();
+				em.merge(pedido);
+				em.getTransaction().commit();
+	//			setPedido(new Pedido());
+				
+				usuario =  SessionBean.getUser();
+		        pedido.setUsuario(usuario);
+		        cidade = usuario.getCidade();
+				bairro = usuario.getBairro();	        
+		        
+				EmailService ThreadEmail = new EmailService(pedido, "Adm Novo Pedido");
+				new Thread(ThreadEmail).start();
+		        
+				setPedido(new Pedido());
+				return "/gerenciador/pedido/listar";
 		}
-		msg = msg + "Até a entrega, facilete o troco! Qualquer dúvida entraremos em contato!";
-		mail.setMsg(msg);
-		mail.setNomeDestino(pedido.getNome());
-		mail.sendMail();
-        
-		//setPedido(new Pedido());
-		if (usuario.getTipo().equals(UserTipo.ADMIN))
-			return "/gerenciador/pedido/listar";
-		else
-			return "/loja/pedido/listar";
+		else if (usuario.getTipo().equals(UserTipo.USER)){
+			if (getVerificaDiasDaSemana()){
+				if (getPedido().getStatus() != null && getPedido().getStatus().equals(StatusPedido.EMANDAMENTO)){
+				
+					EntityManager em = JPA.getEM();
+					em.getTransaction().begin();
+					em.merge(pedido);
+					em.getTransaction().commit();
+	//				     
+					pedido = buscaUltimoPedido();
+			        
+					EmailService ThreadEmail = new EmailService(pedido, "Novo Pedido");
+					new Thread(ThreadEmail).start();
+			        
+					//setPedido(new Pedido());
+			        return "/loja/pedido/listar";
+				}
+				if (getPedido().getStatus() == null){
+					pedido.setStatus(StatusPedido.EMANDAMENTO);
+					
+					EntityManager em = JPA.getEM();
+					em.getTransaction().begin();
+					em.merge(pedido);
+					em.getTransaction().commit();    
+					
+					pedido = buscaUltimoPedido();
+			        
+					EmailService ThreadEmail = new EmailService(pedido, "Novo Pedido");
+					new Thread(ThreadEmail).start();
+			        
+					//setPedido(new Pedido());
+			        return "/loja/pedido/listar";
+				}
+			}
+		}
+		return null;
 	}
 	
 	public String clearPedidos() {
@@ -285,7 +381,7 @@ public class PedidoBean implements Serializable {
 		getPedido().getListItens().clear();
 		getProdutosCadastrados();
 		carregaCesta(pedido);
-
+		quantidadeItens = 1;
 		return "";
 	}
 	
@@ -325,6 +421,12 @@ public class PedidoBean implements Serializable {
 			System.out.println("Nao Deletou Produto do Pedido: "+selected.getNome());
 	}
 
+	public String cancelaPedido(){
+		System.out.println("Cancelando...");
+		pedido.setStatus(StatusPedido.CANCELADO);
+		return null;
+	}
+	
 	public Pedido getPedido() {
 		return pedido;
 	}
@@ -379,17 +481,7 @@ public class PedidoBean implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
-	}
-
-	
-	public Mail getMail() {
-		return mail;
-	}
-
-	public void setMail(Mail mail) {
-		this.mail = mail;
-	}
-	
+	}	
 
 	public Cidade getCidade() {
 		return cidade;
@@ -460,9 +552,24 @@ public class PedidoBean implements Serializable {
 		return produtoEspecialSelecionado;
 	}
 
-	public void setProdutoEspecialSelecionado(
-			ProdutoEspecial produtoEspecialSelecionado) {
+	public void setProdutoEspecialSelecionado(ProdutoEspecial produtoEspecialSelecionado) {
 		this.produtoEspecialSelecionado = produtoEspecialSelecionado;
+	}
+	
+	public Date getDataDe() {
+		return dataDe;
+	}
+
+	public void setDataDe(Date dataDe) {
+		this.dataDe = dataDe;
+	}
+
+	public Date getDataAte() {
+		return dataPara;
+	}
+
+	public void setDataAte(Date dataPara) {
+		this.dataPara = dataPara;
 	}
 
 	public String proximaCategoria () {
@@ -488,18 +595,26 @@ public class PedidoBean implements Serializable {
 	public List<ProdutoEspecial> getProdutosPorCategoria() {
 
 		
-		categorias = getCategorias();
-		
+		categorias = getCategorias();		
 		listProdutoEspecial = new ArrayList<ProdutoEspecial>();
 		
 		EntityManager em = JPA.getEM();
-		TypedQuery<Produto> query = em.createQuery("Select p from Produto p left join fetch p.categoria c where c.id = :id",
+		TypedQuery<Produto> query = em.createQuery("Select p from Produto p left join fetch p.categoria c WHERE c.id = :id AND p.status = :status",
 				Produto.class);
 		if (categoria!=null)
 			query.setParameter("id", categoria.getId());
+		query.setParameter("status", StatusProduto.ATIVO);
 		
 		List<Produto> listProduto = query.getResultList();
 		ArrayList<Double> quantidades = new ArrayList<Double>();
+		
+		
+		TypedQuery<Produto> queryEntrega = em.createQuery("Select p from Produto p WHERE p.nome = :nome",
+				Produto.class);
+		queryEntrega.setParameter("nome", "Entrega");
+		Produto entrega = queryEntrega.getSingleResult();
+		
+		listProduto.remove(entrega);
 		
 		for (int i= 0; i< listProduto.size(); i++){
 			
@@ -540,11 +655,12 @@ public class PedidoBean implements Serializable {
 	
 	public List<Produto> getProdutosCadastrados() {
 		EntityManager em = JPA.getEM();
-		TypedQuery<Produto> query = em.createQuery("Select c from Produto c",
+		TypedQuery<Produto> query = em.createQuery("Select p from Produto p WHERE p.status = :status",
 				Produto.class);
+		query.setParameter("status", StatusProduto.ATIVO);
 		List<Produto> listProdutos = (List<Produto>) query.getResultList();
 		
-		TypedQuery<Produto> queryEntrega = em.createQuery("Select c from Produto c WHERE c.nome = :nome",
+		TypedQuery<Produto> queryEntrega = em.createQuery("Select p from Produto p WHERE p.nome = :nome",
 				Produto.class);
 		queryEntrega.setParameter("nome", "Entrega");
 		Produto entrega = queryEntrega.getSingleResult();
@@ -557,13 +673,51 @@ public class PedidoBean implements Serializable {
 	public List<Pedido> getPedidos() {
 		EntityManager em = JPA.getEM();
 		TypedQuery<Pedido> query;
-		if (getStatusPedido()!=null){
+		if (getStatusPedido()!=null && getDataDe()==null && getDataAte()==null){
 			query = em.createQuery("Select p from Pedido p WHERE p.status = :status", Pedido.class);
 			query.setParameter("status", getStatusPedido());
+			System.out.println("Pedido Status");
+		}
+		else if (getStatusPedido()!=null && getDataDe()!=null && getDataAte()==null){
+			query = em.createQuery("Select p from Pedido p WHERE p.status = :status AND p.data >= :data", Pedido.class);
+			query.setParameter("status", getStatusPedido());
+			query.setParameter("data", getDataDe());
+			System.out.println("Pedido DataDe");
+		}
+		else if (getStatusPedido()!=null && getDataDe()==null && getDataAte()!=null){
+			query = em.createQuery("Select p from Pedido p WHERE p.status = :status AND p.data <= :data", Pedido.class);
+			query.setParameter("status", getStatusPedido());
+			query.setParameter("data", getDataAte());
+			System.out.println("Pedido DataAte");
+		}
+		else if (getStatusPedido()!=null && getDataDe()!=null && getDataAte()!=null){
+			query = em.createQuery("Select p from Pedido p WHERE p.status = :status AND p.data >= :dataDe AND p.data <= :dataAte", Pedido.class);
+			query.setParameter("status", getStatusPedido());
+			query.setParameter("dataDe", getDataDe());
+			query.setParameter("dataAte", getDataAte());
+			System.out.println("Pedido DataDe DataAte");
+		}
+		else if (getStatusPedido()==null && getDataDe()==null && getDataAte()!=null){
+			query = em.createQuery("Select p from Pedido p WHERE p.data <= :data", Pedido.class);
+			query.setParameter("data", getDataAte());
+			System.out.println("DataAte");
+		}
+		else if (getStatusPedido()==null && getDataDe()!=null && getDataAte()==null){
+			query = em.createQuery("Select p from Pedido p WHERE p.data >= :data", Pedido.class);
+			query.setParameter("data", getDataDe());
+			System.out.println("DataDe");
+		}
+		else if (getStatusPedido()==null && getDataDe()!=null && getDataAte()!=null){
+			query = em.createQuery("Select p from Pedido p WHERE p.data >= :dataDe AND p.data <= :dataAte", Pedido.class);
+			query.setParameter("dataDe", getDataDe());
+			query.setParameter("dataAte", getDataAte());
+			System.out.println("DataDe DataAte");
 		}
 		else {
 			query = em.createQuery("Select p from Pedido p",	Pedido.class);
+			System.out.println("Apenas Pedido");
 		}
+		
 		return query.getResultList();
 	}
 	
@@ -650,17 +804,21 @@ public class PedidoBean implements Serializable {
 		return pedidosPorUsuario;
 	}
 	
-	public List<StatusPedido> getListStatusPedido() {
-
-		 List<StatusPedido> list = new ArrayList<StatusPedido>();
-		 list.add(StatusPedido.AGUARDANDO);
-		 list.add(StatusPedido.CONFIRMADO);
-		 list.add(StatusPedido.ENVIADO);
-		 list.add(StatusPedido.CANCELADO);
-		 return list;
+	public Integer getNumeroStatus(){
+	    if (getPedido() != null && getPedido().getStatus()!=null){
+			if(getPedido().getStatus().equals(StatusPedido.EMANDAMENTO))		
+					return 1;
+			else if(getPedido().getStatus().equals(StatusPedido.CONFIRMADO))
+					return 2;
+	    }
+		return 0;
 	}
 	
-	public void mudaStatus(AjaxBehaviorEvent abe){
+	public List<StatusPedido> getListStatusPedido() {
+		 return Util.getListStatusPedido();
+	}
+	
+	public void mudaStatus(){
 		System.out.println("mudaStatus");
 		List<Pedido> pedidos = getPedidos();
 		for (int i=0; i< pedidos.size(); i++){
@@ -670,43 +828,104 @@ public class PedidoBean implements Serializable {
 			em.merge(pedidos.get(i));
 			em.getTransaction().commit();
 		}
+		setStatusPedido(getStatusPedidoPara());
 	} 
 	
 	public String list() {
 		return "/gerenciador/pedido/listar";
 	}
-
-    public void onRowEdit(RowEditEvent event) {
-    	ProdutoEspecial produtoEspecial = ((ProdutoEspecial) event.getObject());
-        FacesMessage msg = new FacesMessage("Produto Adicionado", produtoEspecial.getProduto().getId().toString());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        produtoSelecionado = produtoEspecial.getProduto();
-		System.out.println("Add: "+produtoEspecial.getProduto().getNome()+" "+getQuantidade());
-		addProduto();
-    }
-     
-    public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Adicao Cancelada", ((ProdutoEspecial) event.getObject()).getProduto().getId().toString());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-     
-    public void onCellEdit(CellEditEvent event) {
-        Object oldValue = event.getOldValue();
-        Object newValue = event.getNewValue();
-         
-        if(newValue != null && !newValue.equals(oldValue)) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-    }
-    
+//
+//    public void onRowEdit(RowEditEvent event) {
+//    	ProdutoEspecial produtoEspecial = ((ProdutoEspecial) event.getObject());
+//        FacesMessage msg = new FacesMessage("Produto Adicionado", produtoEspecial.getProduto().getId().toString());
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+//        produtoSelecionado = produtoEspecial.getProduto();
+//		System.out.println("Add: "+produtoEspecial.getProduto().getNome()+" "+getQuantidade());
+//		addProduto();
+//    }
+//     
+//    public void onRowCancel(RowEditEvent event) {
+//        FacesMessage msg = new FacesMessage("Adicao Cancelada", ((ProdutoEspecial) event.getObject()).getProduto().getId().toString());
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+//    }
+//     
+//    public void onCellEdit(CellEditEvent event) {
+//        Object oldValue = event.getOldValue();
+//        Object newValue = event.getNewValue();
+//         
+//        if(newValue != null && !newValue.equals(oldValue)) {
+//            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
+//            FacesContext.getCurrentInstance().addMessage(null, msg);
+//            FacesContext.getCurrentInstance().addMessage(null, msg);
+//        }
+//    }
+//    
     public void sendMessage() {
         FacesContext context = FacesContext.getCurrentInstance();
          
         context.addMessage(null, new FacesMessage("Successful",  "Your message ") );
         context.addMessage(null, new FacesMessage("Second Message", "Additional Message Detail"));
+    }
+     
+    
+    public boolean getVerificaDiasDaSemana() {
+    	boolean status = false;
+    	Integer diaDaSemana = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+    	Integer horaAtual = Calendar.getInstance().get(Calendar.HOUR_OF_DAY) * 60;
+    	EntityManager em = JPA.getEM();
+		TypedQuery<Status> query = em.createQuery("Select s from Status s",
+				Status.class);
+		
+		List<Status> listStatus = query.getResultList();
+		for (int i=0; i<listStatus.size(); i++){
+			
+			if (getPedido().getStatus() != null && listStatus.get(i).getNome().equals( getPedido().getStatus().toString() ) ){
+				System.out.println(listStatus.get(i).getNome());
+				if (listStatus.get(i).getDiaInicial() < diaDaSemana && listStatus.get(i).getDiaFinal() > diaDaSemana){
+					System.out.println("Dentro do dia");
+					status = true;
+				}
+				else if (listStatus.get(i).getDiaInicial() == diaDaSemana && listStatus.get(i).getDiaFinal() > diaDaSemana){
+					if (listStatus.get(i).getHrInicial() <= horaAtual ){
+						System.out.println("Dentro da hora");
+						status = true;
+					}
+				}
+				else if (listStatus.get(i).getDiaInicial() < diaDaSemana && listStatus.get(i).getDiaFinal() == diaDaSemana){
+					if (listStatus.get(i).getHrFinal() >= horaAtual ){
+						System.out.println("Dentro da hora");
+						status = true;
+					}
+				}
+			}
+		}
+		System.out.println("Dia "+diaDaSemana+" e hora "+horaAtual);
+		return status;
+	}
+    
+    public String getVerificaStatus() {
+		if (getPedido() != null && getPedido().getStatus() != null){
+			if (getPedido().getStatus().equals(StatusPedido.EMANDAMENTO)){
+				return "ATUALIZAR PEDIDO";
+			}
+			else if (getPedido().getStatus().equals(StatusPedido.CONFIRMADO)){
+				return "CONFIRMADO, AGUARDANDO ENTREGA";
+			}
+		}
+		return "ENVIAR PEDIDO";
+	}
+    
+    public void onDateDeSelect(SelectEvent event) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Data Inicial Selecionada", format.format(event.getObject())));
+    }
+    
+    public void onDateParaSelect(SelectEvent event) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Data Final Selecionada", format.format(event.getObject())));
     }
 }

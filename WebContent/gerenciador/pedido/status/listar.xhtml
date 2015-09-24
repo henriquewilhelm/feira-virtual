@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
+		<ui:define name="content">
+			<h:dataTable styleClass="table table-striped" var="status"
+				value="#{statusBean.listStatus}">
+				<h:column>
+					<f:facet name="header">Id</f:facet>
+                    #{status.id}
+                </h:column>
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+                    #{status.nome}
+                </h:column>
+                <h:column>
+					<f:facet name="header">Dia Inicial</f:facet>
+                    #{status.diaInicial}
+                </h:column>
+                <h:column>
+					<f:facet name="header">Hora Inicial</f:facet>
+                    #{status.hrInicial}
+                </h:column>
+                <h:column>
+					<f:facet name="header">Dia Final</f:facet>
+                    #{status.diaFinal}
+                </h:column>
+                <h:column>
+					<f:facet name="header">Hr Final</f:facet>
+                    #{status.hrFinal}
+                </h:column>
+                <h:column>
+                	<f:facet name="header">Opcoes</f:facet>
+                		<h:form styleClass="form">
+							<h:commandLink actionListener="#{statusBean.delete}" >
+								<f:attribute name="selected" value="#{status}" />
+								<p:graphicImage name="/icons/delete.png" />
+							</h:commandLink>
+						</h:form>
+				 </h:column>
+			</h:dataTable>
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

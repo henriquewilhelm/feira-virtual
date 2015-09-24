@@ -1,5 +1,5 @@
 package models;
 
 public enum StatusPedido {
-	AGUARDANDO, CONFIRMADO, ENVIADO, CANCELADO;
+	EMANDAMENTO, CONFIRMADO, ENTREGUE, CANCELADO;
 }

@@ -5,23 +5,43 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 
+	<meta charset="UTF-8" />
 <h:body>
 	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
 		<ui:define name="content">
-		<h:form styleClass="form">
-					<h:outputLabel for="de" value="Filtrar por Status - DE: " styleClass="col-sm-2"/>
-	               	<h:selectOneMenu value="#{pedidoBean.statusPedido}" styleClass="col-sm-2">
+		<br />
+		<h:form id="growlForm1" styleClass="form-horizontal">
+			<div class="form-group">
+					<p:growl id="msgs" showDetail="true" sticky="true"/>
+					
+					<h:outputLabel for="eventDe" value="Filtrar por Data - DE:"  styleClass="col-sm-2"/>
+					<div class="col-sm-3">	
+				        <p:calendar id="eventDe" value="#{pedidoBean.dataDe}">
+				            <p:ajax event="dateSelect" listener="#{pedidoBean.onDateDeSelect}" update="msgs" />
+				            <f:ajax render="tbl"  /> 
+				        </p:calendar>
+				    </div>
+				    <h:outputLabel for="eventPara" value="ATÉ " styleClass="col-sm-1"/>
+				    <div class="col-sm-2">	
+				        <p:calendar id="eventPara" value="#{pedidoBean.dataAte}">
+				            <p:ajax event="dateSelect" listener="#{pedidoBean.onDateParaSelect}" update="msgs" />
+				            <f:ajax render="tbl"  /> 
+				        </p:calendar>
+			        </div>
+			</div>
+			<div class="form-group">
+					<h:outputLabel for="deStatus" value="Filtrar por Status - DE: " styleClass="col-sm-2"/>
+	               	<p:selectOneMenu id="deStatus" value="#{pedidoBean.statusPedido}" styleClass="col-sm-2">
 	    					<f:selectItem itemValue="" itemLabel="TODOS" />
 	    					<f:selectItems value="#{pedidoBean.listStatusPedido}" />
 	    					<f:ajax render="tbl"  /> 
-					</h:selectOneMenu>
-					<h:outputLabel for="para" value="PARA: " styleClass="col-sm-1"/>
-	               		<h:selectOneMenu value="#{pedidoBean.statusPedidoPara}" styleClass="col-sm-2">
+					</p:selectOneMenu>
+					<h:outputLabel for="paraStatus" value="PARA: " styleClass="col-sm-1"/>
+	               	<p:selectOneMenu id="paraStatus" value="#{pedidoBean.statusPedidoPara}" styleClass="col-sm-2">
 	    					<f:selectItems value="#{pedidoBean.listStatusPedido}" />
-	    					<f:ajax listener="#{pedidoBean.mudaStatus}" render="tbl"/>
-					</h:selectOneMenu>
-				
-			
+					</p:selectOneMenu>
+					<p:commandButton value="Mudar Status" actionListener="#{pedidoBean.mudaStatus}" update="deStatus" />
+			</div>
 			<p:dataTable id="tbl" var="pedido" value="#{pedidoBean.pedidos}"
                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                  paginator="true" rows="10" style="margin-bottom:20px">
@@ -75,10 +95,6 @@
 					<f:facet name="header">Total</f:facet>
                     #{pedido.total}
                 </p:column>
-                 <p:column>
-					<f:facet name="header">Status</f:facet>
-                    #{pedido.status}
-                </p:column>
                 <p:column>
                 	<f:facet name="header">Opcoes</f:facet>
 							<h:commandLink action="/gerenciador/pedido/editar.xhtml">
@@ -91,21 +107,25 @@
 								<p:graphicImage name="/icons/delete.png" />
 							</h:commandLink>
                 </p:column>
+                 <p:column>
+					<f:facet name="header">Status</f:facet>
+                   		<p class="#{pedido.status}" > #{pedido.status} </p>
+                </p:column>
 			</p:dataTable>
-			 <h3>Export Page Data Only</h3>
-			    <h:commandLink>
+			<h3>Export Page Data Only</h3>
+			<h:commandLink>
 			        <p:graphicImage name="/image/excel.png" />
 			        <p:dataExporter type="xls" target="tbl" ajax="false" fileName="pedidos"/>
-			    </h:commandLink>
+			</h:commandLink>
 			 
-			    <h:commandLink>
+			<h:commandLink>
 			        <p:graphicImage name="/image/pdf.png" />
 			       <p:dataExporter type="pdf" target="tbl" ajax="false" fileName="pedidos" />
-			    </h:commandLink>
-			</h:form>
-			<br /><br />
-			<h:messages />
-			<br /><br />	 		
+			</h:commandLink>
+		</h:form>
+		<br /><br />
+		<h:messages />
+		<br /><br />	 		
 		</ui:define>
 		<ui:define name="footer">
 		      <ui:include src="/footer.xhtml"></ui:include>

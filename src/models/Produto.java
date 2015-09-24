@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,6 +31,8 @@ public class Produto implements IConvertible, Serializable {
 	private Double valor;
 	private Categoria categoria;
 	private String foto = "/resources/image/produtos/produto.png";
+	@Enumerated(EnumType.STRING)
+	private StatusProduto status;
 	
 	public Produto() {
 		setData(Calendar.getInstance().getTime());
@@ -106,5 +110,13 @@ public class Produto implements IConvertible, Serializable {
 
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
+	}
+
+	public StatusProduto getStatusProduto() {
+		return status;
+	}
+
+	public void setStatusProduto(StatusProduto statusProduto) {
+		this.status = statusProduto;
 	}
 }

@@ -15,14 +15,22 @@
 		 	<p:growl id="msgs" showDetail="true"/>
 		 	
 			<p:stack id="stack" icon="/resources/image/stack.png" expanded="true">
-			 	<c:forEach items="${pedidoBean.pedido.listItens}" var="item">
-			 	
-			    	<p:menuitem value="R$${item.total}" icon="${item.produto.foto}" action="#{pedidoBean.sendMessage}" update="growl" />
-			    	
+			 	<c:forEach items="${pedidoBean.pedido.lastItens}" var="item">	
+			    	<p:menuitem value=" ${item.quantidade}" icon="${item.produto.foto}" action="#{pedidoBean.sendMessage}" update="growl" />
 			    </c:forEach>
 			</p:stack>
+			<div style="margin-left:250px;">
+				<div  >
+					<p:steps activeIndex="#{pedidoBean.numeroStatus}" styleClass="custom" readonly="false" >
+					    <p:menuitem value="Realizando Pedido" url="#"/>
+					    <p:menuitem value="Em Andamento" url="#"/>
+					    <p:menuitem value="Confirmado" url="#"/>
+					</p:steps>
+				</div>
+			</div><br /><br />
 			<div class="span6 pull-right" style="text-align:right">
-		               	 <h:commandLink styleClass="btn btn-info"  style="width:100%" value="CONTINUAR COMPRANDO" action="#{pedidoBean.proximaCategoria}" />
+		               	 <h:commandLink styleClass="btn btn-info" value="CONTINUAR COMPRANDO" action="#{pedidoBean.proximaCategoria}" />
+		   				<h:commandButton styleClass="btn btn-default"  value="#{pedidoBean.verificaStatus}" action="/loja/pedido/minhaCesta.xhtml" />
 		    </div>
 		    <br /> <br />
 		    <p:dataGrid var="produtoEspecial" value="#{pedidoBean.produtosPorCategoria}" columns="4" layout="grid"
@@ -37,7 +45,7 @@
 			                <p:graphicImage value="#{produtoEspecial.produto.foto}" height="50" width="50"/>  
 			                <h:outputText value="Valor R$ #{produtoEspecial.produto.valor} - #{produtoEspecial.produto.tipo.nome}"/>
 							<h:panelGrid columns="6" style="width:100%">
-						        <p:commandLink  styleClass="btn-xs btn-info" value="-" actionListener="#{pedidoBean.removeQntdProdutoEspecial}" update=":form:stack">    
+						        <p:commandLink  styleClass="btn-lg btn-info" value=" - " actionListener="#{pedidoBean.removeQntdProdutoEspecial}" update=":form:stack">    
 					              	     <f:attribute name="selected" value="#{produtoEspecial}" />
 					            </p:commandLink> 
 				                <div >
@@ -46,7 +54,7 @@
 										<p:graphicImage value="/resources/image/stack.png" height="50" width="50" style='position:relative; top:0px; left:-25px;'/> 
 				                   		 
 				                </div>    
-				              	<p:commandLink styleClass="btn-xs btn-primary" value="+" actionListener="#{pedidoBean.addQntdProdutoEspecial}" update=":form:stack">    
+				              	<p:commandLink styleClass="btn-lg btn-primary" value=" + " actionListener="#{pedidoBean.addQntdProdutoEspecial}" update=":form:stack">    
 				              	     <f:attribute name="selected" value="#{produtoEspecial}" />
 				                </p:commandLink>
 			                
@@ -54,9 +62,20 @@
 		            </h:panelGrid>
 		        </p:panel>
 			 </p:dataGrid>
+			 <br />
 			 <div class="span6 pull-right" style="text-align:right">
-			 	<h:commandButton styleClass="btn-lg btn-info"  value="CONFIRMAR PEDIDO" action="/loja/pedido/registrar.xhtml" />
-		     </div>
+		                <h:commandLink styleClass="btn btn-info"  value="CONTINUAR COMPRANDO" action="#{pedidoBean.proximaCategoria}" />
+			 			<h:commandButton styleClass="btn btn-default"  value="#{pedidoBean.verificaStatus}" action="/loja/pedido/minhaCesta.xhtml" />
+		     </div><br /><br />
+		     <div style="margin-left:250px;margin-top:25px;">
+				<div  >
+					<p:steps activeIndex="#{pedidoBean.numeroStatus}" styleClass="custom" readonly="false" >
+					    <p:menuitem value="Realizando Pedido" url="#"/>
+					    <p:menuitem value="Em Andamento" url="#"/>
+					    <p:menuitem value="Confirmado" url="#"/>
+					</p:steps>
+				</div>
+			</div>
 		</h:form>
 		<br /><br />
 		<h:messages />

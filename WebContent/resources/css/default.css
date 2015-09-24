@@ -1,4 +1,83 @@
 
+/* steps */
+.ui-steps .ui-steps-item {
+	width: 24%;
+}
+
+.ui-state-highlight {
+	text-shadow: none !important;
+}
+
+.ui-steps.custom {
+	margin-bottom: 30px;
+}
+
+.ui-steps.custom .ui-steps-item .ui-menuitem-link {
+	height: 10px;
+	padding: 0 1em;
+}
+
+.ui-steps.custom .ui-steps-item .ui-steps-number {
+	background-color: #0081c2;
+	color: #FFFFFF;
+	display: inline-block;
+	width: 30px;
+	border-radius: 10px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+}
+
+.CONFIRMADO {
+	font-size: 70%;
+	background-color: #00CC66;
+	color: #FFFFFF;
+	display: inline-block;
+	width: 100%;
+	border-radius: 10px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.CANCELADO {
+	font-size: 70%;
+	background-color: #990000;
+	color: #FFFFFF;
+	display: inline-block;
+	width: 100%;
+	border-radius: 10px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.ENTREGUE {
+	font-size: 70%;
+	background-color: #009966;
+	color: #FFFFFF;
+	display: inline-block;
+	width: 100%;
+	border-radius: 10px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.EMANDAMENTO {
+	font-size: 70%;
+	background-color: #0081c2;
+	color: #FFFFFF;
+	display: inline-block;
+	width: 100%;
+	border-radius: 10px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+
+/* content */
+
 .wrap{
 	margin:0 auto;
 	width:80%;
@@ -216,4 +295,11 @@
 .sub-cesta ul li p a:hover{
 	color: #555555;
 	text-decoration:underline;
+}
+
+#stepsCenter {
+  width: 700px ;
+  float : center;
+  margin-left: auto ;
+  margin-right: auto ;
 }

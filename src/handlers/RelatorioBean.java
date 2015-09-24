@@ -14,6 +14,7 @@ import models.Produto;
 import models.Pedido;
 import models.Relacao;
 import models.Relatorio;
+import models.StatusPedido;
 import models.Usuario;
 import util.JPA;
 
@@ -180,7 +181,7 @@ public class RelatorioBean {
 				Pedido.class);
 		List<Pedido> pedidos = query.getResultList();
 		Usuario usuario = new Usuario("", "", "Total", "", 0, "", null, null, 0l, null);
-		Pedido pedido = new Pedido(null, usuario, "", new ArrayList<Item>(),0d);
+		Pedido pedido = new Pedido(null, usuario, "", new ArrayList<Item>(),0d,StatusPedido.EMANDAMENTO);
 		pedidos.add(pedido);
 		
 		return pedidos;

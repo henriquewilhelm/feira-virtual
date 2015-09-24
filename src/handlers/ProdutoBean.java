@@ -1,5 +1,6 @@
 package handlers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -14,8 +15,9 @@ import util.JPA;
 import models.Categoria;
 import models.Produto;
 import models.Pedido;
+import models.StatusPedido;
+import models.StatusProduto;
 import models.Tipo;
-import models.Usuario;
 
 @ManagedBean
 @SessionScoped
@@ -24,6 +26,7 @@ public class ProdutoBean {
 	private Produto produto;
 	private Tipo tipo;
 	private Categoria categoria;
+	private StatusProduto statusProduto = StatusProduto.ATIVO;
 	
 	public ProdutoBean() {	
 		produto = new Produto();
@@ -58,6 +61,21 @@ public class ProdutoBean {
 			
 			return null;
 		}
+		
+		if (getStatusProduto()!=null){
+			produto.setStatusProduto(getStatusProduto());
+			System.out.println("Add Status (Ativo ou Inativo)");
+		}
+		else{
+			FacesContext facesContext = FacesContext.getCurrentInstance(); 
+
+			facesContext.addMessage(null, new FacesMessage( 
+            FacesMessage.SEVERITY_ERROR, "Ops, faltou escolher um Status...", null));
+			System.out.println("Favor selecione uma opcao");
+			
+			return null;
+		}
+		
 		EntityManager em = JPA.getEM();
 		em.getTransaction().begin();
 		em.persist(produto);
@@ -92,6 +110,20 @@ public class ProdutoBean {
 
 			facesContext.addMessage(null, new FacesMessage( 
             FacesMessage.SEVERITY_ERROR, "Ops, faltou escolher uma categoria...", null));
+			System.out.println("Favor selecione uma opcao");
+			
+			return null;
+		}
+		
+		if (getStatusProduto()!=null){
+			produto.setStatusProduto(getStatusProduto());
+			System.out.println("Add Status (Ativo ou Inativo)");
+		}
+		else{
+			FacesContext facesContext = FacesContext.getCurrentInstance(); 
+
+			facesContext.addMessage(null, new FacesMessage( 
+            FacesMessage.SEVERITY_ERROR, "Ops, faltou escolher um Status...", null));
 			System.out.println("Favor selecione uma opcao");
 			
 			return null;
@@ -154,8 +186,10 @@ public class ProdutoBean {
 	public List<Produto> getProdutosPorCategoria() {
 
 		EntityManager em = JPA.getEM();
-		TypedQuery<Produto> query = em.createQuery("Select p from Produto p left join fetch p.categoria c where c.id = :id",
+		TypedQuery<Produto> query = em.createQuery("Select p from Produto p left join fetch p.categoria c WHERE c.id = :id AND p.status = :status",
 				Produto.class);
+
+		query.setParameter("status", StatusProduto.ATIVO);
 		if (categoria!=null)
 		query.setParameter("id", categoria.getId());
 		
@@ -163,11 +197,16 @@ public class ProdutoBean {
 	}
 	
 	public List<Produto> getProdutos() {
-
+		TypedQuery<Produto> query;
 		EntityManager em = JPA.getEM();
-		TypedQuery<Produto> query = em.createQuery("Select p from Produto p",
-				Produto.class);
-		
+		if (getStatusProduto()!=null){
+			query = em.createQuery("Select p from Produto p WHERE p.status = :status",
+					Produto.class);
+			query.setParameter("status", getStatusProduto());
+		}
+		else {
+			query = em.createQuery("Select p from Produto p",Produto.class);
+		}
 		return query.getResultList();
 	}
 	
@@ -189,10 +228,21 @@ public class ProdutoBean {
 		return query.getResultList();
 	}
 	
+	public List<StatusProduto> getListStatus() {
+
+		 List<StatusProduto> list = new ArrayList<StatusProduto>();
+		 list.add(StatusProduto.ATIVO);
+		 list.add(StatusProduto.INATIVO);
+		 return list;
+	}
+	
 	public Produto getProduto() {
 		return produto;
 	}
 	public void setProduto(Produto produto) {
+		this.tipo = produto.getTipo();
+		this.categoria = produto.getCategoria();
+		this.statusProduto = produto.getStatusProduto();
 		this.produto = produto;
 	}
 	
@@ -213,5 +263,13 @@ public class ProdutoBean {
 
 	public String list() {
 		return "/gerenciador/produto/listar";
+	}
+
+	public StatusProduto getStatusProduto() {
+		return statusProduto;
+	}
+
+	public void setStatusProduto(StatusProduto statusProduto) {
+		this.statusProduto = statusProduto;
 	}
 }

@@ -1,6 +1,10 @@
-
+Please make note of these MySQL credentials again:
+  Root User: adminw4n9wQj
+  Root Password: YZjJls6VZ9DM
+URL: https://feira-comendobem.rhcloud.com/phpmyadmin/
+    
 		<properties> 
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/feira" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/jbossews" />
 			<property name="javax.persistence.jdbc.user" value="root" />
 			<property name="javax.persistence.jdbc.password" value="admin" />
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
@@ -10,7 +14,7 @@
 		
 
 	<properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://mysql66018-env-2739445.jelasticlw.com.br/feira" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://mysql66591-env-2739445.jelasticlw.com.br/feira" />
 			<property name="javax.persistence.jdbc.user" value="root" />
 			<property name="javax.persistence.jdbc.password" value="SHOsig31921" />
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
@@ -82,7 +86,7 @@ insert into produtos (nome,data,tipo,valor) values ('Sabonete Urucum com Bergamo
 insert into produtos (nome,data,tipo,valor) values ('Sabonete Aveia Mel e Própolis','2015/08/24','Uni.','5.00');
 insert into produtos (nome,data,tipo,valor) values ('Sabonete Alecrim','2015/08/24','Uni.','5.00');
 
-insert into usuarios (id, email, password, nome, telefone, tipo, endereco) values (1,'henrique.wilhelm@gmail.com','123456','Henrique Wilhelm','4896545864','ADMIN','Rua Moraes 211 ');
+insert into usuarios (id, email, password, nome, telefone, tipo, endereco, numero, complemento) values (1,'henrique.wilhelm@gmail.com','123456','Henrique Wilhelm','4896545864','ADMIN','Rua Moraes',205,'Casa');
 insert into usuarios (id, email, password, nome, telefone, tipo, endereco, cidade, bairro) values (2,'lnborim@hotmail.com','123456','Leandro Nadaleto Borin','4896545864','ADMIN','Rua Coruja 555','Florianopolis','Campeche');
 insert into usuarios (id, email, password, nome, telefone, tipo, endereco, cidade, bairro) values (3,'teste@teste.com','123456','Fulaninho de Tal','4896545864','USER','Rua Coral 205','Florianopolis','Itacurubi');
 

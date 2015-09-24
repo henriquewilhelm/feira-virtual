@@ -14,7 +14,19 @@
 	    <h:outputStylesheet library="css" name="bootstrap-theme.min.css" />
 	    <h:outputStylesheet library="css" name="default.css" />
 	    <h:outputScript library="js" name="bootstrap.js"/>
-	    
+	     	
+	     <!-- start top_js_button -->
+		 <h:outputScript library="js" name="move-top.js" />
+		 <h:outputScript library="js" name="easing.js" />		
+				   
+		<script type="text/javascript">
+				jQuery(document).ready(function($) {
+					$(".scroll").click(function(event){		
+						event.preventDefault();
+						$('html,body').animate({scrollTop:$(this.hash).offset().top},1200);
+					});
+				});
+		</script>
 </h:head>
 
 <h:body>

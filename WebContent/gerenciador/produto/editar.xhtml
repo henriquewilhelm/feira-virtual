@@ -13,10 +13,17 @@
 			<h:form styleClass="form-horizontal" enctype="multipart/form-data">
 			    <div class="form-group">
 					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-2" />
-					<div class="col-sm-7">
+					<div class="col-sm-4">
 							<h:inputText id="nome" value="#{produtoBean.produto.nome}" styleClass="form-control" />
 					</div>	
+					<h:outputLabel for="status" value="Status: " styleClass="col-sm-1" />
+					<div class="col-sm-2"> 
+	                		<h:selectOneListbox id="status" value="#{produtoBean.statusProduto}" styleClass="form-control" >
+	    						<f:selectItems value="#{produtoBean.listStatus}"/>	
+							</h:selectOneListbox >
+					</div>		
 					<div class="col-sm-3">
+							<h:message for="status" />
 							<h:message for="nome" />
 					</div>
 				</div>
@@ -71,7 +78,7 @@
 			 		<div class="col-sm-6">
 			 			<p:growl id="messages" showDetail="true" />
    						<p:fileUpload id="upload" value="#{fileUploadView.file}" mode="simple" skinSimple="true"/>
-    					<p:commandButton value="Submit" update="img" ajax="false" actionListener="#{fileUploadView.upload}" disabled="false" >
+    					<p:commandButton value="Enviar Imagem" update="img" ajax="false" actionListener="#{fileUploadView.upload}" disabled="false" >
     							<f:attribute name="selected" value="#{produtoBean.produto}" /> 
     					</p:commandButton>
 					</div>      

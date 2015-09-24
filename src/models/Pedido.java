@@ -2,6 +2,8 @@ package models;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -58,17 +60,16 @@ public class Pedido implements IConvertible, Serializable  {
 		listItens = new ArrayList<Item>();	
 		cidade = new Cidade();
 		setData(Calendar.getInstance().getTime());
-		status = StatusPedido.AGUARDANDO;
 	};
 	
-	public Pedido(Date data, Usuario usuario, String obs, List<Item> listItens, Double total) {
+	public Pedido(Date data, Usuario usuario, String obs, List<Item> listItens, Double total, StatusPedido statusPedido) {
 		super();
 		setUsuario(usuario);
 		this.data = data;
 		this.obs = obs;
 		this.listItens = listItens;
 		this.total = total;
-		status = StatusPedido.AGUARDANDO;
+		this.status = statusPedido;
 	}
 
 	public Integer getId() {
@@ -155,9 +156,23 @@ public class Pedido implements IConvertible, Serializable  {
 		this.listItens = listItens;
 	}
 
-	public List<Item> getListItens() {
+	public List<Item> getListItens() {		
 		return listItens;
 	}
+	
+	public List<Item> getLastItens() {
+		if (listItens.size()>5){
+			ArrayList<Item> itens = new ArrayList<Item>();
+			Integer aux = listItens.size()-5; 
+			for (int i=aux; i<listItens.size(); i++)
+				itens.add(listItens.get(i));
+			
+			return itens;
+		}
+		else
+			return listItens;
+	}
+
 
 	public Double getTotal() {
 		return total;

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<meta charset="UTF-8" />
+<h:body>
+	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
+		<ui:define name="content">
+			<h1>
+				<h:outputText value="Cadastro de Status" />
+			</h1>
+			<h:form styleClass="form-horizontal">
+			    <div class="form-group">
+					<h:outputLabel for="nome" value="Nome:" styleClass="col-sm-1" />
+					<div class="col-sm-2">
+                		<h:selectOneListbox id="nome" value="#{statusBean.status.nome}" styleClass="form-control"  required="true" requiredMessage="Nome é Obrigatório">
+               				<f:selectItem itemValue="" itemLabel="Selecione um Dia" />  
+    						<f:selectItems value="#{statusBean.listStatusPedido}"/>		
+						</h:selectOneListbox >
+					</div>
+					<div class="form-group">
+						<h:outputLabel for="hrIni" value="Hora Inicial" styleClass="col-sm-1" />
+						<div class="col-sm-3">
+								<h:inputText id="hrIni" value="#{statusBean.status.hrInicial}" styleClass="form-control"  required="true" requiredMessage="Hora Inicial é Obrigatório"/>
+						</div>	
+						<h:outputLabel for="diaIni" value="Dia Inicial" styleClass="col-sm-1" />
+						<div class="col-sm-3">
+	                		<h:selectOneListbox id="diaIni" value="#{statusBean.status.diaInicial}" converter="statusConverter" styleClass="form-control" required="true" requiredMessage="Dia Inicial é Obrigatório">
+	               				<f:selectItem itemValue="" itemLabel="Selecione um Dia" />  
+	    						<f:selectItems value="#{statusBean.diasDaSemana}"/>		
+							</h:selectOneListbox >
+						</div>
+						<br />
+						
+						<div class="col-sm-3">
+									<h:messages />
+						</div>
+						<h:outputLabel for="hrFim" value="Hora Final" styleClass="col-sm-1" />
+						<div class="col-sm-3">
+								<h:inputText id="hrFim" value="#{statusBean.status.hrFinal}" styleClass="form-control"  required="true" requiredMessage="Hora Final é Obrigatório"/>
+						</div>	
+						<h:outputLabel for="diaFim" value="Dia Final" styleClass="col-sm-1" />
+						<div class="col-sm-3">
+	                		<h:selectOneListbox id="diaFim" value="#{statusBean.status.diaFinal}" converter="statusConverter" styleClass="form-control" required="true" requiredMessage="Dia Final é Obrigatório">
+	               				<f:selectItem itemValue="" itemLabel="Selecione um Dia" />  
+	    						<f:selectItems value="#{statusBean.diasDaSemana}"/>		
+							</h:selectOneListbox >
+						</div>
+					</div>
+				</div>
+                <br />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Salvar" action="#{statusBean.addStatus}" />
+				<h:commandButton styleClass="btn btn-primary btn-lg" value="Limpar" action="#{statusBean.clearStatus}" />
+			</h:form>
+			<br />
+			
+			<br />
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

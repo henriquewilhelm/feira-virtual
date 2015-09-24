@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+ 	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<meta charset="UTF-8" />	
+<h:body>
+	<ui:composition template="/loja/layout/layoutuser.xhtml">
+		<ui:define name="content">
+		<h:form styleClass="form-horizontal">
+			<p:stack id="stack" icon="/resources/image/stack.png" expanded="true">
+				 	<c:forEach items="${pedidoBean.pedido.lastItens}" var="item">
+				    	<p:menuitem value=" ${item.quantidade}" icon="${item.produto.foto}" url="#"/>
+				    </c:forEach>
+			</p:stack >
+			<div style="margin-left:250px;">
+				<p:steps activeIndex="#{pedidoBean.numeroStatus}" styleClass="custom" readonly="false">
+				    <p:menuitem value="Realizando Pedido" url="#"/>
+				    <p:menuitem value="Em Andamento" url="#"/>
+				    <p:menuitem value="Confirmado" url="#"/>
+				</p:steps>
+			</div>
+			<br />
+			<h1>
+				<h:outputText value="Pedido Atual " />
+				<h:link value=" ( Cancelar )" action="#{pedidoBean.cancelaPedido}" style="font-size: 50%" />
+			</h1>
+			<div class="form-group">
+					<div class="col-sm-2">
+						<p class="#{pedidoBean.pedido.status}" > #{pedidoBean.pedido.status} </p>
+					</div>
+			</div>
+			<br />
+			<div class="form-group">
+					 <h:outputLabel id="nome" value="Endereço: #{pedidoBean.pedido.endereco} Cidade: #{pedidoBean.pedido.cidade.nome} Bairro: #{pedidoBean.pedido.bairro.nome} A/C #{pedidoBean.pedido.nome} " styleClass="col-sm-6" />		
+		              <div class="col-sm-3">
+		               	 <h:commandLink  value="Alterar" action="/loja/usuario/editar.xhtml" />
+		             </div>
+		             <div class="col-sm-3">
+		               	 <h:commandLink styleClass="btn btn-info"  style="width:100%" value="CONTINUAR COMPRANDO" action="/loja/pedido/listarProdutos.xhtml" />
+		             </div>
+                </div>
+				<div class="form-group">
+					<h:outputLabel for="obs" value="Observações: " styleClass="col-sm-1"/>
+					<div class="col-sm-8">
+						<h:inputText id="obs" value="#{pedidoBean.pedido.obs}" styleClass="form-control" />
+					</div>
+					<div class="col-sm-3">
+							<h:commandButton styleClass="btn btn-default"  style="width:100%" value="#{pedidoBean.verificaStatus}" action="#{pedidoBean.addPedido}" />
+					</div>
+				</div>
+			<div class="form-group">
+			 	<div class="col-sm-9">	
+               		<h:dataTable styleClass="table table-striped" var="i"
+							value="#{pedidoBean.pedido.listItens}"> 
+							<p:column headerText="Nome">
+										<f:facet name="header">Nome</f:facet>
+									    <p:graphicImage id="imgItem" url="#{i.produto.foto}" width="50px" height="50px" />  
+									    <h:outputText value="#{i.produto.nome}" />
+							</p:column>
+							<p:column >
+										<f:facet name="header">Valor</f:facet>
+									    <h:outputText value="R$ #{i.produto.valor}" />
+							</p:column>
+							<p:column >
+										<f:facet name="header">Quantidade</f:facet>
+									    <h:outputText value="#{i.quantidade} x #{i.produto.tipo.nome}" />
+							</p:column>
+							<p:column >
+										<f:facet name="header">Total</f:facet>
+									    <h:outputText value="R$ #{i.total}" />
+							</p:column>
+					</h:dataTable> 
+				</div> 
+			<div class="col-sm-3">
+						<h:commandButton styleClass="btn btn-danger" style="width:100%" value="Limpar Cesta" action="#{pedidoBean.clearPedidos}" />
+				</div>    
+			</div>	 
+		<div class="form-group">
+				<div class="span6 pull-right" style="text-align:right;margin-top:-100px">
+						<h1>
+							<h:outputLabel for="total" value="Total: " />
+							<h:outputText id="total" value="#{pedidoBean.pedido.total}" />
+						</h1>
+						<h:commandButton styleClass="btn btn-default" style="width:100%" value="#{pedidoBean.verificaStatus}" action="#{pedidoBean.addPedido}" />
+				</div>	
+		</div>
+			<br />
+			<h1>
+				<h:outputText value="Histórico de Pedidos" />
+			</h1>
+			<h:dataTable styleClass="table table-striped" var="pedido"
+				value="#{pedidoBean.pedidosPorUsuario}"> 
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+                    #{pedido.nome}
+                </h:column>
+                <h:column>
+               		 <f:facet name="header">Data Entrega</f:facet>
+                    <h:outputText value="#{pedido.data}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </h:column>
+                <h:column>
+					<f:facet name="header">Endereco</f:facet>
+                    #{pedido.endereco}
+                </h:column>
+                <h:column>
+					<f:facet name="header">Bairro</f:facet>
+                    #{pedido.bairro.nome}
+                </h:column>
+                <h:column>
+					<f:facet name="header">Cidade</f:facet>
+                    #{pedido.cidade.nome}
+                </h:column>
+                <h:column>
+					<f:facet name="header">Observacao</f:facet>
+                    #{pedido.obs}
+                </h:column>
+                <h:column>
+                	<f:facet name="header">Produtos</f:facet>
+               		<h:selectOneMenu value="#{pedidoBean.itemSelecionado}" 
+               			converter="itemConverter" styleClass="form-control">
+               			<f:selectItem itemValue="" itemLabel="Produtos Cadastrados" />  
+    					<f:selectItems value="#{pedido.listItens}"  var="item" itemValue="#{item}" itemLabel="#{item.produto.nome} - #{item.quantidade} #{item.produto.tipo.nome} = #{item.total} " />
+					</h:selectOneMenu>
+    			</h:column>
+                <h:column>
+                		<f:facet name="header">Total</f:facet>
+                   		 #{pedido.total}
+                </h:column>
+                 <h:column>
+                		<f:facet name="header">Opções</f:facet>
+                   		 Duplicar
+                </h:column>
+                <h:column>
+                		<f:facet name="header">Status</f:facet>
+                   		<p class="#{pedido.status}" > #{pedido.status} </p>
+                   		
+                </h:column>
+			</h:dataTable>
+			<br /><br />
+			<div style="margin-left:250px;margin-top:25px;">
+				<div  >
+					<p:steps activeIndex="#{pedidoBean.numeroStatus}" styleClass="custom" readonly="false" >
+					    <p:menuitem value="Realizando Pedido" url="#"/>
+					    <p:menuitem value="Em Andamento" url="#"/>
+					    <p:menuitem value="Confirmado" url="#"/>
+					</p:steps>
+				</div>
+			</div>
+			</h:form>
+			<br />
+			<h:messages />
+			<br /><br />
+		</ui:define>
+		<ui:define name="footer">
+		      <ui:include src="/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

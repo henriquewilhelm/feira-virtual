@@ -17,6 +17,7 @@ import models.Cidade;
 import models.Mail;
 import models.UserTipo;
 import models.Usuario;
+import service.EmailService;
 import util.JPA;
 
 
@@ -50,6 +51,32 @@ public class LoginBean implements Serializable {
 	}
 	
 	public String lembrarSenha() {
+		System.out.println("Esqueci Senha");
+		if (getEmail()!=null || getEmail().equals("")){
+			EntityManager em = JPA.getEM();
+			TypedQuery<Usuario> query = em.createQuery("Select u from Usuario u where u.email = :email",
+					Usuario.class);
+			query.setParameter("email", getEmail());
+			System.out.println(getEmail() + " "+ getPassword());
+	        usuario = query.getSingleResult();
+	        
+		    if (usuario!=null){
+		    	EmailService ThreadEmail = new EmailService(usuario, "Esqueci Senha");
+				new Thread(ThreadEmail).start();
+		    }
+		    FacesContext.getCurrentInstance().addMessage(
+	                null,
+	                new FacesMessage(FacesMessage.SEVERITY_WARN,
+	                        "Senha enviada para "+usuario.getEmail(),
+	                        "Um e-mail com o lembrete de Senha foi enviado para o endereço informado."));
+		}
+		else {
+			FacesContext.getCurrentInstance().addMessage(
+                null,
+                new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "E-mail e/ou Senha Incorretos",
+                        "Por favor entre com E-mail e Senha validos"));
+		}
 		return "/login";
 	}
 
@@ -81,7 +108,7 @@ public class LoginBean implements Serializable {
     }
  
 	public String addUsuario() {
-		System.out.println("Add Usuario");
+		System.out.println("Novo Cadastro");
 
 		usuario.setBairro(getBairro());
 		usuario.setCidade(getCidade());
@@ -94,12 +121,10 @@ public class LoginBean implements Serializable {
 
 		HttpSession session = SessionBean.getSession();
         session.setAttribute("usuario", usuario);
-    	mail = new Mail();
-		mail.setAssunto("Cadastro realizado");
-		mail.setDestino(usuario.getEmail());
-		mail.setMsg("Seu cadastro foi realizado com sucesso! Seu login de acesso é "+usuario.getEmail()+" e sua senha é "+usuario.getPassword()+".");
-		mail.setNomeDestino(usuario.getNome());
-		mail.sendMail();
+        
+    	EmailService ThreadEmail = new EmailService(usuario, "Novo Cadastro");
+		new Thread(ThreadEmail).start();
+		
 		return "usuario";
 	}
 	

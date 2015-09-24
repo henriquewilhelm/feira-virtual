@@ -54,7 +54,6 @@ public class Mail implements Serializable {
            
             
             email.setFrom("sistema.lnb@gmail.com", "LNB Sistema");
-            
             email.setSubject(getAssunto());
             email.setMsg(getMsg());
             email.addTo(getDestino(), getNomeDestino());

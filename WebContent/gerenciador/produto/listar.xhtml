@@ -8,53 +8,62 @@
 <h:body>
 	<ui:composition template="/gerenciador/layout/layoutadmin.xhtml">
 		<ui:define name="content">
-			<h:dataTable styleClass="table table-striped" var="produto"
-				value="#{produtoBean.produtos}">
-				<h:column>
-					<f:facet name="header">Nome</f:facet>
-                    #{produto.nome}
-                </h:column>
-                <h:column>
-               		 <f:facet name="header">Data</f:facet>
-                    <h:outputText value="#{produto.data}">
-                        <f:convertDateTime pattern="dd/MM/yyyy" />
-                    </h:outputText>
-                </h:column>
-                <h:column>
-					<f:facet name="header">Categoria</f:facet>
-                    #{produto.categoria.nome}
-                </h:column>
-                <h:column>
-					<f:facet name="header">Tipo</f:facet>
-                    #{produto.tipo.nome}
-                </h:column>
-                <h:column>
-                	<f:facet name="header">Valor</f:facet>
-                    <h:outputText value="#{produto.valor}">
-                        <f:convertNumber pattern="#0.00" />
-                    </h:outputText>
-                </h:column>
-                <h:column>
-                	<f:facet name="header">Foto</f:facet>
-			 			<p:graphicImage url="#{produto.foto}" width="100px" height="100px" />  
-                </h:column>
-                <h:column>
-                	<f:facet name="header">Opcoes</f:facet>
-                	<h:form styleClass="form">
-							<h:column>
-								<h:commandLink actionListener="#{produtoBean.delete}" >
-											<f:attribute name="selected" value="#{produto}" /> 
-											<p:graphicImage name="/icons/delete.png" />
-								</h:commandLink>
-								<h:commandLink action="/gerenciador/produto/editar.xhtml">
-									 <f:setPropertyActionListener target="#{produtoBean.produto}"
-	                               	 value="#{produto}" />
-	                               	 <p:graphicImage name="/icons/edit.png" />
-								</h:commandLink>
-							</h:column>
-                    </h:form>
-                </h:column>
-			</h:dataTable>
+			<h:form >
+				<br />
+				<h:outputLabel for="de" value="Filtrar por Status" styleClass="col-sm-2"/>
+		        <h:selectOneMenu value="#{produtoBean.statusProduto}" styleClass="col-sm-2">
+		    					<f:selectItem itemValue="" itemLabel="TODOS" />
+		    					<f:selectItems value="#{produtoBean.listStatus}" />
+		    					<f:ajax render="tbl"  /> 
+				</h:selectOneMenu>
+				<h:dataTable id="tbl" styleClass="table table-striped" var="produto"
+					value="#{produtoBean.produtos}">
+					<h:column>
+						<f:facet name="header">Nome</f:facet>
+				 			<p:graphicImage url="#{produto.foto}" width="50px" height="50px" />  
+	                    	#{produto.nome}
+	                </h:column>
+	                <h:column>
+						<f:facet name="header">Status</f:facet>
+	                    #{produto.statusProduto}
+	                </h:column>
+	                <h:column>
+	               		 <f:facet name="header">Data</f:facet>
+	                    <h:outputText value="#{produto.data}">
+	                        <f:convertDateTime pattern="dd/MM/yyyy" />
+	                    </h:outputText>
+	                </h:column>
+	                <h:column>
+						<f:facet name="header">Categoria</f:facet>
+	                    #{produto.categoria.nome}
+	                </h:column>
+	                <h:column>
+						<f:facet name="header">Tipo</f:facet>
+	                    #{produto.tipo.nome}
+	                </h:column>
+	                <h:column>
+	                	<f:facet name="header">Valor</f:facet>
+	                    <h:outputText value="#{produto.valor}">
+	                        <f:convertNumber pattern="#0.00" />
+	                    </h:outputText>
+	                </h:column>
+	                <h:column>
+	                	<f:facet name="header">Opcoes</f:facet>
+								<h:column>
+									<h:commandLink actionListener="#{produtoBean.delete}" >
+												<f:attribute name="selected" value="#{produto}" /> 
+												<p:graphicImage name="/icons/delete.png" />
+									</h:commandLink>
+									<h:commandLink action="/gerenciador/produto/editar.xhtml">
+										 <f:setPropertyActionListener target="#{produtoBean.produto}"
+		                               	 value="#{produto}" />
+		                               	 <p:graphicImage name="/icons/edit.png" />
+									</h:commandLink>
+								</h:column>
+	                    
+	                </h:column>
+				</h:dataTable>
+			</h:form>
 		</ui:define>
 		<ui:define name="footer">
 		      <ui:include src="/footer.xhtml"></ui:include>

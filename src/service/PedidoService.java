@@ -1,8 +1,10 @@
 package service;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ApplicationScoped;
@@ -12,6 +14,7 @@ import javax.persistence.EntityManager;
 import util.JPA;
 import models.Item;
 import models.Pedido;
+import models.StatusPedido;
 import models.Usuario;
 	 
 @ManagedBean(name = "pedidoService")
@@ -24,6 +27,7 @@ public class PedidoService implements Serializable{
 		/**
 		 * 
 		 */
+		private static SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 		private static final long serialVersionUID = -3418441511903269362L;
 		private final static String[] obs;
 		private Double total = 0d;
@@ -39,13 +43,14 @@ public class PedidoService implements Serializable{
         obs[5] = "Duas cestas";
 		 }
 		
+		
 	    public List<Pedido> createPedidos(int size) {
 	    	usuarioService = new UsuarioService();
 	    	listUsuario = usuarioService.createUsuarios();
 	    	
 	        List<Pedido> list = new ArrayList<Pedido>(size);
 	        for(int i = 0 ; i < size ; i++) {
-	        	Pedido pedido = new Pedido(Calendar.getInstance().getTime(), getRandomUsuario(), getRandomObs(), getRandomListItens(), total);
+	        	Pedido pedido = new Pedido(getRandomDate(), getRandomUsuario(), getRandomObs(), getRandomListItens(), total, StatusPedido.EMANDAMENTO);
 	        	EntityManager em = JPA.getEM();
 	    		em.getTransaction().begin();
 	    		em.persist(pedido);
@@ -79,5 +84,11 @@ public class PedidoService implements Serializable{
 
 	    private String getRandomObs() {
 	        return obs[(int) (Math.random() * 6)];
+	    }
+	    
+	    private Date getRandomDate() {
+	    	Date aux = Calendar.getInstance().getTime();
+	    	aux.setDate(aux.getDay()+(int) (Math.random() * 30));
+	        return aux;
 	    }
 }

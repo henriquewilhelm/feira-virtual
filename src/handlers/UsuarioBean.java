@@ -7,10 +7,8 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.servlet.http.HttpSession;
 
 import handlers.SessionBean;
 import models.Bairro;
@@ -18,6 +16,7 @@ import models.Cidade;
 import models.Mail;
 import models.UserTipo;
 import models.Usuario;
+import service.EmailService;
 import util.JPA;
 
 @ManagedBean
@@ -34,7 +33,7 @@ public class UsuarioBean implements Serializable {
 	private Usuario novoUsuario;
 	private Cidade cidade;
 	private Bairro bairro;
-	private Mail mail;
+	
 	
 	public UsuarioBean() {	
 		try{ 
@@ -53,7 +52,7 @@ public class UsuarioBean implements Serializable {
 	}
 	
 	public String addUsuario() {
-		System.out.println("Add Usuario");
+		System.out.println("Novo Cadastro");
 		String string = "";
 		
 		novoUsuario.setBairro(getBairro());
@@ -69,12 +68,8 @@ public class UsuarioBean implements Serializable {
 		else 
 			string = "/loja/usuario";
 
-		mail = new Mail();
-		mail.setAssunto("Cadastro realizado");
-		mail.setDestino(novoUsuario.getEmail());
-		mail.setMsg("Seu cadastro foi realizado com sucesso! Seu login de acesso é "+novoUsuario.getEmail()+" e sua senha é "+novoUsuario.getPassword()+".");
-		mail.setNomeDestino(novoUsuario.getNome());
-		mail.sendMail();
+		EmailService ThreadEmail = new EmailService(novoUsuario, "Novo Cadastro");
+		new Thread(ThreadEmail).start();
 		
 		setNovoUsuario(new Usuario());
 
@@ -98,12 +93,8 @@ public class UsuarioBean implements Serializable {
 		else
 			string = "/loja/usuario";
 		
-		mail = new Mail();
-		mail.setAssunto("Alteração no cadastro realizada");
-		mail.setDestino(meuUsuario.getEmail());
-		mail.setMsg("Seu cadastro foi alterado com sucesso! Seu login de acesso é "+meuUsuario.getEmail()+" e sua senha é "+meuUsuario.getPassword()+"");
-		mail.setNomeDestino(meuUsuario.getNome());
-		mail.sendMail();
+		EmailService ThreadEmail = new EmailService(meuUsuario, "Update Usuario");
+		new Thread(ThreadEmail).start();
 		
 		return string;
 	}
@@ -173,21 +164,15 @@ public class UsuarioBean implements Serializable {
 	public void setMeuUsuario(Usuario usuario) {
 		this.meuUsuario = usuario;
 	}
+	
 	public Usuario getNovoUsuario() {
 		return novoUsuario;
 	}
+	
 	public void setNovoUsuario(Usuario novoUsuario) {
 		this.novoUsuario = novoUsuario;
 	}
 	
-	public Mail getMail() {
-		return mail;
-	}
-
-	public void setMail(Mail mail) {
-		this.mail = mail;
-	}
-
 	public Cidade getCidade() {
 		return cidade;
 	}
